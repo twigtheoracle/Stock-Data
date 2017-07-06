@@ -1,9 +1,12 @@
 from string import ascii_uppercase
 from datetime import *
 from scipy import stats
-from pprint import *
 from openpyxl.chart import BarChart, Series, Reference, LineChart
+
+import pprint
 import math
+
+import generate_data as gd
 
 ################################################################################
 
@@ -61,7 +64,7 @@ def clean(sheet):
 
 # fills in the spreadsheet with data
 # return	prices	an array containing price data
-def fillData(sheet, stock):
+def fillData(sheet):
 	# does the whole date stuff
 	dateCurrent = date.today()
 	deltaT = timedelta(days = 90)
@@ -70,116 +73,119 @@ def fillData(sheet, stock):
 	dateOld = str(dateOld)
 
 	# gets the historical data of the stock
-	historicalData = stock.get_historical(dateOld, dateCurrent)
-	pprint(historicalData)
-
-	# fills in prices with historical data
-	prices = [0] * len(historicalData)
-	for i in range(0, len(historicalData)):
-		prices[len(historicalData) - (i + 1)] = float(historicalData[i]["Close"])
+	historicalData = gd.getHistoricalData(sheet.title, dateOld, dateCurrent)
 
 	# puts the data into the sheet
-	for row in range(2, len(historicalData) + 2):
-		rowNumber = len(historicalData) + 3 - row
-		sheet["A" + str(rowNumber)] = historicalData[row - 2]["Date"]
-		sheet["B" + str(rowNumber)] = float(historicalData[row - 2]["Close"])
+	for row in range(0, len(historicalData)):
+		sheet["A" + str(row + 2)] = historicalData[row][0]
+		sheet["B" + str(row + 2)] = historicalData[row][1]
 
-	return prices
+	returnArray = [0 for x in range(0, len(historicalData))];
+	for i in range(0, len(historicalData)):
+		returnArray[i] = historicalData[i][1]
+
+	return returnArray
 
 ################################################################################
 
 # fills the spreadsheet with relevant statistics
 def fillStats(sheet, prices):
-	# gets the basic stats from the historical data prices
-	statistics = stats.describe(prices, bias=False, nan_policy="omit")
-	statVars = ["n", "x_bar", "variance", "std deviation", "skewness", "kurtosis"]
-	statValues = [0,0,0,0,0]
-	for i in range(0,6):
-		if (i < 1):
-			statValues[i] = statistics[i]
-		elif (i > 1):
-			statValues[i - 1] = statistics[i]
+	try:
+		# gets the basic stats from the historical data prices
+		statistics = stats.describe(prices, bias=False, nan_policy="omit")
+		statVars = ["n", "x_bar", "variance", "std deviation", "skewness", "kurtosis"]
+		statValues = [0,0,0,0,0]
+		for i in range(0,6):
+			if (i < 1):
+				statValues[i] = statistics[i]
+			elif (i > 1):
+				statValues[i - 1] = statistics[i]
 
-	# fill in stats to the excel worksheet
-	offset = 2
-	for i in range(2, 5):
-		# using rows C and D for stats
-		sheet["D" + str(i)] = statVars[i - offset]
-		sheet["E" + str(i)] = statValues[i - offset]
-	sheet["D5"] = str(len(prices)) + " Day Std Dev"
-	sheet["E5"] = math.sqrt(sheet["E4"].value)
-	sheet["E6"] = math.sqrt(stats.describe(prices[len(prices) - 40 : len(prices)], bias=False, nan_policy="omit")[3])
-	sheet["E7"] = math.sqrt(stats.describe(prices[len(prices) - 20 : len(prices)], bias=False, nan_policy="omit")[3])
+		# fill in stats to the excel worksheet
+		offset = 2
+		for i in range(2, 5):
+			# using rows C and D for stats
+			sheet["D" + str(i)] = statVars[i - offset]
+			sheet["E" + str(i)] = statValues[i - offset]
+		sheet["D5"] = str(len(prices)) + " Day Std Dev"
+		sheet["E5"] = math.sqrt(sheet["E4"].value)
+		sheet["E6"] = math.sqrt(stats.describe(prices[len(prices) - 40 : len(prices)], bias=False, nan_policy="omit")[3])
+		sheet["E7"] = math.sqrt(stats.describe(prices[len(prices) - 20 : len(prices)], bias=False, nan_policy="omit")[3])
+	except ValueError:
+		print(sheet.title + " does not exist in the free quandl database")
 
 ################################################################################
 
 # fills the spreadsheet with relevant graphs
 def graphs(sheet, prices):
 	#gets the min max values of the data and computes the bin size
-	minimum = stats.tmin(prices)
-	maximum = stats.tmax(prices)
-	# print("MINIMUM:           " + str(minimum))
-	# print("MAXIMUM:           " + str(maximum))
-	r = maximum - minimum
-	deltaB = r / bins
-	counts = [0] * (bins + 1)
-	# print("BIN SIZE:          " + str(deltaB))
+	try:
+		minimum = stats.tmin(prices)
+		maximum = stats.tmax(prices)
+		# print("MINIMUM:           " + str(minimum))
+		# print("MAXIMUM:           " + str(maximum))
+		r = maximum - minimum
+		deltaB = r / bins
+		counts = [0] * (bins + 1)
+		# print("BIN SIZE:          " + str(deltaB))
 
-	#counts for each bin, how many fit in it
-	for price in prices:
-		index = int((price - minimum) / deltaB)
-		# print("INDEX: ", end = "")
-		# print(index)
-		counts[index] += 1
+		#counts for each bin, how many fit in it
+		for price in prices:
+			index = int((price - minimum) / deltaB)
+			# print("INDEX: ", end = "")
+			# print(index)
+			counts[index] += 1
 
-	#puts the bin data into the spreadsheet
-	#using D8:E28
-	for i in range(startVal, startVal + bins):
-		lowerBin = minimum + (deltaB * (i - 8))
-		upperBin = minimum + (deltaB * (i - 7))
-		binName = (upperBin + lowerBin) / 2
-		# binName = i - 7
-		sheet["D" + str(i)] = binName
-		sheet["E" + str(i)] = counts[i - startVal]
-	
+		#puts the bin data into the spreadsheet
+		#using D8:E28
+		for i in range(startVal, startVal + bins):
+			lowerBin = minimum + (deltaB * (i - 8))
+			upperBin = minimum + (deltaB * (i - 7))
+			binName = (upperBin + lowerBin) / 2
+			# binName = i - 7
+			sheet["D" + str(i)] = binName
+			sheet["E" + str(i)] = counts[i - startVal]
+		
 
-	# #adds in a random null column for the chart
-	# sheet["F7"] = "rand"
-	# for i in range(8, 28):
-	# 	sheet["F" + str(i)] = 1
+		# #adds in a random null column for the chart
+		# sheet["F7"] = "rand"
+		# for i in range(8, 28):
+		# 	sheet["F" + str(i)] = 1
 
-	#generates the bar chart based on bin and frequency data
-	data = BarChart()
-	data.type = "col"
-	data.style = 10
-	data.title = sheet.title + " HISTOGRAM"
-	data.x_axis_title = "BIN AVERAGE"
-	data.y_axis_title = "FREQUENCY"
-	foo = Reference(sheet, min_col = 5, min_row = startVal - 1, max_row = startVal + bins - 1, max_col = 5)
-	cats = Reference(sheet, min_col = 4, min_row = startVal, max_row = startVal + bins - 1)
-	data.add_data(foo, titles_from_data = True)
-	data.set_categories(cats)
-	data.shape = 4
-	sheet.add_chart(data, "G4")
+		#generates the bar chart based on bin and frequency data
+		data = BarChart()
+		data.type = "col"
+		data.style = 10
+		data.title = sheet.title + " HISTOGRAM"
+		data.x_axis_title = "BIN AVERAGE"
+		data.y_axis_title = "FREQUENCY"
+		foo = Reference(sheet, min_col = 5, min_row = startVal - 1, max_row = startVal + bins - 1, max_col = 5)
+		cats = Reference(sheet, min_col = 4, min_row = startVal, max_row = startVal + bins - 1)
+		data.add_data(foo, titles_from_data = True)
+		data.set_categories(cats)
+		data.shape = 4
+		sheet.add_chart(data, "G4")
 
-	#generate the linechart based on date and price
-	#create chart and add data values to it
-	lc = LineChart()
-	lc.title = sheet.title + " LINECHART"
-	lc.style = 12
-	lc.y_axis_title = "PRICE"
-	lc.x_axis_title = "DATE"
-	lcData = Reference(sheet, min_col = 2, min_row = 1, max_row = 1 + len(prices))
-	lc.add_data(lcData, titles_from_data = True)
-	#style the chart
-	s2 = lc.series[0]
-	s2.graphicalProperties.line.solidFill = "00AAAA"
-	s2.graphicalProperties.line.dashStyle = "sysDot"
-	s2.graphicalProperties.line.width = 100050 # width in EMUs
-	#add in the date categories
-	lcDates = Reference(sheet, min_col = 1, min_row = 2, max_row = 1 + len(prices))
-	lc.set_categories(lcDates)
-	sheet.add_chart(lc, "G22")
+		#generate the linechart based on date and price
+		#create chart and add data values to it
+		lc = LineChart()
+		lc.title = sheet.title + " LINECHART"
+		lc.style = 12
+		lc.y_axis_title = "PRICE"
+		lc.x_axis_title = "DATE"
+		lcData = Reference(sheet, min_col = 2, min_row = 1, max_row = 1 + len(prices))
+		lc.add_data(lcData, titles_from_data = True)
+		#style the chart
+		s2 = lc.series[0]
+		s2.graphicalProperties.line.solidFill = "00AAAA"
+		s2.graphicalProperties.line.dashStyle = "sysDot"
+		s2.graphicalProperties.line.width = 100050 # width in EMUs
+		#add in the date categories
+		lcDates = Reference(sheet, min_col = 1, min_row = 2, max_row = 1 + len(prices))
+		lc.set_categories(lcDates)
+		sheet.add_chart(lc, "G22")
+	except ValueError:
+		x = 1
 
 ################################################################################
 

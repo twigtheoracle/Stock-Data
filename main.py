@@ -1,5 +1,3 @@
-from yahoo_finance import *
-
 from openpyxl import *
 import numpy as np
 
@@ -15,31 +13,30 @@ run = f.fileOpen(wb, fileName)
 if(run):
 	#iterate through the sheets
 	for sheet in wb:
-		try:
-			f.clean(sheet)
+		# try:
+		f.clean(sheet)
 
-			#gets the stock from the sheet name
-			print ("SHEET TITLE:       " + sheet.title)
-			stock = Share(sheet.title)		
-			
-			prices = f.fillData(sheet, stock)
+		#gets the stock from the sheet name
+		print ("SHEET TITLE:       " + sheet.title)	
 
-			f.fillStats(sheet, prices)
+		prices = f.fillData(sheet)
 
-			f.graphs(sheet, prices)
+		f.fillStats(sheet, prices)
 
-		except AttributeError:
-			print("AttributeError")
-			sheet.column_dimensions["A"].width = 24
-			sheet["A1"] = "ERROR: STOCK DOES NOT EXIST"
+		f.graphs(sheet, prices)
+
+		# except AttributeError:
+		# 	print("AttributeError")
+		# 	sheet.column_dimensions["A"].width = 24
+		# 	sheet["A1"] = "ERROR: STOCK DOES NOT EXIST"
 		# except KeyError:
 		# 	print("KeyError")
 		# 	sheet.column_dimensions["A"].width = 24
 		# 	sheet["A1"] = "ERROR: STOCK DOES NOT EXIST"
-		except TypeError:
-			print("TypeError")
-			sheet.column_dimensions["A"].width = 24
-			sheet["A1"] = "ERROR: STOCK DOES NOT EXIST"
+		# except TypeError:
+		# 	print("TypeError")
+		# 	sheet.column_dimensions["A"].width = 24
+		# 	sheet["A1"] = "ERROR: STOCK DOES NOT EXIST"
 
 		#finish
 		print(sheet.title + " COMPLETED\n")
