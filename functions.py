@@ -5,14 +5,17 @@ from openpyxl.chart import BarChart, Series, Reference, LineChart
 
 import pprint
 import math
+import pprint
 
 import generate_data as gd
 
 ################################################################################
 
-# needed global variables
+# parameters that matter :)
 startVal = 10
 bins = 20
+numberMonths = 3
+savePath = "C:/Users/ericl/Desktop/"
 
 ################################################################################
 
@@ -32,13 +35,12 @@ def fileOpen(wb, fileName):
 
 def save(wb):
 	try:
-		wb.save("option_analysis_" + str(date.today()) + ".xlsx")
+		wb.save(savePath + "option_analysis_" + str(date.today()) + ".xlsx")
 		return True
 	except PermissionError:
 		print("ERROR: FILE IS OPEN")
 		print("CLOSE FILE AND RUN SCRIPT AGAIN")
 		return False
-
 
 ################################################################################
 
@@ -120,8 +122,8 @@ def fillStats(sheet, prices):
 def graphs(sheet, prices):
 	#gets the min max values of the data and computes the bin size
 	try:
-		minimum = stats.tmin(prices)
-		maximum = stats.tmax(prices)
+		minimum = stats.tmin(prices) - .1
+		maximum = stats.tmax(prices) + .1
 		# print("MINIMUM:           " + str(minimum))
 		# print("MAXIMUM:           " + str(maximum))
 		r = maximum - minimum
@@ -145,12 +147,6 @@ def graphs(sheet, prices):
 			# binName = i - 7
 			sheet["D" + str(i)] = binName
 			sheet["E" + str(i)] = counts[i - startVal]
-		
-
-		# #adds in a random null column for the chart
-		# sheet["F7"] = "rand"
-		# for i in range(8, 28):
-		# 	sheet["F" + str(i)] = 1
 
 		#generates the bar chart based on bin and frequency data
 		data = BarChart()
@@ -186,6 +182,51 @@ def graphs(sheet, prices):
 		sheet.add_chart(lc, "G22")
 	except ValueError:
 		x = 1
+
+################################################################################
+
+def isNumber(n):
+	try:
+		int(n)
+		return True
+	except ValueError:
+		return False
+
+################################################################################
+
+def getMonthList(currentMonth):
+	returnList = [0] * numberMonths
+	for i in range(1,numberMonths):
+		returnList[i] = (currentMonth + i) % 12
+	for i in range(0,numberMonths):
+		if (returnList[i] == 0):
+			returnList[i] = 12
+	return returnList
+
+################################################################################
+
+#Creates the ten year average pages
+def tenYearAverage(book):
+	percSheet = book.create_sheet("10YEARAVG%", 0)
+	freqSheet = book.create_sheet("10YearAVGv", 1)
+
+	rowNumber = 3
+
+	for sheet in book:
+		if(not isNumber(sheet.title[:1])):
+			
+			percentageList = [0] * 10
+
+			#Both of these are type ints
+			thisYear = datetime.now().year
+			thisMonth = datetime.now().month
+
+			monthList = getMonthList(thisMonth)
+
+			gd.fillPercentageAndFreq(percSheet, freqSheet, thisYear, monthList, rowNumber, sheet.title)
+
+			rowNumber += 1
+
 
 ################################################################################
 

@@ -3,12 +3,16 @@ from pprint import *
 import quandl
 import random
 
+################################################################################
+
 def formatDate(dateString):
 	returnString = ""
 	for i in range(0, len(dateString)):
 		if(dateString[i] != "-"):
 			returnString += dateString[i]
 	return returnString
+
+################################################################################
 
 def getHistoricalData(stockName, dateOld, dateCurrent):
 
@@ -27,3 +31,9 @@ def getHistoricalData(stockName, dateOld, dateCurrent):
 		returnArray[i][1] = float(data["close"][i])
 
 	return returnArray
+
+################################################################################
+
+def fillPercentageAndFreq(percSheet, freqSheet, year, monthList, row, stockName):
+	percSheet["A" + str(row)] = stockName + " percentages go here"
+	freqSheet["A" + str(row)] = stockName + " frequencies go here"
