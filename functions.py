@@ -210,6 +210,13 @@ def tenYearAverage(book):
 	percSheet = book.create_sheet("10YEARAVG%", 0)
 	freqSheet = book.create_sheet("10YearAVGv", 1)
 
+	#Both of these are type ints
+	thisYear = datetime.now().year
+	thisMonth = datetime.now().month
+
+	gd.formatPercOrFreqSheet(percSheet, thisYear, thisMonth)
+	gd.formatPercOrFreqSheet(freqSheet, thisYear, thisMonth)
+
 	rowNumber = 3
 
 	for sheet in book:
@@ -217,13 +224,7 @@ def tenYearAverage(book):
 			
 			percentageList = [0] * 10
 
-			#Both of these are type ints
-			thisYear = datetime.now().year
-			thisMonth = datetime.now().month
-
-			monthList = getMonthList(thisMonth)
-
-			gd.fillPercentageAndFreq(percSheet, freqSheet, thisYear, monthList, rowNumber, sheet.title)
+			gd.fillPercAndFreq(percSheet, freqSheet, thisYear, thisMonth, rowNumber, sheet.title)
 
 			rowNumber += 1
 
