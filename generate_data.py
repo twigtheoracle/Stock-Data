@@ -29,6 +29,7 @@ def formatDate(dateString):
 ################################################################################
 
 def formatQuandlQuery(stock, startDate, endDate):
+	#This comment is literally so I can collapse the function in sublime :D
 	return ("WIKI/PRICES.json?date.gte=" + startDate + "&date.lt=" + endDate + "&ticker=" + stock + "&api_key=1qsGVmxih-dcMRsh13Zk")
 
 ################################################################################
@@ -233,4 +234,3 @@ def fillPercAndFreq(percSheet, freqSheet, thisYear, thisMonth, rowNumber, stock)
 
 	print(stock + " 10 YEAR ANALYSIS COMPLETE\n")
 	
-################################################################################

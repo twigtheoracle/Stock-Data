@@ -228,6 +228,3 @@ def tenYearAverage(book):
 			gd.fillPercAndFreq(percSheet, freqSheet, thisYear, thisMonth, rowNumber, sheet.title)
 
 			rowNumber += 1
-
-################################################################################
-
