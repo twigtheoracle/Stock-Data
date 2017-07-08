@@ -19,6 +19,8 @@ quandl.ApiConfig.api_key = "1qsGVmxih-dcMRsh13Zk"
 
 ################################################################################
 
+# formats the date for quandl query (its not actually needed but o well)
+# return 	returnString	YYYYMMDD formatted date
 def formatDate(dateString):
 	returnString = ""
 	for i in range(0, len(dateString)):
@@ -28,12 +30,17 @@ def formatDate(dateString):
 
 ################################################################################
 
+# formats the quandl query so I don't have to look at a monsterously long string :P
+# return 	string 	a formatted string for quandl query
 def formatQuandlQuery(stock, startDate, endDate):
 	#This comment is literally so I can collapse the function in sublime :D
 	return ("WIKI/PRICES.json?date.gte=" + startDate + "&date.lt=" + endDate + "&ticker=" + stock + "&api_key=1qsGVmxih-dcMRsh13Zk")
 
 ################################################################################
 
+# retrieves historical data from the quandl WIKI/PRICES database between certain dates
+# return 	returnArray 	a LIST of data... 
+#							organized like [[date, close price], [date, close price], etc]
 def getHistoricalData(stockName, dateOld, dateCurrent):
 
 	dateOldFormatted = formatDate(str(dateOld))
@@ -53,12 +60,16 @@ def getHistoricalData(stockName, dateOld, dateCurrent):
 
 ################################################################################
 
+# takes a number input and prints out the letter assoiated with the number
+# return num2alpha[n] 	uppercase letter that corresponds to the input number
+#						1-->A, 2-->B, ..., 26-->Z
 def numberToLetter(n):
 	num2alpha = dict(zip(range(1,27), string.ascii_uppercase))
 	return num2alpha[n]
 
 ################################################################################
 
+# exactly what it says... formatts the percentage sheet
 def formatPercSheet(sheet, currentYear, currentMonth):
 
 	#Puts in the months for the current month and next years months
@@ -101,6 +112,9 @@ def formatPercSheet(sheet, currentYear, currentMonth):
 
 ################################################################################
 
+# a silly function, i'm sure there's some library out there that will do this for me
+# return 	1 			if the month is twelve (Dec), the next month is 1 (Jan)
+# return 	month + 1	if the month is not twelve, the next month is month + 1
 def nextMonth(month):
 	if (month == 12):
 		return 1
@@ -108,6 +122,9 @@ def nextMonth(month):
 
 ################################################################################
 
+# look above :D
+# return 	year + 1	if the month is twelve, the year increments by one
+# return  	year 		if the month is not twelve, the year remains the same
 def nextYear(year, month):
 	if (month == 12):
 		return year + 1
@@ -115,6 +132,9 @@ def nextYear(year, month):
 
 ################################################################################
 
+# just like the holiday cheer i always feel, this function killed me inside
+# exceptions are made for every stock trading holiday that would interfere with the 10 year data
+# return 	date 	the fixed date, if need be
 def holidayExceptions(date):
 	deltaT = datetime.timedelta(days = 1)
 
@@ -134,6 +154,9 @@ def holidayExceptions(date):
 
 ################################################################################
 
+# finding out that the first day of each month is NOT always a business day shocked me
+# finds the first valid workday in a month given the year (does not account for exceptions)
+# return 	dateList 	dateList[0] has the first valid workday, dateList[1] has the next day (can be a weekend)
 def firstValidDate(year, month):
 	deltaT = datetime.timedelta(days = 1)
 	date = datetime.date(year, month, 1)
@@ -148,10 +171,15 @@ def firstValidDate(year, month):
 	firstDate = str(date)
 	secondDate = str(date + deltaT)
 
-	return [firstDate, secondDate]
+	dateList = [firstDate, secondDate]
+
+	return dateList
 
 ################################################################################
 
+# look above :D
+# finds the last valid workday in a month given the year (does not account for exceptions)
+# return 	dateList 	dateList[0] has the first valid workday, dateList[1] has the next day (can be a weekend or in the next month)
 def lastValidDate(year, month):
 	deltaT = datetime.timedelta(days = 1)
 	date = datetime.date(year, month, calendar.monthrange(year, month)[1])
@@ -166,10 +194,15 @@ def lastValidDate(year, month):
 	firstDate = str(date)
 	secondDate = str(date + deltaT)
 
-	return [firstDate, secondDate]
+	dateList = [firstDate, secondDate]]
+
+	return dateList
 
 ################################################################################
 
+# the psuedo code layout that kept on changing :(
+# uses most of the above functions to generate the historical data for a given stock, year, and month
+# return 	dataList 	a list containing the average percentage change, the average 
 def getMonthPercentageChange(stock, year, month):
 	percentChangeList = [0.0] * 10
 	frequencyList = [0, 0]
@@ -198,11 +231,15 @@ def getMonthPercentageChange(stock, year, month):
 		index += 1
 
 		# print(str(i) + " " + monthIndex[month - 1] + " percentage change = " + str(percentChangeList[index - 1]))
+
+	dataList = [np.mean(percentChangeList), np.std(percentChangeList, ddof = 1), percentChangeList, frequencyList]
 	
-	return [np.mean(percentChangeList), np.std(percentChangeList, ddof = 1), percentChangeList, frequencyList]
+	return dataList
 
 ################################################################################
 
+# i hate the name of this function
+# fills the percentage and frequency sheets with the relevant data generated by the functions above
 def fillPercAndFreq(percSheet, freqSheet, thisYear, thisMonth, rowNumber, stock):
 	percSheet["A" + str(rowNumber)] = stock
 	freqSheet["A" + str(rowNumber)] = stock

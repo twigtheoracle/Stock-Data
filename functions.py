@@ -15,7 +15,6 @@ import generate_data as gd
 # parameters that matter :)
 startVal = 10
 bins = 20
-numberMonths = 3
 savePath = "C:/Users/ericl/Desktop/"
 
 ################################################################################
@@ -34,6 +33,9 @@ def fileOpen(wb, fileName):
 
 ################################################################################
 
+# saves the completed workbook as option_analysis_ and the current date
+# return 	True 	if the save completed successfully
+# return 	False 	if the save didn't go through
 def save(wb):
 	try:
 		wb.save(savePath + "option_analysis_" + str(date.today()) + ".xlsx")
@@ -186,6 +188,9 @@ def graphs(sheet, prices):
 
 ################################################################################
 
+# tests is the input is a number
+# return 	True	n is a number
+# return 	False 	n is not a number
 def isNumber(n):
 	try:
 		int(n)
@@ -195,11 +200,13 @@ def isNumber(n):
 
 ################################################################################
 
+# returns a list of the next three months based on the current month
+# return 	returnList	a list of the next three month numbers
 def getMonthList(currentMonth):
-	returnList = [0] * numberMonths
-	for i in range(1,numberMonths):
+	returnList = [0] * 3
+	for i in range(1,3):
 		returnList[i] = (currentMonth + i) % 12
-	for i in range(0,numberMonths):
+	for i in range(0,3):
 		if (returnList[i] == 0):
 			returnList[i] = 12
 	return returnList
