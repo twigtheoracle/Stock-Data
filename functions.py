@@ -6,6 +6,7 @@ from openpyxl.chart import BarChart, Series, Reference, LineChart
 import pprint
 import math
 import pprint
+import sys
 
 import generate_data as gd
 
@@ -214,20 +215,19 @@ def tenYearAverage(book):
 	thisYear = datetime.now().year
 	thisMonth = datetime.now().month
 
-	gd.formatPercOrFreqSheet(percSheet, thisYear, thisMonth)
-	gd.formatPercOrFreqSheet(freqSheet, thisYear, thisMonth)
+	gd.formatPercSheet(percSheet, thisYear, thisMonth)
+	gd.formatPercSheet(freqSheet, thisYear, thisMonth)
 
 	rowNumber = 3
 
 	for sheet in book:
 		if(not isNumber(sheet.title[:1])):
-			
-			percentageList = [0] * 10
+
+			print("STARTING " + sheet.title + " 10 YEAR ANALYSIS")
 
 			gd.fillPercAndFreq(percSheet, freqSheet, thisYear, thisMonth, rowNumber, sheet.title)
 
 			rowNumber += 1
-
 
 ################################################################################
 
