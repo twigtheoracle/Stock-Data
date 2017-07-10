@@ -1,40 +1,32 @@
-from openpyxl import *
-import numpy as np
+import openpyxl
 
 import functions as f
+import stock as s
 
-fileName = "template.xlsx"
-# fileName = "test_template.xlsx"
+fileName = "test_template.xlsx"
+bins = 20
+savePath = "C:/Users/ericl/Downloads/"
 
-wb = load_workbook(fileName)
+wb = openpyxl.load_workbook(fileName)
 
 run = f.fileOpen(wb, fileName)
-
-print("\n")
-print("===STARTING RECENT DATA ANALYSIS")
-print("\n")
 
 if(run):
 
 	#iterate through the sheets
 	for sheet in wb:
 
-		f.clean(sheet)
+		stock = s.stock(sheet.title, sheet, bins, savePath)
 
-		print ("SHEET TITLE:       " + sheet.title)	
+		stock.formatRecentDataSheet()
 
-		prices = f.fillData(sheet)
+		hd = stock.getHistoricalData()
 
-		f.fillStats(sheet, prices)
+		prices = stock.fillRecentData(hd)
 
-		f.graphs(sheet, prices)
+		stock.fillRecentDescriptiveStats(prices)
 
-		#finish
-		print(sheet.title + " RECENT DATA ANALYSIS COMPLETE\n")
-
-	print("\n===ALL RECENT DATA ANALYSIS COMPLETE===\n\n")
-
-	print("===STARTING 10 YEAR DATA ANALYSIS===\n\n")
+		stock.fillRecentGraphs(prices)
 
 	# f.tenYearAverage(wb)
 
