@@ -4,7 +4,7 @@ import functions as f
 import stock as s
 import percentageSheet as ps
 
-fileName = "test_template.xlsx"
+fileName = "template.xlsx"
 bins = 20
 savePath = "C:/Users/ericl/Desktop/"
 
@@ -17,6 +17,8 @@ if(run):
 	#iterate through the sheets
 	for sheet in wb:
 
+		print(sheet.title + " ANALYSIS")
+
 		stock = s.stock(sheet.title, sheet, bins, savePath)
 
 		stock.formatRecentDataSheet()
@@ -26,8 +28,10 @@ if(run):
 		prices = stock.fillRecentData(hd)
 
 		stock.fillRecentDescriptiveStats(prices)
-		
+
 		stock.fillRecentGraphs(prices)
+
+		print("COMPLETED\n")
 
 	stockList = wb.sheetnames
 
