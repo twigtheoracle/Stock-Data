@@ -36,7 +36,7 @@ if(run):
 
 	print("===STARTING 10 YEAR DATA ANALYSIS===\n\n")
 
-	f.tenYearAverage(wb)
+	# f.tenYearAverage(wb)
 
 	#save workbook
 	if (f.save(wb)):

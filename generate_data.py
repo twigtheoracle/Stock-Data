@@ -194,7 +194,7 @@ def lastValidDate(year, month):
 	firstDate = str(date)
 	secondDate = str(date + deltaT)
 
-	dateList = [firstDate, secondDate]]
+	dateList = [firstDate, secondDate]
 
 	return dateList
 
