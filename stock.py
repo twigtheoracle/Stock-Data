@@ -18,9 +18,9 @@ class stock():
 		self.bins = bins
 		self.savePath = savePath
 
-		self.monthIndex = ["Jan (1)", "Feb (2)", "Mar (3)", "Apr (4)", "May (5)", "Jun (6)", "Jul (7)", "Aug (8)", "Sep (9)", "Oct (10)", "Nov (11)", "Dec (12)"]
 		self.statVal = 10
 
+	# formats the recent data sheet with sheet titles, etc.
 	def formatRecentDataSheet(self):
 		for col in string.ascii_uppercase:
 			self.sheet.column_dimensions[col].width = 12
