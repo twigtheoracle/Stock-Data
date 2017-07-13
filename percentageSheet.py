@@ -88,7 +88,7 @@ class percentageSheet():
 	def addStock(self, index, stock):
 		self.sheet["A" + str(index)] = stock
 
-	# gets a months average percentage change for a stock over the last 10 (or less) years and fills in the sheet
+	# gets a months percentage change and fills it into the percentage sheet
 	# return 	frequencyList 	a list containing the frequency that the stock went up or down over the last 10 years.
 	#							this is done here because repeating this function would take forever
 	def fillPercentageChange(self, stock, n, row):
@@ -144,7 +144,7 @@ class percentageSheet():
 
 			percentChange = ((lastDayClosePrice - firstDayClosePrice)/firstDayClosePrice) * 100
 
-			print(i + yearOffset, adjustedMonth, percentChange)
+			print(stock, i + yearOffset, adjustedMonth, precentageChange)
 
 			if(percentChange > 0):
 				frequencyList[0] += 1
