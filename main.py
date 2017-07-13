@@ -4,7 +4,7 @@ import functions as f
 import stock as s
 import percentageSheet as ps
 
-fileName = "template.xlsx"
+fileName = "test_template.xlsx"
 bins = 20
 savePath = "C:/Users/ericl/Desktop/"
 
@@ -45,11 +45,9 @@ if(run):
 
 		percentageSheet.addStock(i + 3, stockList[i])
 
-		print(stockList[i])
+		for monthOffset in range(0,12):
 
-		for index in range(0,12):
-
-			percentageSheet.fillPercentageChange(stockList[i], index, i)
+			percentageSheet.fillPercentageChange(stockList[i], monthOffset, i)
 
 	#save workbook
 	if (f.save(wb, savePath)):

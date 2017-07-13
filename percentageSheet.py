@@ -85,73 +85,112 @@ class percentageSheet():
 		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + stock + "&api_key=1qsGVmxih-dcMRsh13Zk")
 		return returnString
 
+	# probally don't need this one, but ...
 	def addStock(self, index, stock):
+		# comment to make this function collapse in sublime because functions need to be at least two lines to work
 		self.sheet["A" + str(index)] = stock
+
+	# returns the percentage change of a stock based on year and month
+	# return 	percentageChange 	the percentage change of that year and month
+	def getPercentageChange(self, stock, year, month):
+		monthStartPrice = -1
+		monthEndPrice = -1
+
+		firstDay = datetime.date(year, month, 1)
+		lastDay = datetime.date(year, month, calendar.monthrange(year, month)[1])
+
+		data = quandl.get_table(self.formatQuandlQuery(stock, str(firstDay), str(lastDay)))
+
+		index = 0
+		while True:
+			try:
+				if (index == 6):
+					break
+				monthStartPrice = data["close"][index]
+				break
+			except IndexError:
+				index += 1
+
+		index = len(data["close"]) - 1
+		while True:
+			try:
+				if (index == 25):
+					break
+				monthEndPrice = data["close"][index]
+				break
+			except IndexError:
+				index -= 1
+
+		# if we are looking too far back in time for prices to exist
+		if (monthStartPrice == -1 or monthEndPrice == -1):
+			return None
+
+		return ((monthEndPrice - monthStartPrice)/monthStartPrice) * 100
 
 	# gets a months percentage change and fills it into the percentage sheet
 	# return 	frequencyList 	a list containing the frequency that the stock went up or down over the last 10 years.
 	#							this is done here because repeating this function would take forever
 	def fillPercentageChange(self, stock, n, row):
-		# variables and such are stored in the collapsed if(True): 
-		# i know, its bad
-		if(True):
-			percentChangeList = []
-			frequencyList = [0, 0]
-			deltaT = datetime.timedelta(days = 1)
+		percentChangeList = []
+		frequencyList = [0, 0]
+		deltaT = datetime.timedelta(days = 1)
 
-			yearOffset = 0
+		yearOffset = 0
 
-			firstDays = None
-			firstDayData = None
-			firstDayClosePrice = None
+		firstDays = None
+		firstDayData = None
+		firstDayClosePrice = None
 
-			lastDays = None
-			lastDayData = None
-			lastDayClosePrice = None
+		lastDays = None
+		lastDayData = None
+		lastDayClosePrice = None
 
-			adjustedMonth = n + self.month
-			booler = False
-			if(adjustedMonth >= 13):
-				booler = True
-				adjustedMonth -= 12
+		adjustedMonth = n + self.month
+		booler = False
+		if(adjustedMonth >= 13):
+			booler = True
+			adjustedMonth -= 12
 
 		for i in range(self.year - 1, self.year - 11, -1):
 
 			if(adjustedMonth < self.month):
 				yearOffset = 1
 
-			firstDays = [datetime.date(i + yearOffset, adjustedMonth, 1), datetime.date(i + yearOffset, adjustedMonth, 2)]
-			while True:
-				try:
-					firstDayData = quandl.get_table(self.formatQuandlQuery(stock, str(firstDays[0]), str(firstDays[1])))
-					firstDayClosePrice = firstDayData["close"][0]
-					if (firstDays[0].day == 6):
-						break
-					break
-				except IndexError:
-					firstDays[0] += deltaT
-					firstDays[1] += deltaT
+			# firstDays = [datetime.date(i + yearOffset, adjustedMonth, 1), datetime.date(i + yearOffset, adjustedMonth, 2)]
+			# while True:
+			# 	try:
+			# 		firstDayData = quandl.get_table(self.formatQuandlQuery(stock, str(firstDays[0]), str(firstDays[1])))
+			# 		firstDayClosePrice = firstDayData["close"][0]
+			# 		if (firstDays[0].day == 6):
+			# 			break
+			# 		break
+			# 	except IndexError:
+			# 		firstDays[0] += deltaT
+			# 		firstDays[1] += deltaT
 
-			lastDays = [datetime.date(i + yearOffset, adjustedMonth, calendar.monthrange(i + yearOffset, adjustedMonth)[1]), datetime.date(i + yearOffset, adjustedMonth, calendar.monthrange(i + yearOffset, adjustedMonth)[1]) + deltaT]
-			while True:
-				try:
-					lastDayData = quandl.get_table(self.formatQuandlQuery(stock, str(lastDays[0]), str(lastDays[1])))
-					lastDayClosePrice = lastDayData["close"][0]
-					break
-				except IndexError:
-					lastDays[0] -= deltaT
-					lastDays[1] -= deltaT		
+			# lastDays = [datetime.date(i + yearOffset, adjustedMonth, calendar.monthrange(i + yearOffset, adjustedMonth)[1]), datetime.date(i + yearOffset, adjustedMonth, calendar.monthrange(i + yearOffset, adjustedMonth)[1]) + deltaT]
+			# while True:
+			# 	try:
+			# 		lastDayData = quandl.get_table(self.formatQuandlQuery(stock, str(lastDays[0]), str(lastDays[1])))
+			# 		lastDayClosePrice = lastDayData["close"][0]
+			# 		break
+			# 	except IndexError:
+			# 		lastDays[0] -= deltaT
+			# 		lastDays[1] -= deltaT	
 
-			percentChange = ((lastDayClosePrice - firstDayClosePrice)/firstDayClosePrice) * 100
+			# percentageChange = ((lastDayClosePrice - firstDayClosePrice)/firstDayClosePrice) * 100
 
-			print(stock, i + yearOffset, adjustedMonth, precentageChange)
+			percentageChange = self.getPercentageChange(stock, i + yearOffset, adjustedMonth)
 
-			if(percentChange > 0):
+			print(stock, i + yearOffset, adjustedMonth, percentageChange)
+
+			# the elif is not an else to catch percentageChange == None
+			if(percentageChange > 0):
 				frequencyList[0] += 1
-			else:
+			elif(percentageChange < 0):
 				frequencyList[1] += 1
 
-			percentChangeList.append(percentChange)
+			percentChangeList.append(percentageChange)
 
 		dataList = [np.mean(percentChangeList), np.std(percentChangeList, ddof = 1)]
 
