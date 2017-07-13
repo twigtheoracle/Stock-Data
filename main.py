@@ -15,23 +15,23 @@ run = f.fileOpen(wb, fileName, savePath)
 if(run):
 
 	#iterate through the sheets
-	for sheet in wb:
+	# for sheet in wb:
 
-		print(sheet.title + " ANALYSIS")
+	# 	print(sheet.title + " ANALYSIS")
 
-		stock = s.stock(sheet.title, sheet, bins, savePath)
+	# 	stock = s.stock(sheet.title, sheet, bins, savePath)
 
-		stock.formatRecentDataSheet()
+	# 	stock.formatRecentDataSheet()
 
-		hd = stock.getHistoricalData()
+	# 	hd = stock.getHistoricalData()
 
-		prices = stock.fillRecentData(hd)
+	# 	prices = stock.fillRecentData(hd)
 
-		stock.fillRecentDescriptiveStats(prices)
+	# 	stock.fillRecentDescriptiveStats(prices)
 
-		stock.fillRecentGraphs(prices)
+	# 	stock.fillRecentGraphs(prices)
 
-		print("COMPLETED\n")
+	# 	print("COMPLETED\n")
 
 	stockList = wb.sheetnames
 

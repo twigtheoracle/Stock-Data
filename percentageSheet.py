@@ -80,7 +80,7 @@ class percentageSheet():
 		return year
 
 	# formats the quandl query so I don't have to look at a monsterously long string :P
-	# return 	string 	a formatted string for quandl query
+	# return 	returnstring 	a formatted string for quandl query
 	def formatQuandlQuery(self, stock, dateOld, dateCurrent):
 		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + stock + "&api_key=1qsGVmxih-dcMRsh13Zk")
 		return returnString
@@ -104,8 +104,8 @@ class percentageSheet():
 		index = 0
 		while True:
 			try:
-				if (index == 6):
-					break
+				if (index >= 6):
+					return None
 				monthStartPrice = data["close"][index]
 				break
 			except IndexError:
@@ -114,8 +114,8 @@ class percentageSheet():
 		index = len(data["close"]) - 1
 		while True:
 			try:
-				if (index == 25):
-					break
+				if (index == -1):
+					return None
 				monthEndPrice = data["close"][index]
 				break
 			except IndexError:
@@ -184,13 +184,12 @@ class percentageSheet():
 
 			print(stock, i + yearOffset, adjustedMonth, percentageChange)
 
-			# the elif is not an else to catch percentageChange == None
-			if(percentageChange > 0):
-				frequencyList[0] += 1
-			elif(percentageChange < 0):
-				frequencyList[1] += 1
-
-			percentChangeList.append(percentageChange)
+			if (percentageChange != None):
+				percentChangeList.append(percentageChange)
+				if(percentageChange > 0):
+					frequencyList[0] += 1
+				elif(percentageChange < 0):
+					frequencyList[1] += 1
 
 		dataList = [np.mean(percentChangeList), np.std(percentChangeList, ddof = 1)]
 
