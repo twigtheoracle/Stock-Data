@@ -8,9 +8,6 @@ import math
 import pprint
 import sys
 
-import generate_data as gd
-
-
 ################################################################################
 
 # checks if the file is open
@@ -63,28 +60,3 @@ def getMonthList(currentMonth):
 		if (returnList[i] == 0):
 			returnList[i] = 12
 	return returnList
-
-################################################################################
-
-#Creates the ten year average pages
-def tenYearAverage(book):
-	percSheet = book.create_sheet("10YEARAVG%", 0)
-	freqSheet = book.create_sheet("10YearAVGv", 1)
-
-	#Both of these are type ints
-	thisYear = datetime.now().year
-	thisMonth = datetime.now().month
-
-	gd.formatPercSheet(percSheet, thisYear, thisMonth)
-	gd.formatPercSheet(freqSheet, thisYear, thisMonth)
-
-	rowNumber = 3
-
-	for sheet in book:
-		if(not isNumber(sheet.title[:1])):
-
-			print("STARTING " + sheet.title + " 10 YEAR ANALYSIS")
-
-			gd.fillPercAndFreq(percSheet, freqSheet, thisYear, thisMonth, rowNumber, sheet.title)
-
-			rowNumber += 1

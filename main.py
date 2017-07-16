@@ -49,6 +49,8 @@ if(run):
 
 			percentageSheet.fillPercentageChange(stockList[i], monthOffset, i)
 
+	percentageSheet.color()
+
 	#save workbook
 	if (f.save(wb, savePath)):
 		print("WORKBOOK COMPLETED")

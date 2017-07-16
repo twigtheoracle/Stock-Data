@@ -187,4 +187,5 @@ class percentageSheet():
 		for letter in range(2, 15): # from letter B to N when plugged into the first non __init__ function
 			for row in range(3, 3 + len(self.stockList)):
 				cell = self.numberToLetter(letter) + str(row)
-				
+
+				print(cell, self.sheet[cell])
