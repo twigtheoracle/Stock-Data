@@ -180,4 +180,4 @@ class percentageSheet():
 		pp.pprint(dataList)
 		print()
 
-		return frequencyList
+		return [frequencyList, dataList[1]]
