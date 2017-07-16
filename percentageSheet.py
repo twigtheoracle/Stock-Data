@@ -181,3 +181,10 @@ class percentageSheet():
 		print()
 
 		return [frequencyList, dataList[1]]
+
+	# colors each numerical percentage a color based on a pretty gradient from red to green
+	def color(self):
+		for letter in range(2, 15): # from letter B to N when plugged into the first non __init__ function
+			for row in range(3, 3 + len(self.stockList)):
+				cell = self.numberToLetter(letter) + str(row)
+				
