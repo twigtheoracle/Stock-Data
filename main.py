@@ -1,43 +1,54 @@
-from openpyxl import *
-import numpy as np
+import openpyxl
 
 import functions as f
+import stock as s
+import percentageSheet as ps
 
 fileName = "template.xlsx"
-# fileName = "test_template.xlsx"
+bins = 20
+savePath = "C:/Users/ericl/Desktop/"
 
-wb = load_workbook(fileName)
+wb = openpyxl.load_workbook(fileName)
 
-run = f.fileOpen(wb, fileName)
-
-print("\n")
-print("===STARTING RECENT DATA ANALYSIS")
-print("\n")
+run = f.fileOpen(wb, fileName, savePath)
 
 if(run):
 
-	#iterate through the sheets
+	# iterate through the sheets
 	for sheet in wb:
 
-		f.clean(sheet)
+		print(sheet.title + " ANALYSIS")
 
-		print ("SHEET TITLE:       " + sheet.title)	
+		stock = s.stock(sheet.title, sheet, bins, savePath)
 
-		prices = f.fillData(sheet)
+		stock.formatRecentDataSheet()
 
-		f.fillStats(sheet, prices)
+		hd = stock.getHistoricalData()
 
-		f.graphs(sheet, prices)
+		prices = stock.fillRecentData(hd)
 
-		#finish
-		print(sheet.title + " RECENT DATA ANALYSIS COMPLETE\n")
+		stock.fillRecentDescriptiveStats(prices)
 
-	print("\n===ALL RECENT DATA ANALYSIS COMPLETE===\n\n")
+		stock.fillRecentGraphs(prices)
 
-	print("===STARTING 10 YEAR DATA ANALYSIS===\n\n")
+		print("COMPLETED\n")
 
-	f.tenYearAverage(wb)
+	stockList = wb.sheetnames
+
+	foo = wb.create_sheet("10YR %", 0)
+
+	percentageSheet = ps.percentageSheet(foo, stockList)
+
+	percentageSheet.formatPercentageSheet()
+
+	for i in range(0, len(stockList)):
+
+		percentageSheet.addStock(i + 3, stockList[i])
+
+		for monthOffset in range(0,12):
+
+			percentageSheet.fillPercentageChange(stockList[i], monthOffset, i)
 
 	#save workbook
-	if (f.save(wb)):
+	if (f.save(wb, savePath)):
 		print("WORKBOOK COMPLETED")
