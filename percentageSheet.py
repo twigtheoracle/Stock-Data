@@ -38,8 +38,7 @@ class percentageSheet():
 			PatternFill(start_color='31DE0B', end_color='31DE0B', fill_type='solid'), 
 			PatternFill(start_color='1ADE0C', end_color='1ADE0C', fill_type='solid'), 
 			PatternFill(start_color='0CDE17', end_color='0CDE17', fill_type='solid')]
-
-
+			
 	# returns a letter based on the number
 	# return 	x 	a letter representation of a number (1-->A, 2-->B, ect.)
 	def numberToLetter(self, n):
