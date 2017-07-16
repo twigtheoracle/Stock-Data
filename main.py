@@ -4,7 +4,7 @@ import functions as f
 import stock as s
 import percentageSheet as ps
 
-fileName = "test_template.xlsx"
+fileName = "template.xlsx"
 bins = 20
 savePath = "C:/Users/ericl/Desktop/"
 

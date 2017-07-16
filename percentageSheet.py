@@ -38,7 +38,7 @@ class percentageSheet():
 			PatternFill(start_color='31DE0B', end_color='31DE0B', fill_type='solid'), 
 			PatternFill(start_color='1ADE0C', end_color='1ADE0C', fill_type='solid'), 
 			PatternFill(start_color='0CDE17', end_color='0CDE17', fill_type='solid')]
-			
+
 	# returns a letter based on the number
 	# return 	x 	a letter representation of a number (1-->A, 2-->B, ect.)
 	def numberToLetter(self, n):
@@ -105,6 +105,7 @@ class percentageSheet():
 	# formats the quandl query so I don't have to look at a monsterously long string :P
 	# return 	returnstring 	a formatted string for quandl query
 	def formatQuandlQuery(self, stock, dateOld, dateCurrent):
+		time.sleep(.5)
 		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + stock + "&api_key=1qsGVmxih-dcMRsh13Zk")
 		return returnString
 
@@ -217,4 +218,3 @@ class percentageSheet():
 					elif (value >= 19):
 						value = 19
 					self.sheet[cell].fill = self.colorGradient[value]
-
