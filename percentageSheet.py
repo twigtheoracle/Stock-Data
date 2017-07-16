@@ -5,6 +5,7 @@ import quandl
 import string
 import calendar
 import datetime
+import time
 
 class percentageSheet():
 	# initializes the sheet with basic data
@@ -82,6 +83,7 @@ class percentageSheet():
 	# formats the quandl query so I don't have to look at a monsterously long string :P
 	# return 	returnstring 	a formatted string for quandl query
 	def formatQuandlQuery(self, stock, dateOld, dateCurrent):
+		time.sleep(1)
 		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + stock + "&api_key=1qsGVmxih-dcMRsh13Zk")
 		return returnString
 
@@ -155,30 +157,6 @@ class percentageSheet():
 
 			if(adjustedMonth < self.month):
 				yearOffset = 1
-
-			# firstDays = [datetime.date(i + yearOffset, adjustedMonth, 1), datetime.date(i + yearOffset, adjustedMonth, 2)]
-			# while True:
-			# 	try:
-			# 		firstDayData = quandl.get_table(self.formatQuandlQuery(stock, str(firstDays[0]), str(firstDays[1])))
-			# 		firstDayClosePrice = firstDayData["close"][0]
-			# 		if (firstDays[0].day == 6):
-			# 			break
-			# 		break
-			# 	except IndexError:
-			# 		firstDays[0] += deltaT
-			# 		firstDays[1] += deltaT
-
-			# lastDays = [datetime.date(i + yearOffset, adjustedMonth, calendar.monthrange(i + yearOffset, adjustedMonth)[1]), datetime.date(i + yearOffset, adjustedMonth, calendar.monthrange(i + yearOffset, adjustedMonth)[1]) + deltaT]
-			# while True:
-			# 	try:
-			# 		lastDayData = quandl.get_table(self.formatQuandlQuery(stock, str(lastDays[0]), str(lastDays[1])))
-			# 		lastDayClosePrice = lastDayData["close"][0]
-			# 		break
-			# 	except IndexError:
-			# 		lastDays[0] -= deltaT
-			# 		lastDays[1] -= deltaT	
-
-			# percentageChange = ((lastDayClosePrice - firstDayClosePrice)/firstDayClosePrice) * 100
 
 			percentageChange = self.getPercentageChange(stock, i + yearOffset, adjustedMonth)
 
