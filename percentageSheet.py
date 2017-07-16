@@ -18,26 +18,27 @@ class percentageSheet():
 		self.monthIndex = ["Jan (1)", "Feb (2)", "Mar (3)", "Apr (4)", "May (5)", "Jun (6)", "Jul (7)", "Aug (8)", "Sep (9)", "Oct (10)", "Nov (11)", "Dec (12)"]
 		self.year = datetime.datetime.now().year
 		self.month = datetime.datetime.now().month
-		self.colorGradient=[PatternFill(start_color='E50054', end_color='E50054', fill_type='solid'), 
-			PatternFill(start_color='E40037', end_color='E40037', fill_type='solid'),
-			PatternFill(start_color='E4011A', end_color='E4011A', fill_type='solid'),
-			PatternFill(start_color='E30502', end_color='E30502', fill_type='solid'),
-			PatternFill(start_color='E32202', end_color='E32202', fill_type='solid'),
-			PatternFill(start_color='E33F03', end_color='E33F03', fill_type='solid'),
-			PatternFill(start_color='E25C04', end_color='E25C04', fill_type='solid'),
-			PatternFill(start_color='E27804', end_color='E27804', fill_type='solid'),
-			PatternFill(start_color='E29405', end_color='E29405', fill_type='solid'),
-			PatternFill(start_color='E1B006', end_color='E1B006', fill_type='solid'),
-			PatternFill(start_color='E1CC06', end_color='E1CC06', fill_type='solid'),
-			PatternFill(start_color='DAE007', end_color='DAE007', fill_type='solid'),
-			PatternFill(start_color='BEE008', end_color='BEE008', fill_type='solid'),
-			PatternFill(start_color='A2E008', end_color='A2E008', fill_type='solid'),
-			PatternFill(start_color='87DF09', end_color='87DF09', fill_type='solid'),
-			PatternFill(start_color='6CDF0A', end_color='6CDF0A', fill_type='solid'),
-			PatternFill(start_color='51DF0B', end_color='51DF0B', fill_type='solid'),
-			PatternFill(start_color='37DE0B', end_color='37DE0B', fill_type='solid'),
-			PatternFill(start_color='1CDE0C', end_color='1CDE0C', fill_type='solid'),
+		self.colorGradient=[PatternFill(start_color='E4001A', end_color='E4001A', fill_type='solid'), 
+			PatternFill(start_color='E30201', end_color='E30201', fill_type='solid'), 
+			PatternFill(start_color='E31c02', end_color='E31c02', fill_type='solid'), 
+			PatternFill(start_color='E33602', end_color='E33602', fill_type='solid'), 
+			PatternFill(start_color='E25003', end_color='E25003', fill_type='solid'), 
+			PatternFill(start_color='E26904', end_color='E26904', fill_type='solid'), 
+			PatternFill(start_color='E28304', end_color='E28304', fill_type='solid'), 
+			PatternFill(start_color='E19C05', end_color='E19C05', fill_type='solid'), 
+			PatternFill(start_color='E1B506', end_color='E1B506', fill_type='solid'), 
+			PatternFill(start_color='E1CD06', end_color='E1CD06', fill_type='solid'), 
+			PatternFill(start_color='DBE007', end_color='DBE007', fill_type='solid'), 
+			PatternFill(start_color='C2E008', end_color='C2E008', fill_type='solid'), 
+			PatternFill(start_color='A9E008', end_color='A9E008', fill_type='solid'), 
+			PatternFill(start_color='91DF09', end_color='91DF09', fill_type='solid'), 
+			PatternFill(start_color='79DF09', end_color='79DF09', fill_type='solid'), 
+			PatternFill(start_color='60DF0A', end_color='60DF0A', fill_type='solid'), 
+			PatternFill(start_color='49DE0B', end_color='49DE0B', fill_type='solid'), 
+			PatternFill(start_color='31DE0B', end_color='31DE0B', fill_type='solid'), 
+			PatternFill(start_color='1ADE0C', end_color='1ADE0C', fill_type='solid'), 
 			PatternFill(start_color='0CDE17', end_color='0CDE17', fill_type='solid')]
+
 
 	# returns a letter based on the number
 	# return 	x 	a letter representation of a number (1-->A, 2-->B, ect.)
