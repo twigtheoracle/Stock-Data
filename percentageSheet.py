@@ -1,3 +1,5 @@
+from openpyxl.styles import Color, PatternFill
+
 import numpy as np
 import pprint as pp
 import openpyxl
@@ -16,6 +18,26 @@ class percentageSheet():
 		self.monthIndex = ["Jan (1)", "Feb (2)", "Mar (3)", "Apr (4)", "May (5)", "Jun (6)", "Jul (7)", "Aug (8)", "Sep (9)", "Oct (10)", "Nov (11)", "Dec (12)"]
 		self.year = datetime.datetime.now().year
 		self.month = datetime.datetime.now().month
+		self.colorGradient=[PatternFill(start_color='E50054', end_color='E50054', fill_type='solid'), 
+			PatternFill(start_color='E40037', end_color='E40037', fill_type='solid'),
+			PatternFill(start_color='E4011A', end_color='E4011A', fill_type='solid'),
+			PatternFill(start_color='E30502', end_color='E30502', fill_type='solid'),
+			PatternFill(start_color='E32202', end_color='E32202', fill_type='solid'),
+			PatternFill(start_color='E33F03', end_color='E33F03', fill_type='solid'),
+			PatternFill(start_color='E25C04', end_color='E25C04', fill_type='solid'),
+			PatternFill(start_color='E27804', end_color='E27804', fill_type='solid'),
+			PatternFill(start_color='E29405', end_color='E29405', fill_type='solid'),
+			PatternFill(start_color='E1B006', end_color='E1B006', fill_type='solid'),
+			PatternFill(start_color='E1CC06', end_color='E1CC06', fill_type='solid'),
+			PatternFill(start_color='DAE007', end_color='DAE007', fill_type='solid'),
+			PatternFill(start_color='BEE008', end_color='BEE008', fill_type='solid'),
+			PatternFill(start_color='A2E008', end_color='A2E008', fill_type='solid'),
+			PatternFill(start_color='87DF09', end_color='87DF09', fill_type='solid'),
+			PatternFill(start_color='6CDF0A', end_color='6CDF0A', fill_type='solid'),
+			PatternFill(start_color='51DF0B', end_color='51DF0B', fill_type='solid'),
+			PatternFill(start_color='37DE0B', end_color='37DE0B', fill_type='solid'),
+			PatternFill(start_color='1CDE0C', end_color='1CDE0C', fill_type='solid'),
+			PatternFill(start_color='0CDE17', end_color='0CDE17', fill_type='solid')]
 
 	# returns a letter based on the number
 	# return 	x 	a letter representation of a number (1-->A, 2-->B, ect.)
@@ -83,7 +105,6 @@ class percentageSheet():
 	# formats the quandl query so I don't have to look at a monsterously long string :P
 	# return 	returnstring 	a formatted string for quandl query
 	def formatQuandlQuery(self, stock, dateOld, dateCurrent):
-		time.sleep(1)
 		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + stock + "&api_key=1qsGVmxih-dcMRsh13Zk")
 		return returnString
 
@@ -187,5 +208,13 @@ class percentageSheet():
 		for letter in range(2, 15): # from letter B to N when plugged into the first non __init__ function
 			for row in range(3, 3 + len(self.stockList)):
 				cell = self.numberToLetter(letter) + str(row)
+				value = self.sheet[cell].value
 
-				print(cell, self.sheet[cell])
+				if (value != None):
+					value = int(value + 10)
+					if (value <= 0):
+						value = 0
+					elif (value >= 19):
+						value = 19
+					self.sheet[cell].fill = self.colorGradient[value]
+
