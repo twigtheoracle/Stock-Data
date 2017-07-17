@@ -6,7 +6,7 @@ import stock as s
 import percentageSheet as ps
 import frequencySheet as fs
 
-fileName = "test_template.xlsx"
+fileName = "template.xlsx"
 bins = 20
 savePath = "C:/Users/ericl/Desktop/"
 
@@ -16,7 +16,7 @@ run = f.fileOpen(wb, fileName, savePath)
 
 if(run):
 
-	recent data
+	# recent data
 	for sheet in wb:
 
 		print(sheet.title + " ANALYSIS")
@@ -30,8 +30,8 @@ if(run):
 
 		print("COMPLETED\n")
 
-	10 year stuff
-	percentage sheet
+	# 10 year stuff
+	# percentage sheet
 	stockList = wb.sheetnames
 	foo = wb.create_sheet("10YR %", 0)
 	percentageSheet = ps.percentageSheet(foo, stockList)

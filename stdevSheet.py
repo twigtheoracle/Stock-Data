@@ -4,11 +4,11 @@ import openpyxl
 import datetime
 import string
 
-class frequencySheet():
+class stdevSheet():
 	# initializes the sheet with basic data
-	def __init__(self, frequencySheet, frequencyList, stockList):
-		self.sheet = frequencySheet
-		self.frequencyList = frequencyList
+	def __init__(self, stdevSheet, stdevList, stockList):
+		self.sheet = stdevSheet
+		self.stdevList = stdevList
 		self.stockList = stockList
 
 		self.monthIndex = ["Jan (1)", "Feb (2)", "Mar (3)", "Apr (4)", "May (5)", "Jun (6)", "Jul (7)", "Aug (8)", "Sep (9)", "Oct (10)", "Nov (11)", "Dec (12)"]
@@ -83,36 +83,3 @@ class frequencySheet():
 
 		for row in range(3, 3 + len(self.stockList)):
 			self.sheet["A" + str(row)] = self.stockList[row - 3]
-
-	# fills the frequency sheet with cool data
-	def fill(self):
-		index = 0
-		for row in range(3, 3 + len(self.stockList)):
-			for letter in range(2, 15): # from letter B to N when plugged into the first non __init__ function
-				cell = self.numberToLetter(letter) + str(row)
-
-				if (self.sheet[self.numberToLetter(letter) + "2"].value != None):
-
-					up = self.frequencyList[index][0]
-					down = self.frequencyList[index][1]
-
-					percentUp = round((up*100)/(up + down), 2)
-
-					self.sheet[cell] = percentUp
-
-					index += 1
-
-	# colors the frequecy sheet on a red green gradient
-	def color(self):
-		for letter in range(2, 15): # from letter B to N when plugged into the first non __init__ function
-			for row in range(3, 3 + len(self.stockList)):
-				cell = self.numberToLetter(letter) + str(row)
-				value = self.sheet[cell].value
-
-				if (value != None):
-					value = int(value/5)
-					if (value <= 0):
-						value = 0
-					elif (value >= 19):
-						value = 19
-					self.sheet[cell].fill = self.colorGradient[value]

@@ -9,7 +9,7 @@ import calendar
 import datetime
 import time
 
-timeDelay = False
+timeDelay = True
 
 class percentageSheet():
 	# initializes the sheet with basic data
