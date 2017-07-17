@@ -9,6 +9,8 @@ import calendar
 import datetime
 import time
 
+timeDelay = False
+
 class percentageSheet():
 	# initializes the sheet with basic data
 	def __init__(self, sheet, stocks):
@@ -47,7 +49,7 @@ class percentageSheet():
 		return x
 
 	# formats the percentage sheet
-	def formatPercentageSheet(self):
+	def format(self):
 
 		#Puts in the months for the current month and next years months
 		#Merges cells for year values
@@ -105,7 +107,8 @@ class percentageSheet():
 	# formats the quandl query so I don't have to look at a monsterously long string :P
 	# return 	returnstring 	a formatted string for quandl query
 	def formatQuandlQuery(self, stock, dateOld, dateCurrent):
-		time.sleep(.5)
+		if(timeDelay):
+			time.sleep(.5)
 		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + stock + "&api_key=1qsGVmxih-dcMRsh13Zk")
 		return returnString
 
@@ -202,7 +205,7 @@ class percentageSheet():
 		pp.pprint(dataList)
 		print()
 
-		return [frequencyList, dataList[1]]
+		return (frequencyList, dataList[1])
 
 	# colors each numerical percentage a color based on a pretty gradient from red to green
 	def color(self):
