@@ -1,5 +1,6 @@
-import openpyxl
+from pprint import pprint
 
+import openpyxl
 import functions as f
 import stock as s
 import percentageSheet as ps
@@ -16,18 +17,18 @@ run = f.fileOpen(wb, fileName, savePath)
 if(run):
 
 	# recent data
-	for sheet in wb:
+	# for sheet in wb:
 
-		print(sheet.title + " ANALYSIS")
+	# 	print(sheet.title + " ANALYSIS")
 
-		stock = s.stock(sheet.title, sheet, bins, savePath)
-		stock.formatRecentDataSheet()
-		hd = stock.getHistoricalData()
-		prices = stock.fillRecentData(hd)
-		stock.fillRecentDescriptiveStats(prices)
-		stock.fillRecentGraphs(prices)
+	# 	stock = s.stock(sheet.title, sheet, bins, savePath)
+	# 	stock.formatRecentDataSheet()
+	# 	hd = stock.getHistoricalData()
+	# 	prices = stock.fillRecentData(hd)
+	# 	stock.fillRecentDescriptiveStats(prices)
+	# 	stock.fillRecentGraphs(prices)
 
-		print("COMPLETED\n")
+	# 	print("COMPLETED\n")
 
 	# 10 year stuff
 	# percentage sheet
@@ -56,6 +57,7 @@ if(run):
 
 	frequencySheet = fs.frequencySheet(foo, frequencyList, stockList)
 	frequencySheet.format()
+	frequencySheet.fill()
 
 
 	# standard deviation sheet

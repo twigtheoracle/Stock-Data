@@ -15,7 +15,7 @@ import sys
 # return	False	fils is open (can not save)
 def fileOpen(wb, fileName, path):
 	try:
-		wb.save(fileName)
+		wb.save(path + "option_analysis_" + str(date.today()) + ".xlsx")
 		return True
 	except PermissionError:
 		print("ERROR: FILE IS OPEN")

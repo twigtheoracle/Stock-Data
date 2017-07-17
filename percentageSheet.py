@@ -200,7 +200,7 @@ class percentageSheet():
 		if(booler):
 			offset = 1
 
-		self.sheet[self.numberToLetter(n + 2 + offset) + str(row + 3)] = dataList[0]
+		self.sheet[self.numberToLetter(n + 2 + offset) + str(row + 3)] = round(dataList[0], 2)
 
 		pp.pprint(dataList)
 		print()

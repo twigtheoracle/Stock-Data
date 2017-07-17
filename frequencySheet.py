@@ -82,20 +82,22 @@ class frequencySheet():
 		self.sheet.merge_cells(nextYearRange)
 
 		for row in range(3, 3 + len(self.stockList)):
-			self.sheet["A" + str(row)] = self.stockList[row - 2]
+			self.sheet["A" + str(row)] = self.stockList[row - 3]
 
 	# fills the frequency sheet with cool data
 	def fill(self):
 		index = 0
-		for letter in range(2, 15): # from letter B to N when plugged into the first non __init__ function
-			for row in range(3, 3 + len(self.stockList)):
+		for row in range(3, 3 + len(self.stockList)):
+			for letter in range(2, 15): # from letter B to N when plugged into the first non __init__ function
 				cell = self.numberToLetter(letter) + str(row)
 
-				if (self.sheet[cell[:1] + "2"] != None):
+				if (self.sheet[self.numberToLetter(letter) + "2"].value != None):
+
 					up = self.frequencyList[index][0]
 					down = self.frequencyList[index][1]
 
-					percentUp = int(up/(up + down))
+					percentUp = round((up*100)/(up + down), 2)
 
 					self.sheet[cell] = percentUp
 
+					index += 1
