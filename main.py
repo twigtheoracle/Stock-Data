@@ -16,22 +16,22 @@ run = f.fileOpen(wb, fileName, savePath)
 
 if(run):
 
-	# recent data
-	# for sheet in wb:
+	recent data
+	for sheet in wb:
 
-	# 	print(sheet.title + " ANALYSIS")
+		print(sheet.title + " ANALYSIS")
 
-	# 	stock = s.stock(sheet.title, sheet, bins, savePath)
-	# 	stock.formatRecentDataSheet()
-	# 	hd = stock.getHistoricalData()
-	# 	prices = stock.fillRecentData(hd)
-	# 	stock.fillRecentDescriptiveStats(prices)
-	# 	stock.fillRecentGraphs(prices)
+		stock = s.stock(sheet.title, sheet, bins, savePath)
+		stock.formatRecentDataSheet()
+		hd = stock.getHistoricalData()
+		prices = stock.fillRecentData(hd)
+		stock.fillRecentDescriptiveStats(prices)
+		stock.fillRecentGraphs(prices)
 
-	# 	print("COMPLETED\n")
+		print("COMPLETED\n")
 
-	# 10 year stuff
-	# percentage sheet
+	10 year stuff
+	percentage sheet
 	stockList = wb.sheetnames
 	foo = wb.create_sheet("10YR %", 0)
 	percentageSheet = ps.percentageSheet(foo, stockList)
@@ -58,6 +58,7 @@ if(run):
 	frequencySheet = fs.frequencySheet(foo, frequencyList, stockList)
 	frequencySheet.format()
 	frequencySheet.fill()
+	frequencySheet.color()
 
 
 	# standard deviation sheet
