@@ -72,5 +72,5 @@ if(run):
 	if (f.save(wb, savePath)):
 		print("WORKBOOK COMPLETED")
 
-end = time.time()
-print("\nELAPSED TIME: ", int(end - start))
+timeElapsed = time.time() - start
+print("\nELAPSED TIME: ", int(int(timeElapsed)/60), int(timeElapsed)%60)
