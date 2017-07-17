@@ -1,10 +1,14 @@
 from pprint import pprint
 
-import openpyxl
 import functions as f
 import stock as s
 import percentageSheet as ps
 import frequencySheet as fs
+
+import openpyxl
+import time
+
+start = time.time()
 
 fileName = "template.xlsx"
 bins = 20
@@ -67,3 +71,6 @@ if(run):
 	#save workbook
 	if (f.save(wb, savePath)):
 		print("WORKBOOK COMPLETED")
+
+end = time.time()
+print("\nELAPSED TIME: ", int(end - start))
