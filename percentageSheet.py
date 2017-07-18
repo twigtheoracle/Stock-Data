@@ -9,6 +9,8 @@ import calendar
 import datetime
 import time
 
+import apiKey as key
+
 timeDelay = True
 
 class percentageSheet():
@@ -109,7 +111,7 @@ class percentageSheet():
 	def formatQuandlQuery(self, stock, dateOld, dateCurrent):
 		if(timeDelay):
 			time.sleep(.5)
-		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + stock + "&api_key=1qsGVmxih-dcMRsh13Zk")
+		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + stock + "&api_key=" + key.getAPIKey())
 		return returnString
 
 	# probally don't need this one, but ...
