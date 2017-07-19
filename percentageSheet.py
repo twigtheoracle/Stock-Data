@@ -195,6 +195,8 @@ class percentageSheet():
 					frequencyList[0] += 1
 				elif(percentageChange < 0):
 					frequencyList[1] += 1
+			else:
+				break
 
 		dataList = [np.mean(percentChangeList), np.std(percentChangeList, ddof = 1)]
 
