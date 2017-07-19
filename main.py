@@ -2,6 +2,7 @@ from pprint import pprint
 
 import openpyxl
 import time
+import quandl
 
 import functions as f
 import stock as s
@@ -9,10 +10,11 @@ import percentageSheet as ps
 import frequencySheet as fs
 import stdevSheet as sds
 
-try:
-	start = time.time()
+start = time.time()
 
-	fileName = "test_template.xlsx"
+try:
+	
+	fileName = "template.xlsx"
 	bins = 20
 	savePath = "C:/Users/ericl/Desktop/"
 
@@ -80,10 +82,35 @@ try:
 		if (f.save(wb, savePath)):
 			print("WORKBOOK COMPLETED")
 
+		timeElapsed = time.time() - start
+		# im not sure if time will automatically cast to an int and im too lazy to look it up :D
+		print("\nELAPSED TIME:", str(int(int(timeElapsed)/60)) + "m", str(int(timeElapsed)%60)+"s")
+
+except quandl.errors.quandl_error.QuandlError:
+	if (f.save(wb, savePath)):
+		print("INCOMPLETE WORKBOOK SAVED")
+	print("===PROGRAM TERMINATED===\n")
+	timeElapsed = time.time() - start
+	# im not sure if time will automatically cast to an int and im too lazy to look it up :D
+	print("\nELAPSED TIME:", str(int(int(timeElapsed)/60)) + "m", str(int(timeElapsed)%60)+"s")
+	print("504: GATEWAY TIMEOUT ERROR")
+	print("TRY TO RUN THE PROGRAM AGAIN")
+
+except KeyboardInterrupt:
+	if (f.save(wb, savePath)):
+		print("\n\nINCOMPLETE WORKBOOK COMPLETED")
+	print("===PROGRAM TERMINATED===")
+	print("KEYBOARD INTERRUPT\n")
 	timeElapsed = time.time() - start
 	# im not sure if time will automatically cast to an int and im too lazy to look it up :D
 	print("\nELAPSED TIME:", str(int(int(timeElapsed)/60)) + "m", str(int(timeElapsed)%60)+"s")
 
-except quandl.errors.quandl_error.QuandlError:
-	print("504: GATEWAY TIMEOUT ERROR")
-	print("TRY TO RUN THE PROGRAM AGAIN")
+except ConnectionResetError:
+	if (f.save(wb, savePath)):
+		print("\n\nINCOMPLETE WORKBOOK COMPLETED")
+	print("===PROGRAM TERMINATED===\n")
+	print("CONNECTION RESET ERROR\n")
+	timeElapsed = time.time() - start
+	# im not sure if time will automatically cast to an int and im too lazy to look it up :D
+	print("\nELAPSED TIME:", str(int(int(timeElapsed)/60)) + "m", str(int(timeElapsed)%60)+"s")
+

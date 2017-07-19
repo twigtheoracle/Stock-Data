@@ -1,3 +1,4 @@
 apiKey.py
 __pycache__/
 test_template.xlsx
+*.pyc
