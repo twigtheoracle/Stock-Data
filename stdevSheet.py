@@ -104,7 +104,7 @@ class stdevSheet():
 				cell = self.numberToLetter(letter) + str(row)
 				value = self.sheet[cell].value
 
-				if (value != None):
+				if (value != None and value != -1):
 					value = 20-int(value*2)
 					if (value <= 0):
 						value = 0

@@ -8,6 +8,7 @@ import string
 import calendar
 import datetime
 import time
+import math
 
 import apiKey as key
 
@@ -199,6 +200,9 @@ class percentageSheet():
 				break
 
 		dataList = [np.mean(percentChangeList), np.std(percentChangeList, ddof = 1)]
+
+		if(math.isnan(dataList[1])):
+			dataList[1] = -1
 
 		offset = 0
 		if(booler):
