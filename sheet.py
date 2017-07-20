@@ -4,6 +4,8 @@ import openpyxl
 import datetime
 import string
 
+import apiKey
+
 class Sheet():
 	# initializes the sheet with basic data
 	def __init__(self, sheet, dataList, stockList):
@@ -96,3 +98,12 @@ class Sheet():
 					self.sheet[cell] = self.dataList[index]
 
 					index += 1
+
+	# formats the quandl query so I don't have to look at a monsterously long string :P
+	# return 	returnstring 	a formatted string for quandl query
+	def formatQuandlQuery(self, stock, dateOld, dateCurrent):
+		if(timeDelay):
+			time.sleep(.5)
+		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + stock + "&api_key=" + key.getAPIKey())
+		return returnString
+		
