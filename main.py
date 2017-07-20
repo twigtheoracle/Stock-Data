@@ -14,7 +14,7 @@ start = time.time()
 
 try:
 	
-	fileName = "template.xlsx"
+	fileName = "test_template.xlsx"
 	bins = 20
 	savePath = "C:/Users/ericl/Desktop/"
 
@@ -24,19 +24,19 @@ try:
 
 	if(run):
 
-		# recent data
-		for sheet in wb:
+		# # recent data
+		# for sheet in wb:
 
-			print(sheet.title + " ANALYSIS")
+		# 	print(sheet.title + " ANALYSIS")
 
-			stock = s.stock(sheet.title, sheet, bins, savePath)
-			stock.formatRecentDataSheet()
-			hd = stock.getHistoricalData()
-			prices = stock.fillRecentData(hd)
-			stock.fillRecentDescriptiveStats(prices)
-			stock.fillRecentGraphs(prices)
+		# 	stock = s.stock(sheet.title, sheet, bins, savePath)
+		# 	stock.formatRecentDataSheet()
+		# 	hd = stock.getHistoricalData()
+		# 	prices = stock.fillRecentData(hd)
+		# 	stock.fillRecentDescriptiveStats(prices)
+		# 	stock.fillRecentGraphs(prices)
 
-			print("COMPLETED\n")
+		# 	print("COMPLETED\n")
 
 		# 10 year stuff
 		# percentage sheet
@@ -98,7 +98,7 @@ except quandl.errors.quandl_error.QuandlError:
 
 except KeyboardInterrupt:
 	if (f.save(wb, savePath)):
-		print("\n\nINCOMPLETE WORKBOOK COMPLETED")
+		print("\n\nINCOMPLETE WORKBOOK SAVED")
 	print("===PROGRAM TERMINATED===")
 	print("KEYBOARD INTERRUPT\n")
 	timeElapsed = time.time() - start
@@ -107,7 +107,7 @@ except KeyboardInterrupt:
 
 except ConnectionResetError:
 	if (f.save(wb, savePath)):
-		print("\n\nINCOMPLETE WORKBOOK COMPLETED")
+		print("\n\nINCOMPLETE WORKBOOK SAVED")
 	print("===PROGRAM TERMINATED===\n")
 	print("CONNECTION RESET ERROR\n")
 	timeElapsed = time.time() - start

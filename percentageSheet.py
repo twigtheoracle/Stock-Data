@@ -202,7 +202,7 @@ class percentageSheet():
 		dataList = [np.mean(percentChangeList), np.std(percentChangeList, ddof = 1)]
 
 		if(math.isnan(dataList[1])):
-			dataList[1] = -1
+			dataList[1] = None
 
 		offset = 0
 		if(booler):
@@ -213,7 +213,12 @@ class percentageSheet():
 		pp.pprint(dataList)
 		print()
 
-		return (frequencyList, dataList[1])
+		up = frequencyList[0]
+		down = frequencyList[1]
+
+		percentUp = round((up*100)/(up + down), 2)
+
+		return (percentUp, dataList[1])
 
 	# colors each numerical percentage a color based on a pretty gradient from red to green
 	def color(self):

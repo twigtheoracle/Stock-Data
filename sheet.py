@@ -4,10 +4,10 @@ import openpyxl
 import datetime
 import string
 
-class stdevSheet():
+class Sheet():
 	# initializes the sheet with basic data
 	def __init__(self, sheet, dataList, stockList):
-		self.sheet = stdevSheet
+		self.sheet = sheet
 		self.dataList = dataList
 		self.stockList = stockList
 
@@ -93,21 +93,6 @@ class stdevSheet():
 
 				if (self.sheet[self.numberToLetter(letter) + "2"].value != None):
 
-					self.sheet[cell] = self.stdevList[index]
+					self.sheet[cell] = self.dataList[index]
 
 					index += 1
-
-	# colors the sheet on a red green gradient
-	def color(self):
-		for letter in range(2, 15): # from letter B to N when plugged into the first non __init__ function
-			for row in range(3, 3 + len(self.stockList)):
-				cell = self.numberToLetter(letter) + str(row)
-				value = self.sheet[cell].value
-
-				if (value != None and value != -1):
-					value = 20-int(value*2)
-					if (value <= 0):
-						value = 0
-					elif (value >= 19):
-						value = 19
-					self.sheet[cell].fill = self.colorGradient[value]
