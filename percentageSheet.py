@@ -13,8 +13,6 @@ import math
 import apiKey as key
 import sheet
 
-timeDelay = True
-
 class percentageSheet(sheet.Sheet):
 	# a silly function, i'm sure there's some library out there that will do this for me
 	# return 	1 			if the month is twelve (Dec), the next month is 1 (Jan)
@@ -152,6 +150,6 @@ class percentageSheet(sheet.Sheet):
 		for i in range(0, len(self.stockList)):
 			for monthOffset in range(0,12):
 
-				bar, bat = percentageSheet.fillPercentageChange(self.stockList[i], monthOffset, i)
+				bar, bat = self.fillPercentageChange(self.stockList[i], monthOffset, i)
 				frequencyList.append(bar)
 				stdevList.append(bat)

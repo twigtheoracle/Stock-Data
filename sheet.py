@@ -3,8 +3,11 @@ from openpyxl.styles import Color, PatternFill
 import openpyxl
 import datetime
 import string
+import time
 
 import apiKey
+
+timeDelay = False
 
 class Sheet():
 	# initializes the sheet with basic data
@@ -104,6 +107,5 @@ class Sheet():
 	def formatQuandlQuery(self, stock, dateOld, dateCurrent):
 		if(timeDelay):
 			time.sleep(.5)
-		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + stock + "&api_key=" + key.getAPIKey())
+		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + stock + "&api_key=" + apiKey.getAPIKey())
 		return returnString
-		
