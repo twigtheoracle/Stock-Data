@@ -39,32 +39,24 @@ try:
 		# 	print("COMPLETED\n")
 
 		# 10 year stuff
-		# percentage sheet
 		stockList = wb.sheetnames
-		foo = wb.create_sheet("10YR %", 0)
-		percentageSheet = ps.percentageSheet(foo, stockList)
-
 		frequencyList = []
-		stdDevList = []
+		stdevList = []
 
+
+		# percentage sheet
+		foo = wb.create_sheet("10YR %", 0)
+
+		percentageSheet = ps.percentageSheet(foo, [], stockList)
 		percentageSheet.format()
-		for i in range(0, len(stockList)):
-
-			percentageSheet.addStock(i + 3, stockList[i])
-
-			for monthOffset in range(0,12):
-
-				bar, bat = percentageSheet.fillPercentageChange(stockList[i], monthOffset, i)
-				frequencyList.append(bar)
-				stdDevList.append(bat)
-
+		percentageSheet.fill(frequencyList, stdevList)
 		percentageSheet.color()
 
 
 		# standard deviation sheet
 		foo = wb.create_sheet("10YR % STD Dev", 1)
 
-		stdevSheet = sds.stdevSheet(foo, stdDevList, stockList)
+		stdevSheet = sds.stdevSheet(foo, stdevList, stockList)
 		stdevSheet.format()
 		stdevSheet.fill()
 		stdevSheet.color()
