@@ -9,6 +9,7 @@ import apiKey
 
 timeDelay = False
 
+# superclass for all the sheet classes
 class Sheet():
 	# initializes the sheet with basic data
 	def __init__(self, sheet, dataList, stockList):
