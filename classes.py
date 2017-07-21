@@ -13,7 +13,7 @@ import quandl
 
 import sheet
 
-class percentageSheet(sheet.Sheet):
+class PercentageSheet(sheet.Sheet):
 	# a silly function, i'm sure there's some library out there that will do this for me
 	# return 	1 			if the month is twelve (Dec), the next month is 1 (Jan)
 	# return 	month + 1	if the month is not twelve, the next month is month + 1
@@ -154,7 +154,7 @@ class percentageSheet(sheet.Sheet):
 				frequencyList.append(bar)
 				stdevList.append(bat)
 
-class stdevSheet(sheet.Sheet):
+class StdevSheet(sheet.Sheet):
 	# colors the stdev sheet on a red green gradient
 	def color(self):
 		for letter in range(2, 15): # from letter B to N 
@@ -170,7 +170,7 @@ class stdevSheet(sheet.Sheet):
 						value = 19
 					self.sheet[cell].fill = self.colorGradient[value]
 
-class frequencySheet(sheet.Sheet):
+class FrequencySheet(sheet.Sheet):
 	# colors the frequecy sheet on a red green gradient
 	def color(self):
 		for letter in range(2, 15): # from letter B to N when plugged into the first non __init__ function
