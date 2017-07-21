@@ -5,16 +5,15 @@ import time
 import quandl
 
 import functions as f
-import stock as s
-import percentageSheet as ps
-import frequencySheet as fs
-import stdevSheet as sds
+import stock
+
+import classes
 
 start = time.time()
 
 try:
 	
-	fileName = "template.xlsx"
+	fileName = "test_template.xlsx"
 	bins = 20
 	savePath = "C:/Users/ericl/Desktop/"
 
@@ -24,47 +23,39 @@ try:
 
 	if(run):
 
-		# recent data
-		for sheet in wb:
+		# # recent data
+		# for sheet in wb:
 
-			print(sheet.title + " ANALYSIS")
+		# 	print(sheet.title + " ANALYSIS")
 
-			stock = s.stock(sheet.title, sheet, bins, savePath)
-			stock.formatRecentDataSheet()
-			hd = stock.getHistoricalData()
-			prices = stock.fillRecentData(hd)
-			stock.fillRecentDescriptiveStats(prices)
-			stock.fillRecentGraphs(prices)
+		# 	stock = stock.stock(sheet.title, sheet, bins, savePath)
+		# 	stock.formatRecentDataSheet()
+		# 	hd = stock.getHistoricalData()
+		# 	prices = stock.fillRecentData(hd)
+		# 	stock.fillRecentDescriptiveStats(prices)
+		# 	stock.fillRecentGraphs(prices)
 
-			print("COMPLETED\n")
+		# 	print("COMPLETED\n")
 
 		# 10 year stuff
-		# percentage sheet
 		stockList = wb.sheetnames
-		foo = wb.create_sheet("10YR %", 0)
-		percentageSheet = ps.percentageSheet(foo, stockList)
-
 		frequencyList = []
-		stdDevList = []
+		stdevList = []
 
+
+		# percentage sheet
+		foo = wb.create_sheet("10YR %", 0)
+
+		percentageSheet = classes.percentageSheet(foo, [], stockList)
 		percentageSheet.format()
-		for i in range(0, len(stockList)):
-
-			percentageSheet.addStock(i + 3, stockList[i])
-
-			for monthOffset in range(0,12):
-
-				bar, bat = percentageSheet.fillPercentageChange(stockList[i], monthOffset, i)
-				frequencyList.append(bar)
-				stdDevList.append(bat)
-
+		percentageSheet.fill(frequencyList, stdevList)
 		percentageSheet.color()
 
 
 		# standard deviation sheet
 		foo = wb.create_sheet("10YR % STD Dev", 1)
 
-		stdevSheet = sds.stdevSheet(foo, stdDevList, stockList)
+		stdevSheet = classes.stdevSheet(foo, stdevList, stockList)
 		stdevSheet.format()
 		stdevSheet.fill()
 		stdevSheet.color()
@@ -73,7 +64,7 @@ try:
 		# frequency sheet
 		foo = wb.create_sheet("10YR FREQ", 2)
 
-		frequencySheet = fs.frequencySheet(foo, frequencyList, stockList)
+		frequencySheet = classes.frequencySheet(foo, frequencyList, stockList)
 		frequencySheet.format()
 		frequencySheet.fill()
 		frequencySheet.color()
@@ -98,7 +89,7 @@ except quandl.errors.quandl_error.QuandlError:
 
 except KeyboardInterrupt:
 	if (f.save(wb, savePath)):
-		print("\n\nINCOMPLETE WORKBOOK COMPLETED")
+		print("\n\nINCOMPLETE WORKBOOK SAVED")
 	print("===PROGRAM TERMINATED===")
 	print("KEYBOARD INTERRUPT\n")
 	timeElapsed = time.time() - start
@@ -107,7 +98,7 @@ except KeyboardInterrupt:
 
 except ConnectionResetError:
 	if (f.save(wb, savePath)):
-		print("\n\nINCOMPLETE WORKBOOK COMPLETED")
+		print("\n\nINCOMPLETE WORKBOOK SAVED")
 	print("===PROGRAM TERMINATED===\n")
 	print("CONNECTION RESET ERROR\n")
 	timeElapsed = time.time() - start

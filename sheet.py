@@ -3,12 +3,18 @@ from openpyxl.styles import Color, PatternFill
 import openpyxl
 import datetime
 import string
+import time
 
-class frequencySheet():
+import apiKey
+
+timeDelay = False
+
+# superclass for all the sheet classes
+class Sheet():
 	# initializes the sheet with basic data
-	def __init__(self, frequencySheet, frequencyList, stockList):
-		self.sheet = frequencySheet
-		self.frequencyList = frequencyList
+	def __init__(self, sheet, dataList, stockList):
+		self.sheet = sheet
+		self.dataList = dataList
 		self.stockList = stockList
 
 		self.monthIndex = ["Jan (1)", "Feb (2)", "Mar (3)", "Apr (4)", "May (5)", "Jun (6)", "Jul (7)", "Aug (8)", "Sep (9)", "Oct (10)", "Nov (11)", "Dec (12)"]
@@ -42,7 +48,7 @@ class frequencySheet():
 		x = num2alpha[n]
 		return x
 
-	# formats the frequency sheet
+	# formats the sheet
 	def format(self):
 		#Puts in the months for the current month and next years months
 		#Merges cells for year values
@@ -84,7 +90,7 @@ class frequencySheet():
 		for row in range(3, 3 + len(self.stockList)):
 			self.sheet["A" + str(row)] = self.stockList[row - 3]
 
-	# fills the frequency sheet with cool data
+	# fills the sheet with cool data
 	def fill(self):
 		index = 0
 		for row in range(3, 3 + len(self.stockList)):
@@ -93,26 +99,14 @@ class frequencySheet():
 
 				if (self.sheet[self.numberToLetter(letter) + "2"].value != None):
 
-					up = self.frequencyList[index][0]
-					down = self.frequencyList[index][1]
-
-					percentUp = round((up*100)/(up + down), 2)
-
-					self.sheet[cell] = percentUp
+					self.sheet[cell] = self.dataList[index]
 
 					index += 1
 
-	# colors the frequecy sheet on a red green gradient
-	def color(self):
-		for letter in range(2, 15): # from letter B to N when plugged into the first non __init__ function
-			for row in range(3, 3 + len(self.stockList)):
-				cell = self.numberToLetter(letter) + str(row)
-				value = self.sheet[cell].value
-
-				if (value != None):
-					value = int(value/5)
-					if (value <= 0):
-						value = 0
-					elif (value >= 19):
-						value = 19
-					self.sheet[cell].fill = self.colorGradient[value]
+	# formats the quandl query so I don't have to look at a monsterously long string :P
+	# return 	returnstring 	a formatted string for quandl query
+	def formatQuandlQuery(self, stock, dateOld, dateCurrent):
+		if(timeDelay):
+			time.sleep(.5)
+		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + stock + "&api_key=" + apiKey.getAPIKey())
+		return returnString
