@@ -12,7 +12,7 @@ import math
 
 import apiKey as key
 
-class stock():
+class Stock():
 	# initializes the stock with basic data
 	def __init__(self, stockName, sheet, bins, savePath):
 		self.stock = stockName
