@@ -1,4 +1,5 @@
 from openpyxl.styles import Color, PatternFill
+from pprint import pprint
 
 import numpy as np
 
@@ -119,7 +120,7 @@ class percentageSheet(sheet.Sheet):
 
 		self.sheet[self.numberToLetter(n + 2 + offset) + str(row + 3)] = round(dataList[0], 2)
 
-		pp.pprint(dataList)
+		pprint(dataList)
 		print()
 
 		up = frequencyList[0]
