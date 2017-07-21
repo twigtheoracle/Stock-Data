@@ -5,10 +5,9 @@ import time
 import quandl
 
 import functions as f
-import stock as s
-import percentageSheet as ps
-import frequencySheet as fs
-import stdevSheet as sds
+import stock
+
+import classes
 
 start = time.time()
 
@@ -29,7 +28,7 @@ try:
 
 		# 	print(sheet.title + " ANALYSIS")
 
-		# 	stock = s.stock(sheet.title, sheet, bins, savePath)
+		# 	stock = stock.stock(sheet.title, sheet, bins, savePath)
 		# 	stock.formatRecentDataSheet()
 		# 	hd = stock.getHistoricalData()
 		# 	prices = stock.fillRecentData(hd)
@@ -47,7 +46,7 @@ try:
 		# percentage sheet
 		foo = wb.create_sheet("10YR %", 0)
 
-		percentageSheet = ps.percentageSheet(foo, [], stockList)
+		percentageSheet = classes.percentageSheet(foo, [], stockList)
 		percentageSheet.format()
 		percentageSheet.fill(frequencyList, stdevList)
 		percentageSheet.color()
@@ -56,7 +55,7 @@ try:
 		# standard deviation sheet
 		foo = wb.create_sheet("10YR % STD Dev", 1)
 
-		stdevSheet = sds.stdevSheet(foo, stdevList, stockList)
+		stdevSheet = classes.stdevSheet(foo, stdevList, stockList)
 		stdevSheet.format()
 		stdevSheet.fill()
 		stdevSheet.color()
@@ -65,7 +64,7 @@ try:
 		# frequency sheet
 		foo = wb.create_sheet("10YR FREQ", 2)
 
-		frequencySheet = fs.frequencySheet(foo, frequencyList, stockList)
+		frequencySheet = classes.frequencySheet(foo, frequencyList, stockList)
 		frequencySheet.format()
 		frequencySheet.fill()
 		frequencySheet.color()
