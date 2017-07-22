@@ -185,3 +185,4 @@ class FrequencySheet(sheet.Sheet):
 					elif (value >= 19):
 						value = 19
 					self.sheet[cell].fill = self.colorGradient[value]
+					
