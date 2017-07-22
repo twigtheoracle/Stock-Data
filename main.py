@@ -5,7 +5,7 @@ import time
 import quandl
 
 import functions as f
-import stock
+import stock as s
 
 import classes
 
@@ -13,7 +13,7 @@ start = time.time()
 
 try:
 	
-	fileName = "test_template.xlsx"
+	fileName = "template.xlsx"
 	bins = 20
 	savePath = "C:/Users/ericl/Desktop/"
 
@@ -23,19 +23,19 @@ try:
 
 	if(run):
 
-		# # recent data
-		# for sheet in wb:
+		# recent data
+		for sheet in wb:
 
-		# 	print(sheet.title + " ANALYSIS")
+			print(sheet.title + " ANALYSIS")
 
-		# 	stock = stock.stock(sheet.title, sheet, bins, savePath)
-		# 	stock.formatRecentDataSheet()
-		# 	hd = stock.getHistoricalData()
-		# 	prices = stock.fillRecentData(hd)
-		# 	stock.fillRecentDescriptiveStats(prices)
-		# 	stock.fillRecentGraphs(prices)
+			stock = s.Stock(sheet.title, sheet, bins, savePath)
+			stock.formatRecentDataSheet()
+			hd = stock.getHistoricalData()
+			prices = stock.fillRecentData(hd)
+			stock.fillRecentDescriptiveStats(prices)
+			stock.fillRecentGraphs(prices)
 
-		# 	print("COMPLETED\n")
+			print("COMPLETED\n")
 
 		# 10 year stuff
 		stockList = wb.sheetnames
@@ -46,7 +46,7 @@ try:
 		# percentage sheet
 		foo = wb.create_sheet("10YR %", 0)
 
-		percentageSheet = classes.percentageSheet(foo, [], stockList)
+		percentageSheet = classes.PercentageSheet(foo, [], stockList)
 		percentageSheet.format()
 		percentageSheet.fill(frequencyList, stdevList)
 		percentageSheet.color()
@@ -55,7 +55,7 @@ try:
 		# standard deviation sheet
 		foo = wb.create_sheet("10YR % STD Dev", 1)
 
-		stdevSheet = classes.stdevSheet(foo, stdevList, stockList)
+		stdevSheet = classes.StdevSheet(foo, stdevList, stockList)
 		stdevSheet.format()
 		stdevSheet.fill()
 		stdevSheet.color()
@@ -64,7 +64,7 @@ try:
 		# frequency sheet
 		foo = wb.create_sheet("10YR FREQ", 2)
 
-		frequencySheet = classes.frequencySheet(foo, frequencyList, stockList)
+		frequencySheet = classes.FrequencySheet(foo, frequencyList, stockList)
 		frequencySheet.format()
 		frequencySheet.fill()
 		frequencySheet.color()
