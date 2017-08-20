@@ -1,5 +1,4 @@
 apiKey.py
-__pycache__/
+__pycache__
 test_template.xlsx
-*.pyc
-__pycache__/percentageSheet.cpython-36.pyc
+
