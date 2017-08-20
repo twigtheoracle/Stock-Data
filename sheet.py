@@ -7,7 +7,7 @@ import time
 
 import apiKey
 
-timeDelay = False
+timeDelay = True
 
 # superclass for all the sheet classes
 class Sheet():
