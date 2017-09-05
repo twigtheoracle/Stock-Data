@@ -55,6 +55,7 @@ try:
 		# standard deviation sheet
 		foo = wb.create_sheet("10YR % STD Dev", 1)
 
+		#TODO: use monthMeans to switch std dev coloring to being percentage based
 		stdevSheet = classes.StdevSheet(foo, stdevList, stockList)
 		stdevSheet.format()
 		stdevSheet.fill()

@@ -128,7 +128,7 @@ class PercentageSheet(sheet.Sheet):
 
 		percentUp = round((up*100)/(up + down), 2)
 
-		#TODO: update what is returned so that i can change the std dev coloring to percentage based
+		#TODO: make sure that everyting still works right after changing what is passed between functions
 		return (percentUp, dataList)
 
 	# colors each numerical percentage a color based on a pretty gradient from red to green
