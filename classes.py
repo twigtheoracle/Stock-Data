@@ -129,7 +129,7 @@ class PercentageSheet(sheet.Sheet):
 		percentUp = round((up*100)/(up + down), 2)
 
 		#TODO: update what is returned so that i can change the std dev coloring to percentage based
-		return (percentUp, dataList[1])
+		return (percentUp, dataList)
 
 	# colors each numerical percentage a color based on a pretty gradient from red to green
 	def color(self):
@@ -148,12 +148,14 @@ class PercentageSheet(sheet.Sheet):
 
 	# overrides Sheet.fill(self)
 	def fill(self, frequencyList, stdevList):
+		bar, bat = (0,0)
 		for i in range(0, len(self.stockList)):
 			for monthOffset in range(0,12):
 
 				bar, bat = self.fillPercentageChange(self.stockList[i], monthOffset, i)
 				frequencyList.append(bar)
-				stdevList.append(bat)
+				stdevList.append(bat[1])
+		return bat[0]
 
 class StdevSheet(sheet.Sheet):
 	# colors the stdev sheet on a red green gradient

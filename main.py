@@ -12,7 +12,7 @@ import classes
 start = time.time()
 
 try:
-	
+
 	fileName = "template.xlsx"
 	bins = 20
 	savePath = "C:/Users/ericl/Desktop/"
@@ -48,7 +48,7 @@ try:
 
 		percentageSheet = classes.PercentageSheet(foo, [], stockList)
 		percentageSheet.format()
-		percentageSheet.fill(frequencyList, stdevList)
+		monthMeans = percentageSheet.fill(frequencyList, stdevList)
 		percentageSheet.color()
 
 
@@ -104,4 +104,3 @@ except ConnectionResetError:
 	timeElapsed = time.time() - start
 	# im not sure if time will automatically cast to an int and im too lazy to look it up :D
 	print("\nELAPSED TIME:", str(int(int(timeElapsed)/60)) + "m", str(int(timeElapsed)%60)+"s")
-
