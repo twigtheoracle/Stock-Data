@@ -128,6 +128,7 @@ class PercentageSheet(sheet.Sheet):
 
 		percentUp = round((up*100)/(up + down), 2)
 
+		#TODO: update what is returned so that i can change the std dev coloring to percentage based
 		return (percentUp, dataList[1])
 
 	# colors each numerical percentage a color based on a pretty gradient from red to green
@@ -157,7 +158,7 @@ class PercentageSheet(sheet.Sheet):
 class StdevSheet(sheet.Sheet):
 	# colors the stdev sheet on a red green gradient
 	def color(self):
-		for letter in range(2, 15): # from letter B to N 
+		for letter in range(2, 15): # from letter B to N
 			for row in range(3, 3 + len(self.stockList)):
 				cell = self.numberToLetter(letter) + str(row)
 				value = self.sheet[cell].value
@@ -185,4 +186,3 @@ class FrequencySheet(sheet.Sheet):
 					elif (value >= 19):
 						value = 19
 					self.sheet[cell].fill = self.colorGradient[value]
-					
