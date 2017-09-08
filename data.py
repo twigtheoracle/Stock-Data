@@ -10,6 +10,7 @@ class Data():
         self.current_date = current_date
         self.old_date = self.veriy_date(old_date)
 
+    # verifies that a date exists and if it doesn't, goes back in time to find a date that does
     def veriy_date(self, date):
         pass
 
@@ -22,6 +23,7 @@ class Data():
                 return_string += ","
         return return_string
 
+    # gets a string that will allow me to query quandl for all the data we need
     def get_quandl_query_string(self):
 		returnString = ("WIKI/PRICES.json?date.gte=" + self.old_date + "&date.lt=" + self.current_date + "&ticker=" + self.get_stock_string + "&api_key=" + key.getAPIKey())
 		return returnString
