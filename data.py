@@ -1,4 +1,5 @@
 import datetime
+import quandl
 
 class Data():
     # initializes data with the list of stocks and proper dates
@@ -9,6 +10,7 @@ class Data():
         old_date = str(int(current_date[:4]) - 10) + current_date[4:]
         self.current_date = current_date
         self.old_date = self.veriy_date(old_date)
+        self.data = None
 
     # verifies that a date exists and if it doesn't, goes back in time to find a date that does
     def veriy_date(self, date):
@@ -27,3 +29,6 @@ class Data():
     def get_quandl_query_string(self):
 		returnString = ("WIKI/PRICES.json?date.gte=" + self.old_date + "&date.lt=" + self.current_date + "&ticker=" + self.get_stock_string + "&api_key=" + key.getAPIKey())
 		return returnString
+
+    def get_data(self):
+        self.data = quandl.get_table(self.get_quandl_query_string())
