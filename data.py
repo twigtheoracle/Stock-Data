@@ -30,5 +30,6 @@ class Data():
 		returnString = ("WIKI/PRICES.json?date.gte=" + self.old_date + "&date.lt=" + self.current_date + "&ticker=" + self.get_stock_string + "&api_key=" + key.getAPIKey())
 		return returnString
 
+    # gets data from quandl and stores it in the object
     def get_data(self):
         self.data = quandl.get_table(self.get_quandl_query_string())
