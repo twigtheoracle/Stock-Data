@@ -44,7 +44,9 @@ class Data():
 
     # slices self.data to return only the data of the 3 months at 20 weekdays or 30 days a month
     def get_last_3_months(self):
+        # create an empty dictionary
         datatable = {}
+        # iterate through every stock in the template
         for stock in self.stock_list:
             stock_data = []
             for day in range(1, 61):
