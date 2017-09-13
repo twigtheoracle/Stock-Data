@@ -14,8 +14,8 @@ import classes
 start = time.time
 
 data = Data(["APPL", "GOOGL", "ACN"])
-data.get_data()
-pprint(data.data)
+data.retrieve_data()
+data.get_last_90_days()
 
 # try:
 #
