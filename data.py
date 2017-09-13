@@ -20,15 +20,6 @@ class Data():
     def veriy_date(self, date):
         return date
 
-    # returns stock_list as a string of the stocks delimited by commas
-    def get_stock_string(self):
-        return_string = ""
-        for index in range(0, len(self.stock_list)):
-            return_string += self.stock_list[index]
-            if(index != len(self.stock_list) - 1):
-                return_string += ","
-        return return_string
-
     # gets a string that will allow me to query quandl for all the data we need
     def get_quandl_query_string(self, stock):
         returnString = "WIKI/PRICES.json?date.gte=" + self.old_date + "&date.lt=" + self.current_date + "&ticker=" + stock + "&api_key=" + key.get_API_key()
