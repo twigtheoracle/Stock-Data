@@ -35,17 +35,12 @@ class Data():
         return returnString
 
     # gets data from quandl and stores it in the object
-    # TODO: split the data into a new dictionary with stock ticker as keys
-    # TODO: make one quandl call per stock so that quandl doesn't crap itself with large tables
     def retrieve_data(self):
         for stock in self.stock_list:
             temp_data = {}
-
             temp_quandl_data = quandl.get_table(self.get_quandl_query_string(stock))
-
             temp_data["data"] = temp_quandl_data
             temp_data["data_length"] = len(temp_quandl_data["ticker"])
-
 
             self.data[stock] = temp_data
 
@@ -62,3 +57,4 @@ class Data():
                 stock_data.append([temp_date, temp_price])
             datatable[stock] = stock_data
         pprint(datatable)
+        return datatable

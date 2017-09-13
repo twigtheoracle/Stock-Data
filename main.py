@@ -15,7 +15,7 @@ start = time.time
 
 data = Data(["AAPL", "GOOGL", "ACN"])
 data.retrieve_data()
-data.get_last_3_months()
+short_term_data = data.get_last_3_months()
 
 # try:
 #
