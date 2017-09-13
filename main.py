@@ -15,7 +15,10 @@ start = time.time
 
 data = Data(["APPL", "GOOGL", "ACN"])
 data.retrieve_data()
-data.get_last_90_days()
+print(data.data.keys())
+print(data.data["ticker"].keys())
+print(data.data)
+data.get_last_3_months()
 
 # try:
 #
