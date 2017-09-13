@@ -1,6 +1,8 @@
 import datetime
 import quandl
 
+import api_key as key
+
 class Data():
     # initializes data with the list of stocks and proper dates
     def __init__(self, stock_list):
@@ -27,8 +29,8 @@ class Data():
 
     # gets a string that will allow me to query quandl for all the data we need
     def get_quandl_query_string(self):
-		returnString = ("WIKI/PRICES.json?date.gte=" + self.old_date + "&date.lt=" + self.current_date + "&ticker=" + self.get_stock_string + "&api_key=" + key.getAPIKey())
-		return returnString
+        returnString = ("WIKI/PRICES.json?date.gte=" + self.old_date + "&date.lt=" + self.current_date + "&ticker=" + self.get_stock_string + "&api_key=" + key.getAPIKey())
+        return returnString
 
     # gets data from quandl and stores it in the object
     def get_data(self):

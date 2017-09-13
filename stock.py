@@ -10,7 +10,7 @@ import calendar
 import sys
 import math
 
-import apiKey as key
+import api_key as key
 
 class Stock():
 	# initializes the stock with basic data
@@ -43,7 +43,7 @@ class Stock():
 	# formats the quandl query so I don't have to look at a monsterously long string :P
 	# return 	string 	a formatted string for quandl query
 	def formatQuandlQuery(self, dateOld, dateCurrent):
-		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + self.stock + "&api_key=" + key.getAPIKey())
+		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + self.stock + "&api_key=" + key.get_API_key())
 		return returnString
 
 	# retrieves historical data from the quandl WIKI/PRICES database between certain dates

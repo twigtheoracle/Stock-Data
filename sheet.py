@@ -5,7 +5,7 @@ import datetime
 import string
 import time
 
-import apiKey
+import api_key as key
 
 timeDelay = True
 
@@ -108,5 +108,5 @@ class Sheet():
 	def formatQuandlQuery(self, stock, dateOld, dateCurrent):
 		if(timeDelay):
 			time.sleep(.5)
-		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + stock + "&api_key=" + apiKey.getAPIKey())
+		returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + stock + "&api_key=" + api_key.get_API_key())
 		return returnString
