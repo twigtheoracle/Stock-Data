@@ -13,11 +13,8 @@ import classes
 
 start = time.time
 
-data = Data(["APPL", "GOOGL", "ACN"])
+data = Data(["AAPL", "GOOGL", "ACN"])
 data.retrieve_data()
-print(data.data.keys())
-print(data.data["ticker"].keys())
-print(data.data)
 data.get_last_3_months()
 
 # try:
