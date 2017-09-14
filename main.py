@@ -5,17 +5,27 @@ import time
 import quandl
 
 import functions as f
-import stock as s
 
+from stock import *
 from data import *
 
 import classes
 
 start = time.time
 
-data = Data(["AAPL", "GOOGL", "ACN"])
+template_file = "template.xlsx"
+save_path = "C:/Users/ericl/Desktop/"
+
+wb = openpyxl.load_workbook(template_file)
+stock_list = wb.sheetnames
+
+data = Data(stock_list)
 data.retrieve_data()
 short_term_data = data.get_last_3_months()
+
+for sheet in wb:
+	stock = 
+
 
 # try:
 #
