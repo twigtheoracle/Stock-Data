@@ -11,7 +11,7 @@ from data import *
 
 ########################################################################################
 
-template_file = "template.xlsx"
+template_file = "test_template.xlsx"
 save_path = "C:/Users/ericl/Desktop/"
 
 wb = openpyxl.load_workbook(template_file)
@@ -24,6 +24,8 @@ short_term_data = data.get_last_3_months()
 for sheet in wb:
 	stock_sheet = Stock(sheet, short_term_data[sheet.title])
 	stock_sheet.format()
+	stock_sheet.fill_data()
+	stock_sheet.fill_stats()
 
 print("it works!")
 
