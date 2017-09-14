@@ -12,6 +12,35 @@ import math
 
 import api_key as key
 
+class Stock():
+	# initializes the stock with basic data
+	def __init__(self, sheet, data):
+		self.sheet = sheet
+		self.bins = 20
+		self.data = data
+
+		self.start_value = 10
+
+	# formats the recent data sheet with column titles, etc.
+	def format(self):
+		# resets formatting
+		# not really necessary if the template is clean
+		for col in string.ascii_uppercase:
+			self.sheet.column_dimensions[col].width = 12
+			self.sheet.column_dimensions[col].hidden = False
+
+		self.sheet["A1"] = "Date"
+		self.sheet["B1"] = "Close Price"
+		
+		self.sheet.merge_cells("D1:E1")
+		self.sheet["D1"] = "Statistics"
+		self.sheet["D5"] = "60 Day Std Dev"
+		self.sheet["D6"] = "40 Day Std Dev"
+		self.sheet["D7"] = "20 Day Std Dev"
+
+		self.sheet["D9"] = "BIN AVERAGES"
+		self.sheet["E9"] = "FREQUENCY"
+
 # class Stock():
 # 	# initializes the stock with basic data
 # 	def __init__(self, stockName, sheet, bins, savePath):

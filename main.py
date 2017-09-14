@@ -4,14 +4,12 @@ import openpyxl
 import time
 import quandl
 
-import functions as f
-
+from functions import *
 from stock import *
 from data import *
+# from classes import *
 
-import classes
-
-start = time.time
+########################################################################################
 
 template_file = "template.xlsx"
 save_path = "C:/Users/ericl/Desktop/"
@@ -24,8 +22,12 @@ data.retrieve_data()
 short_term_data = data.get_last_3_months()
 
 for sheet in wb:
-	stock = 
+	stock_sheet = Stock(sheet, short_term_data[sheet.title])
+	stock_sheet.format()
 
+print("it works!")
+
+save(wb, save_path)
 
 # try:
 #

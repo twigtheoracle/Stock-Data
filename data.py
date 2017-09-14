@@ -47,5 +47,4 @@ class Data():
                 temp_price = str(self.data[stock]["data"]["close"][self.data[stock]["data_length"] - day])
                 stock_data.append([temp_date, temp_price])
             datatable[stock] = stock_data
-        pprint(datatable)
         return datatable
