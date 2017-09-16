@@ -26,6 +26,7 @@ for sheet in wb:
 	stock_sheet.format()
 	stock_sheet.fill_data()
 	stock_sheet.fill_stats()
+	stock_sheet.fill_graphs()
 
 print("it works!")
 

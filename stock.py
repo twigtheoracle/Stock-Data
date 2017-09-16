@@ -49,10 +49,10 @@ class Stock():
     def fill_data(self):
         for index in range(0, self.data_points):
             self.data_prices.append(float(self.data[self.data_points - 1 - index][1]))
-
             self.sheet["A" + str(index + 2)] = str(self.data[self.data_points - 1 - index][0])
             self.sheet["B" + str(index + 2)] = self.data_prices[index]
 
+    # fills the sheet with recent descriptive stats(n, mean, standard deviations for different time periods)
     def fill_stats(self):
         statistics = stats.describe(self.data_prices, bias=False, nan_policy="omit")
         self.sheet["E2"] = statistics[0]
@@ -60,118 +60,6 @@ class Stock():
         self.sheet["E4"] = math.sqrt(statistics[3])
         self.sheet["E5"] = math.sqrt(stats.describe(self.data_prices[self.data_points-40:], bias=False, nan_policy="omit")[3])
         self.sheet["E6"] = math.sqrt(stats.describe(self.data_prices[self.data_points-20:], bias=False, nan_policy="omit")[3])
-
-    # def fillRecentDescriptiveStats(self, prices):
-    #   # gets the basic stats from the historical data prices
-    #   statistics = stats.describe(prices, bias=False, nan_policy="omit")
-    #   statVars = ["n", "x_bar", "variance", "std deviation", "skewness", "kurtosis"]
-    #   statValues = [0,0,0,0,0]
-    #   for i in range(0,6):
-    #       if (i < 1):
-    #           statValues[i] = statistics[i]
-    #       elif (i > 1):
-    #           statValues[i - 1] = statistics[i]
-
-    #   # fill in stats to the excel worksheet
-    #   offset = 2
-    #   for i in range(2, 5):
-    #       # using rows C and D for stats
-    #       self.sheet["D" + str(i)] = statVars[i - offset]
-    #       self.sheet["E" + str(i)] = statValues[i - offset]
-    #   self.sheet["D5"] = str(len(prices)) + " Day Std Dev"
-    #   self.sheet["E5"] = math.sqrt(self.sheet["E4"].value)
-    #   self.sheet["E6"] = math.sqrt(stats.describe(prices[len(prices) - 40 : len(prices)], bias=False, nan_policy="omit")[3])
-    #   self.sheet["E7"] = math.sqrt(stats.describe(prices[len(prices) - 20 : len(prices)], bias=False, nan_policy="omit")[3])
-
-# class Stock():
-#   # initializes the stock with basic data
-#   def __init__(self, stockName, sheet, bins, savePath):
-#       self.stock = stockName
-#       self.sheet = sheet
-#       self.bins = bins
-#       self.savePath = savePath
-
-#       self.statVal = 10
-
-#   # formats the recent data sheet with sheet titles, etc.
-#   def formatRecentDataSheet(self):
-#       for col in string.ascii_uppercase:
-#           self.sheet.column_dimensions[col].width = 12
-#           self.sheet.column_dimensions[col].hidden = False
-
-#       self.sheet["A1"] = "Date"
-#       self.sheet["B1"] = "Close Price"
-        
-#       self.sheet.merge_cells("D1:E1")
-#       self.sheet["D1"] = "Statistics"
-#       self.sheet["D5"] = "60 Day Std Dev"
-#       self.sheet["D6"] = "40 Day Std Dev"
-#       self.sheet["D7"] = "20 Day Std Dev"
-
-#       self.sheet["D9"] = "BIN AVERAGES"
-#       self.sheet["E9"] = "FREQUENCY"
-
-#   # formats the quandl query so I don't have to look at a monsterously long string :P
-#   # return    string  a formatted string for quandl query
-#   def formatQuandlQuery(self, dateOld, dateCurrent):
-#       returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + self.stock + "&api_key=" + key.get_API_key())
-#       return returnString
-
-#   # retrieves historical data from the quandl WIKI/PRICES database between certain dates
-#   def getHistoricalData(self):
-#       dateCurrent = dt.date.today()
-#       dateOld = dateCurrent - dt.timedelta(days = 90)
-
-#       dateCurrent = str(dateCurrent)
-#       dateOld = str(dateOld)
-
-#       data = quandl.get_table(self.formatQuandlQuery(dateOld, dateCurrent))
-
-#       length = len(data["date"])
-
-#       formattedDataList = [["", 0] for x in range(0, length)]
-        
-#       for i in range(0, length):
-#           formattedDataList[i][0] = str(data["date"][i])[:10]
-#           formattedDataList[i][1] = float(data["close"][i])
-
-#       return formattedDataList
-
-#   # fills in the spreadsheet with data
-#   def fillRecentData(self, hd):
-#       for row in range(0, len(hd)):
-#           self.sheet["A" + str(row + 2)] = hd[row][0]
-#           self.sheet["B" + str(row + 2)] = hd[row][1]
-
-#       pricesOnlyList = [0 for x in range(0, len(hd))]
-
-#       for i in range(0, len(hd)):
-#           pricesOnlyList[i] = hd[i][1]
-
-#       return pricesOnlyList
-
-#   # fills the spreadsheet with relevant statistics
-#   def fillRecentDescriptiveStats(self, prices):
-#       # gets the basic stats from the historical data prices
-#       statistics = stats.describe(prices, bias=False, nan_policy="omit")
-#       statVars = ["n", "x_bar", "variance", "std deviation", "skewness", "kurtosis"]
-#       statValues = [0,0,0,0,0]
-#       for i in range(0,6):
-#           if (i < 1):
-#               statValues[i] = statistics[i]
-#           elif (i > 1):
-#               statValues[i - 1] = statistics[i]
-
-#       # fill in stats to the excel worksheet
-#       offset = 2
-#       for i in range(2, 5):
-#           # using rows C and D for stats
-#           self.sheet["D" + str(i)] = statVars[i - offset]
-#           self.sheet["E" + str(i)] = statValues[i - offset]
-#       self.sheet["D5"] = str(len(prices)) + " Day Std Dev"
-#       self.sheet["E5"] = math.sqrt(self.sheet["E4"].value)
-#       self.sheet["E6"] = math.sqrt(stats.describe(prices[len(prices) - 40 : len(prices)], bias=False, nan_policy="omit")[3])
-#       self.sheet["E7"] = math.sqrt(stats.describe(prices[len(prices) - 20 : len(prices)], bias=False, nan_policy="omit")[3])
 
 #   # fills the sheet with relevant graphs
 #   def fillRecentGraphs(self, prices):
