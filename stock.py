@@ -36,9 +36,11 @@ class Stock():
         
         self.sheet.merge_cells("D1:E1")
         self.sheet["D1"] = "Statistics"
-        self.sheet["D5"] = "60 Day Std Dev"
-        self.sheet["D6"] = "40 Day Std Dev"
-        self.sheet["D7"] = "20 Day Std Dev"
+        self.sheet["D2"] = "n"
+        self.sheet["D3"] = "mean"
+        self.sheet["D4"] = str(self.data_points) + " Day Std Dev"
+        self.sheet["D5"] = "40 Day Std Dev"
+        self.sheet["D6"] = "20 Day Std Dev"
 
         self.sheet["D9"] = "BIN AVERAGES"
         self.sheet["E9"] = "FREQUENCY"
@@ -46,14 +48,18 @@ class Stock():
     # fills the sheet with data
     def fill_data(self):
         for index in range(0, self.data_points):
-            self.data_prices.append(self.data[self.data_points - 1 - index][1])
+            self.data_prices.append(float(self.data[self.data_points - 1 - index][1]))
 
             self.sheet["A" + str(index + 2)] = str(self.data[self.data_points - 1 - index][0])
             self.sheet["B" + str(index + 2)] = self.data_prices[index]
 
     def fill_stats(self):
         statistics = stats.describe(self.data_prices, bias=False, nan_policy="omit")
-        print(statistics)
+        self.sheet["E2"] = statistics[0]
+        self.sheet["E3"] = statistics[2]
+        self.sheet["E4"] = math.sqrt(statistics[3])
+        self.sheet["E5"] = math.sqrt(stats.describe(self.data_prices[self.data_points-40:], bias=False, nan_policy="omit")[3])
+        self.sheet["E6"] = math.sqrt(stats.describe(self.data_prices[self.data_points-20:], bias=False, nan_policy="omit")[3])
 
     # def fillRecentDescriptiveStats(self, prices):
     #   # gets the basic stats from the historical data prices
