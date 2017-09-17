@@ -21,7 +21,6 @@ class Stock():
         self.data_prices = []
 
         self.bins = 20
-        self.start_value = 10
         
     # formats the recent data sheet with column titles, etc.
     def format(self):
@@ -81,6 +80,57 @@ class Stock():
             self.sheet["D" + str(cell_index + 9)] = bin_name
             self.sheet["E" + str(cell_index + 9)] = counts[cell_index]
 
+        # puts in the bar chart
+        bar_chart = openpyxl.chart.BarChart()
+        bar_chart.shape = 4
+        bar_chart.type = "col"
+        bar_chart.style = 10
+        bar_chart.title = self.sheet.title + " HISTOGRAM"
+        bar_chart.x_axis_title = "BIN AVERAGE"
+        bar_chart.y_axis_title = "FREQUENCY"
+        bar_data = openpyxl.chart.Reference(self.sheet, min_col = 5, min_row = 8, max_row = 9 + self.bins - 1, max_col = 5)
+        bar_categories = openpyxl.chart.Reference(self.sheet, min_col = 4, min_row = 9, max_row = 9 + self.bins - 1)
+        bar_chart.add_data(bar_data, titles_from_data = True)
+        bar_chart.set_categories(bar_categories)
+        self.sheet.add_chart(bar_chart, "G4")
+
+        # puts in the 3 month line chart
+        line_chart = openpyxl.chart.LineChart()
+        line_chart.style = 12
+        line_chart.title = self.sheet.title + " LINECHART"
+        line_chart.x_axis_title = "DATE"
+        line_chart.y_axis_title = "PRICE"
+        line_data = openpyxl.chart.Reference(self.sheet, min_col = 2, min_row = 1, max_row = 1 + len(self.data_prices))
+        line_categories = openpyxl.chart.Reference(self.sheet, min_col = 1, min_row = 2, max_row = 1 + len(self.data_prices))
+        line_chart.add_data(line_data)
+        line_chart.set_categories(line_categories)
+        # style the line chart
+        style = line_chart.series[0]
+        style.graphicalProperties.line.solidFill = "00AAAA"
+        style.graphicalProperties.line.dashStyle = "sysDot"
+        style.graphicalProperties.line.width = 100050
+        self.sheet.add_chart(line_chart, "G22")
+
+
+        # #generate the linechart based on date and price
+        # #create chart and add data values to it
+        # lc = openpyxl.chart.LineChart()
+        # lc.title = self.stock + " LINECHART"
+        # lc.style = 12
+        # lc.y_axis_title = "PRICE"
+        # lc.x_axis_title = "DATE"
+        # lcData = openpyxl.chart.Reference(self.sheet, min_col = 2, min_row = 1, max_row = 1 + len(prices))
+        # lc.add_data(lcData, titles_from_data = True)
+        # #style the chart
+        # s2 = lc.series[0]
+        # s2.graphicalProperties.line.solidFill = "00AAAA"
+        # s2.graphicalProperties.line.dashStyle = "sysDot"
+        # s2.graphicalProperties.line.width = 100050 # width in EMUs
+        # #add in the date categories
+        # lcDates = openpyxl.chart.Reference(self.sheet, min_col = 1, min_row = 2, max_row = 1 + len(prices))
+        # lc.set_categories(lcDates)
+        # self.sheet.add_chart(lc, "G22")
+
 
 #   # fills the sheet with relevant graphs
 #   def fillRecentGraphs(self, prices):
@@ -112,37 +162,37 @@ class Stock():
 #               self.sheet["D" + str(i)] = binName
 #               self.sheet["E" + str(i)] = counts[i - self.statVal]
 
-#           #generates the bar chart based on bin and frequency data
-#           data = openpyxl.chart.BarChart()
-#           data.type = "col"
-#           data.style = 10
-#           data.title = self.stock + " HISTOGRAM"
-#           data.x_axis_title = "BIN AVERAGE"
-#           data.y_axis_title = "FREQUENCY"
-#           foo = openpyxl.chart.Reference(self.sheet, min_col = 5, min_row = self.statVal - 1, max_row = self.statVal + self.bins - 1, max_col = 5)
-#           cats = openpyxl.chart.Reference(self.sheet, min_col = 4, min_row = self.statVal, max_row = self.statVal + self.bins - 1)
-#           data.add_data(foo, titles_from_data = True)
-#           data.set_categories(cats)
-#           data.shape = 4
-#           self.sheet.add_chart(data, "G4")
+         #  #generates the bar chart based on bin and frequency data
+         #  data = openpyxl.chart.BarChart()
+         #  data.type = "col"
+         #  data.style = 10
+         #  data.title = self.stock + " HISTOGRAM"
+         #  data.x_axis_title = "BIN AVERAGE"
+         #  data.y_axis_title = "FREQUENCY"
+         #  foo = openpyxl.chart.Reference(self.sheet, min_col = 5, min_row = self.statVal - 1, max_row = self.statVal + self.bins - 1, max_col = 5)
+         #  cats = openpyxl.chart.Reference(self.sheet, min_col = 4, min_row = self.statVal, max_row = self.statVal + self.bins - 1)
+         #  data.add_data(foo, titles_from_data = True)
+         #  data.set_categories(cats)
+         #  data.shape = 4
+         #  self.sheet.add_chart(data, "G4")
 
-#           #generate the linechart based on date and price
-#           #create chart and add data values to it
-#           lc = openpyxl.chart.LineChart()
-#           lc.title = self.stock + " LINECHART"
-#           lc.style = 12
-#           lc.y_axis_title = "PRICE"
-#           lc.x_axis_title = "DATE"
-#           lcData = openpyxl.chart.Reference(self.sheet, min_col = 2, min_row = 1, max_row = 1 + len(prices))
-#           lc.add_data(lcData, titles_from_data = True)
-#           #style the chart
-#           s2 = lc.series[0]
-#           s2.graphicalProperties.line.solidFill = "00AAAA"
-#           s2.graphicalProperties.line.dashStyle = "sysDot"
-#           s2.graphicalProperties.line.width = 100050 # width in EMUs
-#           #add in the date categories
-#           lcDates = openpyxl.chart.Reference(self.sheet, min_col = 1, min_row = 2, max_row = 1 + len(prices))
-#           lc.set_categories(lcDates)
-#           self.sheet.add_chart(lc, "G22")
-#       except ValueError:
-#           x = 1
+         #  #generate the linechart based on date and price
+         #  #create chart and add data values to it
+         #  lc = openpyxl.chart.LineChart()
+         #  lc.title = self.stock + " LINECHART"
+         #  lc.style = 12
+         #  lc.y_axis_title = "PRICE"
+         #  lc.x_axis_title = "DATE"
+         #  lcData = openpyxl.chart.Reference(self.sheet, min_col = 2, min_row = 1, max_row = 1 + len(prices))
+         #  lc.add_data(lcData, titles_from_data = True)
+         #  #style the chart
+         #  s2 = lc.series[0]
+         #  s2.graphicalProperties.line.solidFill = "00AAAA"
+         #  s2.graphicalProperties.line.dashStyle = "sysDot"
+         #  s2.graphicalProperties.line.width = 100050 # width in EMUs
+         #  #add in the date categories
+         #  lcDates = openpyxl.chart.Reference(self.sheet, min_col = 1, min_row = 2, max_row = 1 + len(prices))
+         #  lc.set_categories(lcDates)
+         #  self.sheet.add_chart(lc, "G22")
+      # except ValueError:
+         #  x = 1
