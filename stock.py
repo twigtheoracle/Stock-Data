@@ -42,8 +42,8 @@ class Stock():
         self.sheet["D5"] = "40 Day Std Dev"
         self.sheet["D6"] = "20 Day Std Dev"
 
-        self.sheet["D9"] = "BIN AVERAGES"
-        self.sheet["E9"] = "FREQUENCY"
+        self.sheet["D8"] = "BIN AVERAGE"
+        self.sheet["E8"] = "FREQUENCY"
 
     # fills the sheet with data
     def fill_data(self):
@@ -60,6 +60,27 @@ class Stock():
         self.sheet["E4"] = math.sqrt(statistics[3])
         self.sheet["E5"] = math.sqrt(stats.describe(self.data_prices[self.data_points-40:], bias=False, nan_policy="omit")[3])
         self.sheet["E6"] = math.sqrt(stats.describe(self.data_prices[self.data_points-20:], bias=False, nan_policy="omit")[3])
+
+    # fills the sheet with bin counts and 2 graphs
+    def fill_graphs(self):
+        # bin size calculations
+        minimum, maximum = stats.describe(self.data_prices, bias=False, nan_policy="omit")[1]
+        minimum -= .05
+        maximum -= .05
+        difference = maximum - minimum
+        bin_size = difference / self.bins
+
+        # counts for every bin
+        counts = [0] * (self.bins + 1)
+        for price in self.data_prices:
+            counts[int((price - minimum) / bin_size)] += 1
+
+        # puts the bin data into the sheet
+        for cell_index in range(0, self.bins):
+            bin_name = minimum + (((cell_index * bin_size) + ((cell_index + 1) * bin_size)) / 2)
+            self.sheet["D" + str(cell_index + 9)] = bin_name
+            self.sheet["E" + str(cell_index + 9)] = counts[cell_index]
+
 
 #   # fills the sheet with relevant graphs
 #   def fillRecentGraphs(self, prices):
