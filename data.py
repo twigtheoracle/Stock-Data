@@ -48,3 +48,7 @@ class Data():
                 stock_data.append([temp_date, temp_price])
             datatable[stock] = stock_data
         return datatable
+
+    # TODO: write this damn function
+    def get_percentage_change(self, stock_name, year, month):
+        pass

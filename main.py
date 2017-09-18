@@ -7,6 +7,7 @@ import quandl
 from functions import *
 from stock import *
 from data import *
+from sheet import *
 # from classes import *
 
 ########################################################################################
@@ -27,6 +28,8 @@ for sheet in wb:
 	stock_sheet.fill_data()
 	stock_sheet.fill_stats()
 	stock_sheet.fill_graphs()
+
+
 
 print("it works!")
 
