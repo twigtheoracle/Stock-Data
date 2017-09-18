@@ -29,7 +29,10 @@ for sheet in wb:
 	stock_sheet.fill_stats()
 	stock_sheet.fill_graphs()
 
-
+# the way the long term sheets will work is there will only be one sheet class and all it will do is put the given data into the sheet.
+# thus, the Data class needs to be able to return data formatted in a specific way for every single type of data (percent change, frequency, std dev)
+# as a result, every sheet will have the same functions of format, put data into the sheet, and color.
+# the constructor will take in a pre-formatted data list and the color function will take in high and low values for coloring.
 
 print("it works!")
 
