@@ -35,7 +35,7 @@ class Data():
 
             self.data[stock] = temp_data
 
-    # slices self.data to return only the data of the 3 months at 20 weekdays or 30 days a month
+    # slices self.data to return only the data of the last 3 months (every month has 4 weeks and 5 weekdays a week, so there are 20 days a month and 60 days for 3 months)
     def get_last_3_months(self):
         # create an empty dictionary
         datatable = {}
