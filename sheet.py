@@ -11,8 +11,9 @@ timeDelay = True
 
 class Sheet():
 	# initializes the sheet with basic data
-	def __init__(self, sheet_title, data):
-		self.title = sheet_title
+	def __init__(self, sheet, data):
+		self.sheet = sheet
+		self.data = data
 
 # # superclass for all the sheet classes
 # class Sheet():
