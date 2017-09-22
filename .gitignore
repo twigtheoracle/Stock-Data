@@ -5,3 +5,4 @@ __pycache__/
 __pycache__
 test_template.xlsx
 *.cpython-36
+*.pyc
