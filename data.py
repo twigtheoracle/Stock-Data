@@ -53,9 +53,23 @@ class Data():
         months_since_start = month - int(self.old_date[5:7])
 
         # every year has 252 trading days on average and every month has 21 trading days on average 
+        # these indicies are approximate values
         month_start_index = (years_since_start * 252) + (months_since_start * 21)
         month_end_index = (years_since_start * 252) + (months_since_start * 21) + 21
+
+        # this turns the indicies into the true values
+        while(True):
+            if(int(str(self.data[stock_name]["data"]["date"][month_start_index])[5:7]) != month):
+                month_start_index += 1
+                break
+            month_start_index -= 1
+        while(True):
+            if(int(str(self.data[stock_name]["data"]["date"][month_end_index])[5:7]) == month):
+                break
+            month_end_index -= 1
+
         print(self.data[stock_name]["data"]["date"][month_start_index])
         print(self.data[stock_name]["data"]["date"][month_end_index])
+        print()
         
 
