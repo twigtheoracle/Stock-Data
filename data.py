@@ -56,5 +56,6 @@ class Data():
         months_since_start = month - int(self.old_date[5:7])
 
         # every year has 252 trading days on average and every month has 21 trading days on average 
-        days_since_start = (years_since_start * 252) + (months_since_start * 21)
-        
+        month_start_index = (years_since_start * 252)
+        month_end_index = (years_since_start * 252) + (months_since_start * 21)
+
