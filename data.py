@@ -9,16 +9,13 @@ class Data():
     # initializes data with the list of stocks and proper dates
     def __init__(self, sl):
         self.stock_list = sl
-        cd = str(datetime.date.today())
-        od = str(int(cd[:4]) - 10) + cd[4:]
-        self.current_date = cd
-        self.old_date = self.veriy_date(od)
+        self.current_date = str(datetime.date.today())
+        self.old_date = self.get_old_date(self.current_date)
         self.data = {}
 
-    # verifies that a date exists and if it doesn't, goes back in time to find a date that does
-    # TODO: actually write the verify date function
-    def veriy_date(self, date):
-        return date
+    # gets the old date for data access
+    def get_old_date(self, date):
+        return str(int(date[:4]) - 10) + date[4:7] + "-01"
 
     # gets a string that will allow me to query quandl for all the data we need
     def get_quandl_query_string(self, stock):
