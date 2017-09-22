@@ -10,13 +10,16 @@ class Data():
     # initializes data with the list of stocks and proper dates
     def __init__(self, sl):
         self.stock_list = sl
+
         self.current_date = str(datetime.date.today())
+        self.current_year = int(self.current_date[:4])
+        self.current_month = int(self.current_date[5:7])
         self.old_date = self.get_old_date(self.current_date)
         self.data = {}
 
     # gets the old date for data access
     def get_old_date(self, date):
-        return str(int(date[:4]) - 10) + date[4:7] + "-01"
+        return str(self.current_year - 10) + str(self.current_month) + "-01"
 
     # gets a string that will allow me to query quandl for all the data we need
     def get_quandl_query_string(self, stock):
@@ -49,32 +52,45 @@ class Data():
 
     # gets the percentage change of the given month in the given year of the given stock
     def get_percentage_change(self, stock_name, year, month):
-        years_since_start = year - int(self.old_date[:4])
-        months_since_start = month - int(self.old_date[5:7])
+        years_since_start = year - self.current_year
+        months_since_start = month - self.current_month
 
         # every year has 252 trading days on average and every month has 21 trading days on average 
         # these indicies are approximate values
         month_start_index = (years_since_start * 252) + (months_since_start * 21)
         month_end_index = (years_since_start * 252) + (months_since_start * 21) + 21
 
-        # this turns the indicies into the true values
-        while(True):
-            if(int(str(self.data[stock_name]["data"]["date"][month_start_index])[5:7]) != month):
-                month_start_index += 1
-                break
-            month_start_index -= 1
-        while(True):
-            if(int(str(self.data[stock_name]["data"]["date"][month_end_index])[5:7]) == month):
-                break
-            month_end_index -= 1
+        percentage_change = None
 
-        percentage_change = (self.data[stock_name]["data"]["close"][month_end_index] - self.data[stock_name]["data"]["close"][month_start_index]) / self.data[stock_name]["data"]["close"][month_start_index]
+        try:
+            # this turns the indicies into the true values
+            while(True):
+                if(int(str(self.data[stock_name]["data"]["date"][month_start_index])[5:7]) != month):
+                    month_start_index += 1
+                    break
+                month_start_index -= 1
+            while(True):
+                if(int(str(self.data[stock_name]["data"]["date"][month_end_index])[5:7]) == month):
+                    break
+                month_end_index -= 1
 
-        print(self.data[stock_name]["data"]["date"][month_start_index])
-        print(self.data[stock_name]["data"]["date"][month_end_index])
-        print(percentage_change)
-        print()
+            percentage_change = (self.data[stock_name]["data"]["close"][month_end_index] - self.data[stock_name]["data"]["close"][month_start_index]) / self.data[stock_name]["data"]["close"][month_start_index]
+        except:
+            print(year, month)
 
         return percentage_change
+
+    def get_average_percent_change(self, stock_name, month):
+        year_offset = None
+        # for the current month and all months after it, we need to look at data up to last year
+        if(month >= self.current_month):
+            year_offset = 1
+        else:
+            year_offset = 0
+
+        datalist = []
+        for year in range(self.current_year - 10 - year_offset, self.current_year - year_offset):
+            datalist.append(self.get_percentage_change(stock_name, year, month))
+        print(stock_name, datalist, "")
         
 
