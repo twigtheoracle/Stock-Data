@@ -1,4 +1,5 @@
 from pprint import *
+from calendar import monthrange
 
 import datetime
 import quandl
@@ -51,4 +52,9 @@ class Data():
     # the first index should be the first valid traded day and the last index should be the last valid traded day of the month
     # indicies should take into account the fact that weekends and holidays exist
     def get_percentage_change(self, stock_name, year, month):
-        pass
+        years_since_start = year - int(self.old_date[:4])
+        months_since_start = month - int(self.old_date[5:7])
+
+        # every year has 252 trading days on average and every month has 21 trading days on average 
+        days_since_start = (years_since_start * 252) + (months_since_start * 21)
+        
