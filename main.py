@@ -9,7 +9,6 @@ from functions import *
 from stock import *
 from data import *
 from sheet import *
-# from classes import *
 
 ########################################################################################
 
@@ -48,6 +47,8 @@ for sheet in wb:
 	stock_sheet.fill_data()
 	stock_sheet.fill_stats()
 	stock_sheet.fill_graphs()
+
+data.get_percentage_change("AAPL", 2017, 3)
 
 # the way the long term sheets will work is there will only be one sheet class and all it will do is put the given data into the sheet.
 # thus, the Data class needs to be able to return data formatted in a specific way for every single type of data (percent change, frequency, std dev)
