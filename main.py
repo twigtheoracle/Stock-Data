@@ -27,9 +27,9 @@ template_file = "test_template.xlsx"
 wb = None
 stock_list = []
 extension = template_file[template_file.rfind(".")+1:]
-if(extension = "xlsx"):
+if(extension == "xlsx"):
 	wb = openpyxl.load_workbook(template_file)
-	stock_list = sb.sheetnames
+	stock_list = wb.sheetnames
 elif(extension == "txt"):
 	f = open(template_file, "r")
 	wb = openpyxl.Workbook()

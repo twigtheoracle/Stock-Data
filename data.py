@@ -58,4 +58,7 @@ class Data():
         # every year has 252 trading days on average and every month has 21 trading days on average 
         month_start_index = (years_since_start * 252)
         month_end_index = (years_since_start * 252) + (months_since_start * 21)
+        print(self.data[stock_name]["Date"][month_start_index])
+        print(self.data[stock_name]["Date"][month_end_index])
+        
 
