@@ -13,15 +13,30 @@ from sheet import *
 
 ########################################################################################
 
-save_path = None
-
-template_file = "test_template.xlsx"
 
 # change save path based on os
+save_path = None
 if(platform.system() == "Darwin"):
 	save_path = "/users/twig/Desktop/"
 else:
 	save_path = "C:/Users/ericl/Desktop/"
+
+# get the workbook and stock list
+# depends on the file format of the template
+template_file = "test_template.xlsx"
+wb = None
+stock_list = []
+extension = template_file[template_file.rfind(".")+1:]
+if(extension = "xlsx"):
+	wb = openpyxl.load_workbook(template_file)
+	stock_list = sb.sheetnames
+elif(extension == "txt"):
+	f = open(template_file, "r")
+	wb = openpyxl.Workbook()
+	for line in f:
+		stock_list.append(line)
+		wb.create_sheet(line, 0)
+
 
 wb = openpyxl.load_workbook(template_file)
 stock_list = wb.sheetnames
