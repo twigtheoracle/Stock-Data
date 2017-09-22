@@ -37,10 +37,6 @@ elif(extension == "txt"):
 		stock_list.append(line)
 		wb.create_sheet(line, 0)
 
-
-wb = openpyxl.load_workbook(template_file)
-stock_list = wb.sheetnames
-
 data = Data(stock_list)
 data.retrieve_data()
 short_term_data = data.get_last_3_months()
