@@ -47,10 +47,7 @@ class Data():
             datatable[stock] = stock_data
         return datatable
 
-    # TODO: write this damn function
-    # the way this function should be done is to turn the year and month into two indexes of the data
-    # the first index should be the first valid traded day and the last index should be the last valid traded day of the month
-    # indicies should take into account the fact that weekends and holidays exist
+    # gets the percentage change of the given month in the given year of the given stock
     def get_percentage_change(self, stock_name, year, month):
         years_since_start = year - int(self.old_date[:4])
         months_since_start = month - int(self.old_date[5:7])
