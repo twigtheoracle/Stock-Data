@@ -50,5 +50,8 @@ class Data():
         return datatable
 
     # TODO: write this damn function
+    # the way this function should be done is to turn the year and month into two indexes of the data
+    # the first index should be the first valid traded day and the last index should be the last valid traded day of the month
+    # indicies should take into account the fact that weekends and holidays exist
     def get_percentage_change(self, stock_name, year, month):
         pass
