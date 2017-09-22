@@ -36,6 +36,7 @@ elif(extension == "txt"):
 	for line in f:
 		stock_list.append(line)
 		wb.create_sheet(line, 0)
+	f.close()
 
 data = Data(stock_list)
 data.retrieve_data()
