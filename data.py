@@ -68,8 +68,16 @@ class Data():
                 break
             month_end_index -= 1
 
+        try:
+            print(self.data[stock_name]["data"]["date"][month_start_index-1])
+        except:
+            pass
         print(self.data[stock_name]["data"]["date"][month_start_index])
         print(self.data[stock_name]["data"]["date"][month_end_index])
+        try:
+            print(self.data[stock_name]["data"]["date"][month_end_index + 1])
+        except:
+            pass
         print()
         
 

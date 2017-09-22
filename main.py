@@ -14,43 +14,48 @@ from sheet import *
 
 
 # change save path based on os
-save_path = None
-if(platform.system() == "Darwin"):
-	save_path = "/users/twig/Desktop/"
-else:
-	save_path = "C:/Users/ericl/Desktop/"
+try:
+    save_path = None
+    if(platform.system() == "Darwin"):
+    	save_path = "/users/twig/Desktop/"
+    else:
+    	save_path = "C:/Users/ericl/Desktop/"
 
-# get the workbook and stock list
-# depends on the file format of the template
-template_file = "test_template.xlsx"
-wb = None
-stock_list = []
-extension = template_file[template_file.rfind(".")+1:]
-if(extension == "xlsx"):
-	wb = openpyxl.load_workbook(template_file)
-	stock_list = wb.sheetnames
-elif(extension == "txt"):
-	f = open(template_file, "r")
-	wb = openpyxl.Workbook()
-	for line in f:
-		stock_list.append(line)
-		wb.create_sheet(line, 0)
-	f.close()
+    # get the workbook and stock list
+    # depends on the file format of the template
+    template_file = "test_template.xlsx"
+    wb = None
+    stock_list = []
+    extension = template_file[template_file.rfind(".")+1:]
+    if(extension == "xlsx"):
+    	wb = openpyxl.load_workbook(template_file)
+    	stock_list = wb.sheetnames
+    elif(extension == "txt"):
+    	f = open(template_file, "r")
+    	wb = openpyxl.Workbook()
+    	for line in f:
+    		stock_list.append(line)
+    		wb.create_sheet(line, 0)
+    	f.close()
 
-data = Data(stock_list)
-data.retrieve_data()
-short_term_data = data.get_last_3_months()
+    data = Data(stock_list)
+    data.retrieve_data()
+    short_term_data = data.get_last_3_months()
 
-for sheet in wb:
-	stock_sheet = Stock(sheet, short_term_data[sheet.title])
-	stock_sheet.format()
-	stock_sheet.fill_data()
-	stock_sheet.fill_stats()
-	stock_sheet.fill_graphs()
+    for sheet in wb:
+    	stock_sheet = Stock(sheet, short_term_data[sheet.title])
+    	stock_sheet.format()
+    	stock_sheet.fill_data()
+    	stock_sheet.fill_stats()
+    	stock_sheet.fill_graphs()
 
-for year in range(2008, 2018):
-    for month in range(1, 13):
-        data.get_percentage_change("AAPL", year, month)
+    for year in range(2008, 2018):
+        for month in range(1, 13):
+            data.get_percentage_change("AAPL", year, month)
+# this doesn't work to stop no wifi errors for some reason
+# TODO: catch no wifi error
+except ConnectionError:
+    print("ERROR: NO INTERNET")
 
 # the way the long term sheets will work is there will only be one sheet class and all it will do is put the given data into the sheet.
 # thus, the Data class needs to be able to return data formatted in a specific way for every single type of data (percent change, frequency, std dev)
