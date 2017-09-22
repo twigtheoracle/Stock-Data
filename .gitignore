@@ -1,4 +1,7 @@
 api_key.py
+/__pycache__/*.pyc
+/__pycache__/
+__pycache__/
 __pycache__
 test_template.xlsx
-
+*.cpython-36
