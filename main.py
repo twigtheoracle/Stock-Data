@@ -3,6 +3,7 @@ from pprint import pprint
 import openpyxl
 import time
 import quandl
+import platform # this is to tell what os we are currently using
 
 from functions import *
 from stock import *
@@ -12,8 +13,15 @@ from sheet import *
 
 ########################################################################################
 
+save_path = None
+
 template_file = "test_template.xlsx"
-save_path = "C:/Users/ericl/Desktop/"
+
+# change save path based on os
+if(platform.system() == "Darwin"):
+	save_path = "/users/twig/Desktop/"
+else:
+	save_path = "C:/Users/ericl/Desktop/"
 
 wb = openpyxl.load_workbook(template_file)
 stock_list = wb.sheetnames
