@@ -15,6 +15,7 @@ class Data():
         self.current_year = int(self.current_date[:4])
         self.current_month = int(self.current_date[5:7])
         self.old_date = self.get_old_date(self.current_date)
+        self.old_year = int(self.old_year[:4])
         self.data = {}
 
     # gets the old date for data access
@@ -56,7 +57,7 @@ class Data():
 
     # gets the percentage change of the given month in the given year of the given stock
     def get_percentage_change(self, stock_name, year, month):
-        years_since_start = self.current_year - year
+        years_since_start = year - self.old_year
         months_since_start = month - self.current_month
 
         # every year has 252 trading days on average and every month has 21 trading days on average 
