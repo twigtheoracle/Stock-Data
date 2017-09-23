@@ -21,7 +21,7 @@ class Data():
     # gets the old date for data access
     def get_old_date(self, date):
         return_string = ""
-        return_string += str(self.current_year - 10) + "-"
+        return_string += str(self.current_year - 11) + "-"
         if(self.current_month < 10):
             return_string += "0"
         return_string += str(self.current_month) + "-01"
