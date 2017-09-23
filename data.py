@@ -61,7 +61,7 @@ class Data():
 
         return datatable
 
-    # gets the percentage change of the given month in the given year of the given stock
+    # returns the percentage change of the given month in the given year of the given stock
     def get_percentage_change(self, stock_name, year, month):
         years_since_start = year - self.old_year
         months_since_start = month - self.current_month
@@ -122,4 +122,14 @@ class Data():
 
         return return_data
         
-    def
+    # returns a datatable with all long term data for every single stock
+    # datatable:
+    #   stock_name:
+    #       percent_change:
+    #           data (starting at current month)
+    #       std_dev:
+    #           same
+    #       freq:  
+    #           same
+    def get_long_term_data(self):
+
