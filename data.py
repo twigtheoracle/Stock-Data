@@ -56,7 +56,7 @@ class Data():
 
     # gets the percentage change of the given month in the given year of the given stock
     def get_percentage_change(self, stock_name, year, month):
-        years_since_start = year - self.current_year
+        years_since_start = self.current_year - year
         months_since_start = month - self.current_month
 
         # every year has 252 trading days on average and every month has 21 trading days on average 
@@ -66,18 +66,22 @@ class Data():
 
         percentage_change = None
 
-        # this turns the indicies into the true values
-        while(True):
-            if(int(str(self.data[stock_name]["data"]["date"][month_start_index])[5:7]) != month):
-                month_start_index += 1
-                break
-            month_start_index -= 1
-        while(True):
-            if(int(str(self.data[stock_name]["data"]["date"][month_end_index])[5:7]) == month):
-                break
-            month_end_index -= 1
+        try:
+            # this turns the indicies into the true values
+            while(True):
+                if(month_start_index < 0 or int(str(self.data[stock_name]["data"]["date"][month_start_index])[5:7]) != month):
+                    month_start_index += 1
+                    break
+                month_start_index -= 1
+            while(True):
+                if(month_end_index < 0 or int(str(self.data[stock_name]["data"]["date"][month_end_index])[5:7]) == month):
+                    break
+                month_end_index -= 1
 
-        percentage_change = (self.data[stock_name]["data"]["close"][month_end_index] - self.data[stock_name]["data"]["close"][month_start_index]) / self.data[stock_name]["data"]["close"][month_start_index]
+            percentage_change = (self.data[stock_name]["data"]["close"][month_end_index] - self.data[stock_name]["data"]["close"][month_start_index]) / self.data[stock_name]["data"]["close"][month_start_index]
+
+        except KeyError:
+            print("KEYERROR:", stock_name, year, month, month_start_index, month_end_index)
 
         return percentage_change
 

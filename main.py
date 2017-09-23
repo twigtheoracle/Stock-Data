@@ -42,8 +42,6 @@ try:
         f.close()
         wb.remove_sheet(wb.get_sheet_by_name("Sheet"))
 
-    print(wb.sheetnames)
-
     data = Data(stock_list)
     data.retrieve_data()
     short_term_data = data.get_last_3_months()
