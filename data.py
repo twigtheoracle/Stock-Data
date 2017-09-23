@@ -94,6 +94,8 @@ class Data():
 
         return percentage_change
 
+    # gets the average percent change of a month for a specific stock
+    # returns a datalist constructed: [average percent change, std dev of percent change, frequency positive percent change]
     def get_average_percent_change(self, stock_name, month):
         year_offset = None
         # for the current month and all months after it, we need to look at data up to last year
@@ -120,4 +122,4 @@ class Data():
 
         return return_data
         
-
+    def
