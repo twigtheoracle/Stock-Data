@@ -102,6 +102,7 @@ class Data():
         datalist = []
         for year in range(self.current_year - 10 - year_offset, self.current_year - year_offset):
             datalist.append(self.get_percentage_change(stock_name, year, month))
-        print(stock_name, datalist, "")
+
+        print(stock_name, month, datalist, "")
         
 
