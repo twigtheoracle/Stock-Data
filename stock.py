@@ -65,7 +65,7 @@ class Stock():
         # bin size calculations
         minimum, maximum = stats.describe(self.data_prices, bias=False, nan_policy="omit")[1]
         minimum -= .05
-        maximum -= .05
+        maximum += .05
         difference = maximum - minimum
         bin_size = difference / self.bins
 
