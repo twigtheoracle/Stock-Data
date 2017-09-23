@@ -35,28 +35,3 @@ def save(wb, path):
 		print("ERROR: FILE IS OPEN")
 		print("CLOSE FILE AND RUN SCRIPT AGAIN")
 		return False
-
-################################################################################
-
-# tests is the input is a number
-# return 	True	n is a number
-# return 	False 	n is not a number
-def isNumber(n):
-	try:
-		int(n)
-		return True
-	except ValueError:
-		return False
-
-################################################################################
-
-# returns a list of the next three months based on the current month
-# return 	returnList	a list of the next three month numbers
-def getMonthList(currentMonth):
-	returnList = [0] * 3
-	for i in range(1,3):
-		returnList[i] = (currentMonth + i) % 12
-	for i in range(0,3):
-		if (returnList[i] == 0):
-			returnList[i] = 12
-	return returnList
