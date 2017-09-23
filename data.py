@@ -15,12 +15,17 @@ class Data():
         self.current_year = int(self.current_date[:4])
         self.current_month = int(self.current_date[5:7])
         self.old_date = self.get_old_date(self.current_date)
-        self.old_year = int(self.old_year[:4])
+        self.old_year = int(self.old_date[:4])
         self.data = {}
 
     # gets the old date for data access
     def get_old_date(self, date):
-        return str(self.current_year - 10) + str(self.current_month) + "-01"
+        return_string = ""
+        return_string += str(self.current_year - 10) + "-"
+        if(self.current_month < 10):
+            return_string += "0"
+        return_string += str(self.current_month) + "-01"
+        return return_string
 
     # gets a string that will allow me to query quandl for all the data we need
     def get_quandl_query_string(self, stock):
