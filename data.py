@@ -41,13 +41,17 @@ class Data():
         # create an empty dictionary
         datatable = {}
         # iterate through every stock in the template
-        for stock in self.stock_list:
-            stock_data = []
-            for day in range(1, 61):
-                temp_date = str(self.data[stock]["data"]["date"][self.data[stock]["data_length"] - day])[:10]
-                temp_price = str(self.data[stock]["data"]["close"][self.data[stock]["data_length"] - day])
-                stock_data.append([temp_date, temp_price])
-            datatable[stock] = stock_data
+        try:
+            for stock in self.stock_list:
+                stock_data = []
+                for day in range(1, 61):
+                    temp_date = str(self.data[stock]["data"]["date"][self.data[stock]["data_length"] - day])[:10]
+                    temp_price = str(self.data[stock]["data"]["close"][self.data[stock]["data_length"] - day])
+                    stock_data.append([temp_date, temp_price])
+                datatable[stock] = stock_data
+        except IndexError:
+            print("INDEXERROR")
+
         return datatable
 
     # gets the percentage change of the given month in the given year of the given stock

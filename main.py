@@ -54,7 +54,6 @@ try:
         stock_sheet.fill_data()
         stock_sheet.fill_stats()
         stock_sheet.fill_graphs()
-
     
     for month in range(1,13):
         data.get_average_percent_change("AAPL", month)
