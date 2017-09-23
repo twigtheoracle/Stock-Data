@@ -89,6 +89,8 @@ class Data():
         except KeyError:
             print("KEYERROR:", stock_name, year, month, month_start_index, month_end_index)
 
+        print(year, month, str(self.data[stock_name]["data"]["date"][month_start_index])[:10], self.data[stock_name]["data"]["close"][month_start_index], str(self.data[stock_name]["data"]["date"][month_end_index])[:10], self.data[stock_name]["data"]["close"][month_end_index])
+
         return percentage_change
 
     def get_average_percent_change(self, stock_name, month):
