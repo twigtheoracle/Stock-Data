@@ -37,8 +37,8 @@ try:
             sheet_title = line
             if(sheet_title[-1] == "\n"):
                 sheet_title = sheet_title[:-1]
-            stock_list.append(sheet_title)
-            wb.create_sheet(sheet_title, 0)
+            stock_list.insert(len(stock_list), sheet_title)
+            wb.create_sheet(sheet_title, len(stock_list))
         f.close()
         wb.remove_sheet(wb.get_sheet_by_name("Sheet"))
 
