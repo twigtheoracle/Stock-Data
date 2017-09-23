@@ -132,4 +132,19 @@ class Data():
     #       freq:  
     #           same
     def get_long_term_data(self):
+        datatable = {}
+        for stock in stock_list:
+            stock_data = {}
+            stock_data["percent_change"] = []
+            stock_data["std_dev"] = []
+            stock_data["freq"] = []
+            for month in range(self.current_month - 1, self.current_month - 1 + 12):
+                adjusted_month = (month % 12) + 1
+                datalist = self.get_average_percent_change(stock, adjusted_month)
+                stock_data["percent_change"].append(datalist[0])
+                stock_data["std_dev"].append(datalist[1])
+                stock_data["freq"].append(datalist[2])
+            datatable[stock] = stock_data
+        return datatable
+
 
