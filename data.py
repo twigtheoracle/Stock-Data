@@ -3,6 +3,7 @@ from calendar import monthrange
 
 import datetime
 import quandl
+import numpy
 
 import api_key as key
 
@@ -103,8 +104,20 @@ class Data():
 
         datalist = []
         for year in range(self.current_year - 10 - year_offset, self.current_year - year_offset):
-            datalist.append(self.get_percentage_change(stock_name, year, month))
+            change = self.get_percentage_change(stock_name, year, month)
+            if(change != None):
+                datalist.append(self.get_percentage_change(stock_name, year, month))
 
         print(stock_name, month, datalist, "")
+
+        count = 0
+        for data_point in datalist:
+            if(data_point > 0):
+                count += 1
+        percent_positive = (count / len(datalist)) * 100
+
+        return_data = [np.mean(datalist) * 100, np.std(datalist), percent_positive]
+
+        return return_data
         
 
