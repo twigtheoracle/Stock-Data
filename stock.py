@@ -61,6 +61,7 @@ class Stock():
         self.sheet["E6"] = math.sqrt(stats.describe(self.data_prices[self.data_points-20:], bias=False, nan_policy="omit")[3])
 
     # fills the sheet with bin counts and 2 graphs
+    # TODO: line charts are looking at the wrong data?
     def fill_graphs(self):
         # bin size calculations
         minimum, maximum = stats.describe(self.data_prices, bias=False, nan_policy="omit")[1]
