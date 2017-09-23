@@ -34,14 +34,15 @@ try:
         f = open(template_file, "r")
         wb = openpyxl.Workbook()
         for line in f:
-            if(line[-1] == "\n"):
-                stock_list.append(line[:-1])
-            else:
-                stock_list.append(line)
-            wb.create_sheet(line, 0)
+            sheet_title = line
+            if(sheet_title[-1] == "\n"):
+                sheet_title = sheet_title[:-1]
+            stock_list.append(sheet_title)
+            wb.create_sheet(sheet_title, 0)
         f.close()
+        wb.remove_sheet(wb.get_sheet_by_name("Sheet"))
 
-    print(stock_list)
+    print(wb.sheetnames)
 
     data = Data(stock_list)
     data.retrieve_data()
