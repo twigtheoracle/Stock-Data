@@ -66,21 +66,18 @@ class Data():
 
         percentage_change = None
 
-        try:
-            # this turns the indicies into the true values
-            while(True):
-                if(int(str(self.data[stock_name]["data"]["date"][month_start_index])[5:7]) != month):
-                    month_start_index += 1
-                    break
-                month_start_index -= 1
-            while(True):
-                if(int(str(self.data[stock_name]["data"]["date"][month_end_index])[5:7]) == month):
-                    break
-                month_end_index -= 1
+        # this turns the indicies into the true values
+        while(True):
+            if(int(str(self.data[stock_name]["data"]["date"][month_start_index])[5:7]) != month):
+                month_start_index += 1
+                break
+            month_start_index -= 1
+        while(True):
+            if(int(str(self.data[stock_name]["data"]["date"][month_end_index])[5:7]) == month):
+                break
+            month_end_index -= 1
 
-            percentage_change = (self.data[stock_name]["data"]["close"][month_end_index] - self.data[stock_name]["data"]["close"][month_start_index]) / self.data[stock_name]["data"]["close"][month_start_index]
-        except:
-            print(year, month)
+        percentage_change = (self.data[stock_name]["data"]["close"][month_end_index] - self.data[stock_name]["data"]["close"][month_start_index]) / self.data[stock_name]["data"]["close"][month_start_index]
 
         return percentage_change
 
