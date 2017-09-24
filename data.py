@@ -121,6 +121,7 @@ class Data():
         return return_data
         
     # returns a datatable with all long term data for every single stock
+    # TODO: reformat the datatable for eaiser access like: datatable:{percent_change:{stocks...}}
     # datatable:
     #   stock_name:
     #       percent_change:
