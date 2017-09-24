@@ -21,7 +21,7 @@ try:
 
     data = Data(stock_list)
     data.retrieve_data()
-    short_term_data = data.get_last_3_months()
+    short_term_data = data.get_short_term_data()
 
     for sheet in wb:
         stock_sheet = Stock(sheet, short_term_data[sheet.title])
@@ -30,7 +30,7 @@ try:
         stock_sheet.fill_stats()
         stock_sheet.fill_graphs()
     
-    pprint(data.get_long_term_data())
+    long_term_data = data.get_long_term_data()
 
 # this doesn't work to stop no wifi errors for some reason
 # TODO: catch no wifi error
