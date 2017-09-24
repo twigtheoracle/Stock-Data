@@ -131,7 +131,7 @@ class Data():
     #           same
     def get_long_term_data(self):
         datatable = {}
-        for stock in stock_list:
+        for stock in self.stock_list:
             stock_data = {}
             stock_data["percent_change"] = []
             stock_data["std_dev"] = []
