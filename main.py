@@ -3,7 +3,6 @@ from pprint import pprint
 import openpyxl
 import time
 import quandl
-import platform # this is to tell what os we are currently using
 
 from functions import *
 from stock import *
@@ -12,14 +11,8 @@ from sheet import *
 
 ########################################################################################
 
-
-# change save path based on os
 try:
-    save_path = None
-    if(platform.system() == "Darwin"):
-        save_path = "/users/twig/Desktop/"
-    else:
-        save_path = "C:/Users/ericl/Desktop/"
+    save_path = get_save_path()
 
     # get the workbook and stock list
     # depends on the file format of the template
