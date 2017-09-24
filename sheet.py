@@ -7,12 +7,18 @@ import time
 
 import api_key as key
 
+# returns an uppcase representation of the number
+# 1 --> A, 2 --> B, etc.
+def number_to_letter(n):
+	return string.ascii_uppercase[n - 1]
+
 # class for all the long term sheets
 class Sheet():
     # initializes the sheet with basic data
-    def __init__(self, sheet, data):
+    def __init__(self, sheet, data, stock_list):
         self.sheet = sheet
         self.data = data
+        self.stock_list = stock_list
 
         self.month_index = ["Jan (1)", "Feb (2)", "Mar (3)", "Apr (4)", "May (5)", "Jun (6)", "Jul (7)", "Aug (8)", "Sep (9)", "Oct (10)", "Nov (11)", "Dec (12)"]
         self.color_gradient = [PatternFill(start_color='E4001A', end_color='E4001A', fill_type='solid'), 
@@ -35,6 +41,13 @@ class Sheet():
             PatternFill(start_color='31DE0B', end_color='31DE0B', fill_type='solid'), 
             PatternFill(start_color='1ADE0C', end_color='1ADE0C', fill_type='solid'), 
             PatternFill(start_color='0CDE17', end_color='0CDE17', fill_type='solid')]
+
+    def format(self):
+    	for row in range(0, len(self.data)):
+    		# puts stocks in the A column
+    		self.sheet["A" + str(row + 3)] = stock_list[row]
+
+    		# merges and puts the year(s) into the top row
 
 # # superclass for all the sheet classes
 # class Sheet():
