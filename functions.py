@@ -1,5 +1,14 @@
 import openpyxl
 import datetime
+import platform
+
+################################################################################
+
+def get_save_path():
+    if(platform.system() == "Darwin"):
+        return "/users/twig/Desktop/"
+    elif(platform.system() == "Windows()"):
+       return "C:/Users/ericl/Desktop/"
 
 ################################################################################
 
@@ -22,6 +31,8 @@ def get_workbook_and_stocklist(file):
         f.close()
         wb.remove_sheet(wb.get_sheet_by_name("Sheet"))
     return wb, stock_list
+
+################################################################################
 
 # checks if the file is open
 # return    True    file is closed (can save)
