@@ -123,13 +123,13 @@ class Data():
     # returns a datatable with all long term data for every single stock
     # TODO: reformat the datatable for eaiser access like: datatable:{percent_change:{stocks...}}
     # datatable:
-    #   stock_name:
-    #       percent_change:
-    #           data (starting at current month)
-    #       std_dev:
-    #           same
-    #       freq:  
-    #           same
+    #   percent_change:
+    #       stock:
+    #           data...
+    #       stock:
+    #           data...
+    #   std_dev:
+    #       etc...
     def get_long_term_data(self):
         datatable = {}
         datatable["percent_change"] = {}
