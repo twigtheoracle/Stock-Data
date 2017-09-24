@@ -42,6 +42,7 @@ class Sheet():
             PatternFill(start_color='1ADE0C', end_color='1ADE0C', fill_type='solid'), 
             PatternFill(start_color='0CDE17', end_color='0CDE17', fill_type='solid')]
 
+    # formats the sheet
     def format(self):
     	for row in range(0, len(self.data)):
     		# puts stocks in the A column
@@ -58,6 +59,12 @@ class Sheet():
     		self.sheet["B1"].alignment = openpyxl.styles.Alignment(horizontal='center')
     		self.sheet[second_range[:2]] = int(str(datetime.datetime.now())[:4]) + 1
     		self.sheet[second_range[:2]].alignment = openpyxl.styles.Alignment(horizontal='center')
+
+    # fills the sheet with data
+    def fill(self):
+    	for row in range(0, len(self.stock_list)):
+    		for column in range(2, 15):
+    			self.sheet[number_to_letter(column) + str(row + 3)] = self.data[self.stock_list[row]][column - 2]
 
 #   # formats the sheet
 #   def format(self):
