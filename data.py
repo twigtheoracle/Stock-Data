@@ -143,6 +143,10 @@ class Data():
                 stock_data["percent_change"].append(datalist[0])
                 stock_data["std_dev"].append(datalist[1])
                 stock_data["freq"].append(datalist[2])
+                if(adjusted_month == 12):
+                    stock_data["percent_change"].append(None)
+                    stock_data["std_dev"].append(None)
+                    stock_data["freq"].append(None)
             datatable[stock] = stock_data
         return datatable
 
