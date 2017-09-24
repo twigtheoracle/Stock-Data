@@ -30,13 +30,17 @@ try:
         stock_sheet.fill_stats()
         stock_sheet.fill_graphs()
     
-    for month in range(1,13):
-        data.get_average_percent_change("AAPL", month)
+    pprint(data.get_long_term_data())
 
 # this doesn't work to stop no wifi errors for some reason
 # TODO: catch no wifi error
 except ConnectionError:
     print("ERROR: NO INTERNET")
+except quandl.errors.quandl_error.QuandlError:
+    if (f.save(wb, savePath)):
+      print("INCOMPLETE WORKBOOK SAVED")
+    print("===PROGRAM TERMINATED===\n")
+    timeElapsed = time.time() - start
 
 # the way the long term sheets will work is there will only be one sheet class and all it will do is put the given data into the sheet.
 # thus, the Data class needs to be able to return data formatted in a specific way for every single type of data (percent change, frequency, std dev)
