@@ -24,23 +24,7 @@ try:
     # get the workbook and stock list
     # depends on the file format of the template
     template_file = "test_template.txt"
-    wb = None
-    stock_list = []
-    extension = template_file[template_file.rfind(".")+1:]
-    if(extension == "xlsx"):
-        wb = openpyxl.load_workbook(template_file)
-        stock_list = wb.sheetnames
-    elif(extension == "txt"):
-        f = open(template_file, "r")
-        wb = openpyxl.Workbook()
-        for line in f:
-            sheet_title = line
-            if(sheet_title[-1] == "\n"):
-                sheet_title = sheet_title[:-1]
-            stock_list.insert(len(stock_list), sheet_title)
-            wb.create_sheet(sheet_title, len(stock_list))
-        f.close()
-        wb.remove_sheet(wb.get_sheet_by_name("Sheet"))
+    wb, stock_list = get_workbook_and_stocklist(template_file)
 
     data = Data(stock_list)
     data.retrieve_data()
