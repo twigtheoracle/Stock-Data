@@ -32,6 +32,10 @@ try:
     
     long_term_data = data.get_long_term_data()
 
+    temp_sheet = wb.create_sheet("10YR %", 0)
+    percentage_sheet = Sheet(temp_sheet, long_term_data["percent_change"], stock_list)
+    percentage_sheet.format()
+
 # this doesn't work to stop no wifi errors for some reason
 # TODO: catch no wifi error
 except ConnectionError:
