@@ -10,7 +10,7 @@ import api_key as key
 # returns an uppcase representation of the number
 # 1 --> A, 2 --> B, etc.
 def number_to_letter(n):
-	return string.ascii_uppercase[n - 1]
+    return string.ascii_uppercase[n - 1]
 
 # class for all the long term sheets
 class Sheet():
@@ -44,87 +44,55 @@ class Sheet():
 
     # formats the sheet
     def format(self):
-    	for row in range(0, len(self.data)):
-    		# puts stocks in the A column
-    		self.sheet["A" + str(row + 3)] = self.stock_list[row]
+        this_month = int(str(datetime.datetime.now())[5:7])
 
-    		# merges and puts the year(s) into the top row
-    		this_month = int(str(datetime.datetime.now())[5:7])
-    		month_offset = 12 - this_month + 1
-    		first_range = "B1:" + number_to_letter(1 + month_offset) + "1"
-    		second_range = number_to_letter(1 + month_offset + 2) + "1:" + number_to_letter(2 + month_offset + (12 - month_offset)) + "1"
-    		self.sheet.merge_cells(first_range)
-    		self.sheet.merge_cells(second_range)
-    		self.sheet["B1"] = int(str(datetime.datetime.now())[:4])
-    		self.sheet["B1"].alignment = openpyxl.styles.Alignment(horizontal='center')
-    		self.sheet[second_range[:2]] = int(str(datetime.datetime.now())[:4]) + 1
-    		self.sheet[second_range[:2]].alignment = openpyxl.styles.Alignment(horizontal='center')
+        for row in range(0, len(self.data)):
+            # puts stocks in the A column
+            self.sheet["A" + str(row + 3)] = self.stock_list[row]
+
+        # puts the months in the second row
+        offset = 0
+        index = 2
+        for month in range(this_month - 1, this_month + 11):
+            self.sheet[number_to_letter(index + offset) + "2"] = self.month_index[month % 12]
+            self.sheet[number_to_letter(index + offset) + "2"].alignment = openpyxl.styles.Alignment(horizontal='center')
+            index += 1
+            if(month == 11):
+                offset = 1
+
+        # merges and puts the year(s) into the top row
+        month_offset = 12 - this_month + 1
+        first_range = "B1:" + number_to_letter(1 + month_offset) + "1"
+        second_range = number_to_letter(1 + month_offset + 2) + "1:" + number_to_letter(2 + month_offset + (12 - month_offset)) + "1"
+        self.sheet.merge_cells(first_range)
+        self.sheet.merge_cells(second_range)
+        self.sheet["B1"] = int(str(datetime.datetime.now())[:4])
+        self.sheet["B1"].alignment = openpyxl.styles.Alignment(horizontal='center')
+        self.sheet[second_range[:2]] = int(str(datetime.datetime.now())[:4]) + 1
+        self.sheet[second_range[:2]].alignment = openpyxl.styles.Alignment(horizontal='center')
 
     # fills the sheet with data
     def fill(self):
-    	for row in range(0, len(self.stock_list)):
-    		for column in range(2, 15):
-    			self.sheet[number_to_letter(column) + str(row + 3)] = self.data[self.stock_list[row]][column - 2]
+        for row in range(0, len(self.stock_list)):
+            for column in range(2, 15):
+                self.sheet[number_to_letter(column) + str(row + 3)] = self.data[self.stock_list[row]][column - 2]
 
-#   # formats the sheet
-#   def format(self):
-#       #Puts in the months for the current month and next years months
-#       #Merges cells for year values
-#       currentYearRange = "B1:"
-#       nextYearRange = ""
-#       self.sheet["B1"] = self.year
-#       self.sheet["B1"].alignment = openpyxl.styles.Alignment(horizontal='center')
+    # colors the sheet based on a low and high value
+    # TODO: write this function
+    def color(self, low, high):
+        pass
 
-#       numberOfMonths = 0
+    # # colors each numerical percentage a color based on a pretty gradient from red to green
+    # def color(self):
+    #     for letter in range(2, 15): # from letter B to N when plugged into the first non __init__ function
+    #         for row in range(3, 3 + len(self.stockList)):
+    #             cell = self.numberToLetter(letter) + str(row)
+    #             value = self.sheet[cell].value
 
-#       index = 2
-#       for month in range(self.month, 13):
-#           self.sheet[self.numberToLetter(index) + "2"] = self.monthIndex[month - 1]
-#           self.sheet[self.numberToLetter(index) + "2"].alignment = openpyxl.styles.Alignment(horizontal='center')
-#           index += 1
-#           numberOfMonths += 1
-
-#       currentYearRange += self.numberToLetter(index - 1) + "1"
-
-#       index += 1
-
-#       nextYearRange += self.numberToLetter(index) + "1:"
-#       self.sheet[self.numberToLetter(index) + "1"] = self.year + 1
-#       self.sheet[self.numberToLetter(index) + "1"].alignment = openpyxl.styles.Alignment(horizontal='center')
-
-#       for month in range(1, 13):
-#           if (numberOfMonths == 12):
-#               break
-#           self.sheet[self.numberToLetter(index) + "2"] = self.monthIndex[month - 1]
-#           self.sheet[self.numberToLetter(index) + "2"].alignment = openpyxl.styles.Alignment(horizontal='center')
-#           index += 1
-#           numberOfMonths += 1
-
-#       nextYearRange += self.numberToLetter(index - 1) + "1"
-
-#       self.sheet.merge_cells(currentYearRange)
-#       self.sheet.merge_cells(nextYearRange)
-
-#       for row in range(3, 3 + len(self.stockList)):
-#           self.sheet["A" + str(row)] = self.stockList[row - 3]
-
-#   # fills the sheet with cool data
-#   def fill(self):
-#       index = 0
-#       for row in range(3, 3 + len(self.stockList)):
-#           for letter in range(2, 15): # from letter B to N when plugged into the first non __init__ function
-#               cell = self.numberToLetter(letter) + str(row)
-
-#               if (self.sheet[self.numberToLetter(letter) + "2"].value != None):
-
-#                   self.sheet[cell] = self.dataList[index]
-
-#                   index += 1
-
-#   # formats the quandl query so I don't have to look at a monsterously long string :P
-#   # return    returnstring    a formatted string for quandl query
-#   def formatQuandlQuery(self, stock, dateOld, dateCurrent):
-#       if(timeDelay):
-#           time.sleep(.5)
-#       returnString = ("WIKI/PRICES.json?date.gte=" + dateOld + "&date.lt=" + dateCurrent + "&ticker=" + stock + "&api_key=" + api_key.get_API_key())
-#       return returnString
+    #             if (value != None):
+    #                 value = int(value + 10)
+    #                 if (value <= 0):
+    #                     value = 0
+    #                 elif (value >= 19):
+    #                     value = 19
+    #                 self.sheet[cell].fill = self.colorGradient[value]
