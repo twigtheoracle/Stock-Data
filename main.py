@@ -37,6 +37,16 @@ try:
     percentage_sheet.format()
     percentage_sheet.fill()
 
+    temp_sheet = wb.create_sheet("10YR STD DEV", 1)
+    std_dev_sheet = Sheet(temp_sheet, long_term_data["std_dev"], stock_list)
+    std_dev_sheet.format()
+    std_dev_sheet.fill()
+
+    temp_sheet = wb.create_sheet("10YR FREQ", 2)
+    freq_sheet = Sheet(temp_sheet, long_term_data["freq"], stock_list)
+    freq_sheet.format()
+    freq_sheet.fill()
+
 # this doesn't work to stop no wifi errors for some reason
 # TODO: catch no wifi error
 except ConnectionError:
