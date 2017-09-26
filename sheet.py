@@ -87,21 +87,44 @@ class Sheet():
         else:
             low = green
             high = red
+        bin_size = (high - low) / len(self.color_gradient)
 
-        for row in range(3, 3 + len(self.stock_list)):
+        for row in range(3, 3 + len(self.stock_list)):   
             for column in range(2, 15):
                 cell = number_to_letter(column) + str(row)
                 if(self.sheet[cell].value != None):
-                    divisor = (high - low) / len(self.color_gradient)
-                    index = int((self.sheet[cell].value - low) / divisor)
+                    index = int((self.sheet[cell].value - low) / bin_size)
                     if(index < 0):
                         index = 0
                     elif(index >= len(self.color_gradient)):
-                        index = self.color_gradient - 1
+                        index = len(self.color_gradient) - 1
                     self.sheet[cell].fill = self.color_gradient[index]
 
     # colors the sheet from a low and high percentage value where perecentages are the sheets data compared to the data_list
-    def color_percentage(self, red, green, data_list)
+    def color_percentage(self, red, green, data_list):
+        low = None
+        high = None
+        if(red < green):
+            low = red
+            high = green
+        else:
+            low = green
+            high = red
+        bin_size = (high - low) / len(self.color_gradient)
+
+        for row in range(3, 3 + len(self.stock_list)):  
+            stock_name = self.sheet["A" + str(row)].value
+            for column in range(2, 15):  
+                data_cell = number_to_letter(column) + str(row)
+                if(self.sheet[data_cell].value != None):
+                    percentage = (self.sheet[data_cell].value / data_list[stock_name][column - 2]) * 100
+                    index = int(percentage / bin_size)
+                    if(index < 0):
+                        index = 0
+                    elif(index >= len(self.color_gradient)):
+                        index = len(self.color_gradient) - 1
+                    self.sheet[data_cell].fill = self.color_gradient[index]
+
 
 
     # # colors each numerical percentage a color based on a pretty gradient from red to green
