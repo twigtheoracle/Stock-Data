@@ -42,7 +42,7 @@ try:
     std_dev_sheet = Sheet(temp_sheet, long_term_data["std_dev"], stock_list)
     std_dev_sheet.format()
     std_dev_sheet.fill()
-    std_dev_sheet.color_percentage(0, 10, long_term_data["percent_change"])
+    std_dev_sheet.color_percentage(10, 0, long_term_data["percent_change"])
 
     temp_sheet = wb.create_sheet("10YR FREQ", 2)
     freq_sheet = Sheet(temp_sheet, long_term_data["freq"], stock_list)

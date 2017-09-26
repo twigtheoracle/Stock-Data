@@ -1,4 +1,5 @@
 from openpyxl.styles import Color, PatternFill
+from numpy import interp
 
 import openpyxl
 import datetime
@@ -119,11 +120,7 @@ class Sheet():
                 data_cell = number_to_letter(column) + str(row)
                 if(self.sheet[data_cell].value != None):
                     percentage = (self.sheet[data_cell].value / data_list[stock_name][column - 2]) * 100
-                    index = int(percentage / bin_size)
-                    if(index < 0):
-                        index = 0
-                    elif(index >= len(self.color_gradient)):
-                        index = len(self.color_gradient) - 1
+                    index = int(interp(percentage, [low, high], [0, len(self.color_gradient) - 1]))
                     self.sheet[data_cell].fill = self.color_gradient[index]
 
 
