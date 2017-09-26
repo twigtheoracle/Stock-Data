@@ -112,6 +112,7 @@ class Sheet():
             high = red
         bin_size = (high - low) / len(self.color_gradient)
 
+        # TODO: actually work out how this algorithim should work
         for row in range(3, 3 + len(self.stock_list)):  
             stock_name = self.sheet["A" + str(row)].value
             for column in range(2, 15):  
