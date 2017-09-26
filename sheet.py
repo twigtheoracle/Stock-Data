@@ -78,9 +78,31 @@ class Sheet():
                 self.sheet[number_to_letter(column) + str(row + 3)] = self.data[self.stock_list[row]][column - 2]
 
     # colors the sheet based on a low and high value
-    # TODO: write this function
-    def color(self, low, high):
-        pass
+    def color(self, red, green):
+        low = None
+        high = None
+        if(red < green):
+            low = red
+            high = green
+        else:
+            low = green
+            high = red
+
+        for row in range(3, 3 + len(self.stock_list)):
+            for column in range(2, 15):
+                cell = number_to_letter(column) + str(row)
+                if(self.sheet[cell].value != None):
+                    divisor = (high - low) / len(self.color_gradient)
+                    index = int((self.sheet[cell].value - low) / divisor)
+                    if(index < 0):
+                        index = 0
+                    elif(index >= len(self.color_gradient)):
+                        index = self.color_gradient - 1
+                    self.sheet[cell].fill = self.color_gradient[index]
+
+    # colors the sheet from a low and high percentage value where perecentages are the sheets data compared to the data_list
+    def color_percentage(self, red, green, data_list)
+
 
     # # colors each numerical percentage a color based on a pretty gradient from red to green
     # def color(self):

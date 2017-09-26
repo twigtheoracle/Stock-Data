@@ -36,6 +36,7 @@ try:
     percentage_sheet = Sheet(temp_sheet, long_term_data["percent_change"], stock_list)
     percentage_sheet.format()
     percentage_sheet.fill()
+    percentage_sheet.color(-10, 10)
 
     temp_sheet = wb.create_sheet("10YR STD DEV", 1)
     std_dev_sheet = Sheet(temp_sheet, long_term_data["std_dev"], stock_list)
@@ -46,13 +47,14 @@ try:
     freq_sheet = Sheet(temp_sheet, long_term_data["freq"], stock_list)
     freq_sheet.format()
     freq_sheet.fill()
+    freq_sheet.color(0, 100)
 
 # this doesn't work to stop no wifi errors for some reason
 # TODO: catch no wifi error
 except ConnectionError:
     print("ERROR: NO INTERNET")
 except quandl.errors.quandl_error.QuandlError:
-    if (f.save(wb, savePath)):
+    if (save(wb, save_path)):
       print("INCOMPLETE WORKBOOK SAVED")
     print("===PROGRAM TERMINATED===\n")
     timeElapsed = time.time() - start
