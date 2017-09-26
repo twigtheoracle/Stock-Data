@@ -119,7 +119,8 @@ class Sheet():
             for column in range(2, 15):  
                 data_cell = number_to_letter(column) + str(row)
                 if(self.sheet[data_cell].value != None):
-                    percentage = (self.sheet[data_cell].value / data_list[stock_name][column - 2]) * 100
+                    percentage = (self.sheet[data_cell].value / abs(data_list[stock_name][column - 2])) * 100
+                    print(percentage)
                     index = int(interp(percentage, [low, high], [0, len(self.color_gradient) - 1]))
                     self.sheet[data_cell].fill = self.color_gradient[index]
 
