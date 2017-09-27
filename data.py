@@ -88,7 +88,8 @@ class Data():
             percentage_change = (self.data[stock_name]["data"]["close"][month_end_index] - self.data[stock_name]["data"]["close"][month_start_index]) / self.data[stock_name]["data"]["close"][month_start_index]
 
         except KeyError:
-            print("KEYERROR:", stock_name, year, month, month_start_index, month_end_index)
+            # print("KEYERROR: " + stock_name + " did not exist at " + str(year) + "-" + str(month))
+            pass
 
         # print(year, month, str(self.data[stock_name]["data"]["date"][month_start_index])[:10], self.data[stock_name]["data"]["close"][month_start_index], str(self.data[stock_name]["data"]["date"][month_end_index])[:10], self.data[stock_name]["data"]["close"][month_end_index])
 
@@ -110,13 +111,17 @@ class Data():
             if(change != None):
                 datalist.append(self.get_percentage_change(stock_name, year, month))
 
-        count = 0
-        for data_point in datalist:
-            if(data_point > 0):
-                count += 1
-        percent_positive = (count / len(datalist)) * 100
+        return_data = None
+        try:
+            count = 0
+            for data_point in datalist:
+                if(data_point > 0):
+                    count += 1
+            percent_positive = (count / len(datalist)) * 100
 
-        return_data = [numpy.mean(datalist) * 100, numpy.std(datalist), percent_positive]
+            return_data = [numpy.mean(datalist) * 100, numpy.std(datalist), percent_positive]
+        except ZeroDivisionError:
+            return_data = [None, None, None]
 
         return return_data
         
