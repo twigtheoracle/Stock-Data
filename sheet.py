@@ -1,5 +1,6 @@
 from openpyxl.styles import Color, PatternFill
 from numpy import interp
+from pprint import pprint
 
 import openpyxl
 import datetime
@@ -16,10 +17,11 @@ def number_to_letter(n):
 # class for all the long term sheets
 class Sheet():
     # initializes the sheet with basic data
-    def __init__(self, sheet, data, stock_list):
+    def __init__(self, sheet, data, stock_list, years):
         self.sheet = sheet
         self.data = data
         self.stock_list = stock_list
+        self.years = years
 
         self.month_index = ["Jan (1)", "Feb (2)", "Mar (3)", "Apr (4)", "May (5)", "Jun (6)", "Jul (7)", "Aug (8)", "Sep (9)", "Oct (10)", "Nov (11)", "Dec (12)"]
         self.color_gradient = [PatternFill(start_color='E4001A', end_color='E4001A', fill_type='solid'), 
@@ -45,6 +47,8 @@ class Sheet():
 
     # formats the sheet
     def format(self):
+        pprint(self.data)
+        pprint(self.years)
         this_month = int(str(datetime.datetime.now())[5:7])
 
         for row in range(0, len(self.data)):

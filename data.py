@@ -139,10 +139,12 @@ class Data():
         datatable["percent_change"] = {}
         datatable["std_dev"] = {}
         datatable["freq"] = {}
+        datatable["years"] = {}
         for stock in self.stock_list:
             datatable["percent_change"][stock] = []
             datatable["std_dev"][stock] = []
             datatable["freq"][stock] = []
+            datatable["years"][stock] = int(self.data[stock]["data_length"] / 252) + 1
             for month in range(self.current_month - 1, self.current_month - 1 + 12):
                 adjusted_month = (month % 12) + 1
                 datalist = self.get_average_percent_change(stock, adjusted_month)

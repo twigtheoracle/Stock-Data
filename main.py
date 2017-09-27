@@ -33,19 +33,19 @@ try:
     long_term_data = data.get_long_term_data()
 
     temp_sheet = wb.create_sheet("10YR %", 0)
-    percentage_sheet = Sheet(temp_sheet, long_term_data["percent_change"], stock_list)
+    percentage_sheet = Sheet(temp_sheet, long_term_data["percent_change"], stock_list, long_term_data["years"])
     percentage_sheet.format()
     percentage_sheet.fill()
     percentage_sheet.color(-10, 10)
 
     temp_sheet = wb.create_sheet("10YR STD DEV", 1)
-    std_dev_sheet = Sheet(temp_sheet, long_term_data["std_dev"], stock_list)
+    std_dev_sheet = Sheet(temp_sheet, long_term_data["std_dev"], stock_list, long_term_data["years"])
     std_dev_sheet.format()
     std_dev_sheet.fill()
     std_dev_sheet.color_percentage(8, 0, long_term_data["percent_change"])
 
     temp_sheet = wb.create_sheet("10YR FREQ", 2)
-    freq_sheet = Sheet(temp_sheet, long_term_data["freq"], stock_list)
+    freq_sheet = Sheet(temp_sheet, long_term_data["freq"], stock_list, long_term_data["years"])
     freq_sheet.format()
     freq_sheet.fill()
     freq_sheet.color(0, 100)
