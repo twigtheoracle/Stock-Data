@@ -114,15 +114,17 @@ class Sheet():
         bin_size = (high - low) / len(self.color_gradient)
 
         # TODO: actually work out how this algorithim should work
+        foo = 1
         for row in range(3, 3 + len(self.stock_list)):  
             stock_name = self.sheet["A" + str(row)].value
             for column in range(2, 15):  
                 data_cell = number_to_letter(column) + str(row)
                 if(self.sheet[data_cell].value != None):
                     percentage = (self.sheet[data_cell].value / abs(data_list[stock_name][column - 2])) * 100
-                    print(percentage)
+                    self.sheet["P" + str(foo)] = percentage
+                    foo += 1
                     index = int(interp(percentage, [low, high], [0, len(self.color_gradient) - 1]))
-                    self.sheet[data_cell].fill = self.color_gradient[index]
+                    self.sheet[data_cell].fill = self.color_gradient[19 - index]
 
 
 
