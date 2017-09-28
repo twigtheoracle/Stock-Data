@@ -12,9 +12,9 @@ from sheet import *
 
 ########################################################################################
 
-try:
-    start = time.time()
+start = time.time()
 
+try:
     save_path = get_save_path()
 
     # get the workbook and stock list
