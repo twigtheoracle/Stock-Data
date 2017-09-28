@@ -101,7 +101,7 @@ class Stock():
         line_chart.title = self.sheet.title + " LINECHART"
         line_chart.x_axis_title = "DATE"
         line_chart.y_axis_title = "PRICE"
-        line_data = openpyxl.chart.Reference(self.sheet, min_col = 2, min_row = 1, max_row = 1 + len(self.data_prices))
+        line_data = openpyxl.chart.Reference(self.sheet, min_col = 2, min_row = 2, max_row = 1 + len(self.data_prices))
         line_categories = openpyxl.chart.Reference(self.sheet, min_col = 1, min_row = 2, max_row = 1 + len(self.data_prices))
         line_chart.add_data(line_data)
         line_chart.set_categories(line_categories)
