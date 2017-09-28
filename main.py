@@ -66,7 +66,7 @@ except quandl.errors.quandl_error.QuandlError:
     
 time_elapsed = time.time() - start
 print()
-print("time elapsed: " + str(int(time_elapsed) / 60) + " " + str(int(time_elapsed) % 60))
+print("time elapsed: " + str(int(int(time_elapsed) / 60)) + " " + str(int(time_elapsed) % 60))
 
 save(wb, save_path)
 
