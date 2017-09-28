@@ -1,4 +1,5 @@
 from pprint import pprint
+from tqdm import tqdm
 
 import openpyxl
 import time
@@ -12,23 +13,27 @@ from sheet import *
 ########################################################################################
 
 try:
+    start = time.time()
+
     save_path = get_save_path()
 
     # get the workbook and stock list
     # depends on the file format of the template
-    template_file = "test_template.xlsx"
+    template_file = "template.xlsx"
     wb, stock_list = get_workbook_and_stocklist(template_file)
 
     data = Data(stock_list)
     data.retrieve_data()
     short_term_data = data.get_short_term_data()
 
+    print("\ncreating stock sheets...")
     for sheet in wb:
         stock_sheet = Stock(sheet, short_term_data[sheet.title])
         stock_sheet.format()
         stock_sheet.fill_data()
         stock_sheet.fill_stats()
         stock_sheet.fill_graphs()
+    print("done")
     
     long_term_data = data.get_long_term_data()
 
@@ -58,14 +63,10 @@ except quandl.errors.quandl_error.QuandlError:
     if (save(wb, save_path)):
       print("INCOMPLETE WORKBOOK SAVED")
     print("===PROGRAM TERMINATED===\n")
-    timeElapsed = time.time() - start
-
-# the way the long term sheets will work is there will only be one sheet class and all it will do is put the given data into the sheet.
-# thus, the Data class needs to be able to return data formatted in a specific way for every single type of data (percent change, frequency, std dev)
-# as a result, every sheet will have the same functions of format, put data into the sheet, and color.
-# the constructor will take in a pre-formatted data list and the color function will take in high and low values for coloring.
-
-print("it works!")
+    
+time_elapsed = time.time() - start
+print()
+print("time elapsed: " + str(int(time_elapsed) / 60) + " " + str(int(time_elapsed) % 60))
 
 save(wb, save_path)
 

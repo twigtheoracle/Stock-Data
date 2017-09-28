@@ -1,5 +1,6 @@
 from pprint import *
 from calendar import monthrange
+from tqdm import tqdm
 
 import datetime
 import quandl
@@ -35,7 +36,8 @@ class Data():
 
     # gets data from quandl and stores it in the object
     def retrieve_data(self):
-        for stock in self.stock_list:
+        print("getting stock information...")
+        for stock in tqdm(self.stock_list):
             temp_data = {}
             temp_quandl_data = quandl.get_table(self.get_quandl_query_string(stock))
             temp_data["data"] = temp_quandl_data
@@ -140,7 +142,8 @@ class Data():
         datatable["std_dev"] = {}
         datatable["freq"] = {}
         datatable["years"] = {}
-        for stock in self.stock_list:
+        print("\ngetting long term data...")
+        for stock in tqdm(self.stock_list):
             datatable["percent_change"][stock] = []
             datatable["std_dev"][stock] = []
             datatable["freq"][stock] = []

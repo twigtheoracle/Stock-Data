@@ -47,8 +47,8 @@ class Sheet():
 
     # formats the sheet
     def format(self):
-        pprint(self.data)
-        pprint(self.years)
+        # pprint(self.data)
+        # pprint(self.years)
         this_month = int(str(datetime.datetime.now())[5:7])
 
         for row in range(0, len(self.data)):
