@@ -64,6 +64,7 @@ class Data():
         return datatable
 
     # returns the percentage change of the given month in the given year of the given stock
+    # TODO: change the assumption that all stock's data will start on the first trading day of the month 10 years ago. This assumption fails for newer stocks and data is therefore off.
     def get_percentage_change(self, stock_name, year, month):
         years_since_start = year - self.old_year
         months_since_start = month - self.current_month
