@@ -4,6 +4,8 @@ from tqdm import tqdm
 import openpyxl
 import time
 import quandl
+import ssl
+import requests
 
 from functions import *
 from stock import *
@@ -19,7 +21,7 @@ try:
 
     # get the workbook and stock list
     # depends on the file format of the template
-    template_file = "test_template.xlsx"
+    template_file = "template.xlsx"
     wb, stock_list = get_workbook_and_stocklist(template_file)
 
     data = Data(stock_list)
@@ -58,11 +60,11 @@ try:
 # this doesn't work to stop no wifi errors for some reason
 # TODO: catch no wifi error
 except ConnectionError:
-    print("ERROR: NO INTERNET")
+    print("\nERROR: NO INTERNET")
+except requests.exceptions.SSLError:
+    print("\nERROR: SSL Certificate is not valid")
 except quandl.errors.quandl_error.QuandlError:
-    if (save(wb, save_path)):
-      print("INCOMPLETE WORKBOOK SAVED")
-    print("===PROGRAM TERMINATED===\n")
+    print("\nERROR: Quandl Speed Limit Breached")
     
 time_elapsed = time.time() - start
 print()
