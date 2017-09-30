@@ -4,13 +4,12 @@ from tqdm import tqdm
 import openpyxl
 import time
 import quandl
-import ssl
-import requests
 
 from functions import *
 from stock import *
 from data import *
 from sheet import *
+from errors import *
 
 ########################################################################################
 
