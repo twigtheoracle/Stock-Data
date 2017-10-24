@@ -112,7 +112,7 @@ class Data():
         for year in range(self.current_year - 10 - year_offset, self.current_year - year_offset):
             change = self.get_percentage_change(stock_name, year, month)
             if(change != None):
-                datalist.append(self.get_percentage_change(stock_name, year, month))
+                datalist.append(change)
 
         return_data = None
         try:
