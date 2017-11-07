@@ -20,7 +20,7 @@ try:
 
     # get the workbook and stock list
     # depends on the file format of the template
-    template_file = "template.xlsx"
+    template_file = "test_template.xlsx"
     wb, stock_list = get_workbook_and_stocklist(template_file)
 
     data = Data(stock_list)

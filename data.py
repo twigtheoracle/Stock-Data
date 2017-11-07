@@ -66,8 +66,17 @@ class Data():
     # returns the percentage change of the given month in the given year of the given stock
     # TODO: change the assumption that all stock's data will start on the first trading day of the month 10 years ago. This assumption fails for newer stocks and data is therefore off.
     def get_percentage_change(self, stock_name, year, month):
-        years_since_start = year - self.old_year
-        months_since_start = month - self.current_month
+
+        first_month = str(self.data[stock_name]["data"]["date"][0])[5:7]
+        first_year = str(self.data[stock_name]["data"]["date"][0])[:4]
+
+        # if data does not exist, return None
+        if(int(first_year) > year or (int(first_year) == year and int(first_month) > month)):
+            print("DATA DOES NOT EXIST:", first_year + "-" + first_month, str(year) + "-" + str(month))
+            return None
+
+        years_since_start = year - int(first_year)
+        months_since_start = month - int(first_month)
 
         # every year has 252 trading days on average and every month has 21 trading days on average 
         # these indicies are approximate values
@@ -93,6 +102,8 @@ class Data():
         except KeyError:
             # print("KEYERROR: " + stock_name + " did not exist at " + str(year) + "-" + str(month))
             pass
+
+        print("DATA DOES EXIST:", year, month, str(self.data[stock_name]["data"]["date"][month_start_index])[:7])
 
         # print(year, month, str(self.data[stock_name]["data"]["date"][month_start_index])[:10], self.data[stock_name]["data"]["close"][month_start_index], str(self.data[stock_name]["data"]["date"][month_end_index])[:10], self.data[stock_name]["data"]["close"][month_end_index])
 
@@ -144,7 +155,8 @@ class Data():
         datatable["freq"] = {}
         datatable["years"] = {}
         print("\ngetting long term data...")
-        for stock in tqdm(self.stock_list):
+        #for stock in tqdm(self.stock_list):
+        for stock in self.stock_list:
             datatable["percent_change"][stock] = []
             datatable["std_dev"][stock] = []
             datatable["freq"][stock] = []
