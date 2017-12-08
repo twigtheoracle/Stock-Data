@@ -60,6 +60,8 @@ class Data():
                 datatable[stock] = stock_data
         except IndexError:
             print("INDEXERROR")
+        except KeyError:
+            print("KEYERROR: Stock is newer than three months")
 
         return datatable
 
@@ -134,6 +136,7 @@ class Data():
             percent_positive = (count / len(datalist)) * 100
 
             return_data = [numpy.mean(datalist) * 100, numpy.std(datalist), percent_positive]
+        # this error occurs when there is not enough data to do standard deviation
         except ZeroDivisionError:
             return_data = [None, None, None]
 
