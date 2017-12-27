@@ -20,7 +20,7 @@ try:
 
     # get the workbook and stock list
     # depends on the file format of the template
-    template_file = "template.txt"
+    template_file = "test_template.txt"
     wb, stock_list = get_workbook_and_stocklist(template_file)
 
     data = Data(stock_list)
@@ -50,13 +50,13 @@ try:
     std_dev_sheet.format()
     std_dev_sheet.fill()
     # TODO: do some work to figure out optimal numbers for std dev coloring
-    std_dev_sheet.color(0, 3)
+    std_dev_sheet.color(.1, .02)
 
     temp_sheet = wb.create_sheet("10YR FREQ", 2)
     freq_sheet = Sheet(temp_sheet, long_term_data["freq"], stock_list, long_term_data["years"])
     freq_sheet.format()
     freq_sheet.fill()
-    freq_sheet.color(0, 100)
+    freq_sheet.color(20, 80)
 
 # this doesn't work to stop no wifi errors for some reason
 # TODO: catch no wifi error
