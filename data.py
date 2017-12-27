@@ -105,7 +105,7 @@ class Data():
             # print("KEYERROR: " + stock_name + " did not exist at " + str(year) + "-" + str(month))
             pass
 
-        print(year, month, "(" + str(self.data[stock_name]["data"]["date"][month_start_index])[:10] + ", " + str(self.data[stock_name]["data"]["close"][month_start_index]) + ")", "(" + str(self.data[stock_name]["data"]["date"][month_end_index])[:10] + ", " + str(self.data[stock_name]["data"]["close"][month_end_index]) + ")")
+        # print(year, month, "(" + str(self.data[stock_name]["data"]["date"][month_start_index])[:10] + ", " + str(self.data[stock_name]["data"]["close"][month_start_index]) + ")", "(" + str(self.data[stock_name]["data"]["date"][month_end_index])[:10] + ", " + str(self.data[stock_name]["data"]["close"][month_end_index]) + ")")
 
         # print(year, month, str(self.data[stock_name]["data"]["date"][month_start_index])[:10], self.data[stock_name]["data"]["close"][month_start_index], str(self.data[stock_name]["data"]["date"][month_end_index])[:10], self.data[stock_name]["data"]["close"][month_end_index])
 
@@ -140,7 +140,7 @@ class Data():
         except ZeroDivisionError:
             return_data = [None, None, None]
 
-        print(stock_name, month, datalist, "\n")
+        # print(stock_name, month, datalist, "\n")
 
         return return_data
         
