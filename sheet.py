@@ -83,6 +83,7 @@ class Sheet():
             for column in range(2, 15):
                 self.sheet[number_to_letter(column) + str(row + 3)] = self.data[self.stock_list[row]][column - 2]
 
+    # TODO: fix backward coloring... look at the current sheet for why it's broken
     # colors the sheet based on a low and high value
     def color(self, red, green):
         low = None
