@@ -87,12 +87,14 @@ class Sheet():
     def color(self, red, green):
         low = None
         high = None
+        reg_color_direction = True
         if(red < green):
             low = red
             high = green
         else:
             low = green
             high = red
+            reg_color_direction = False
         bin_size = (high - low) / len(self.color_gradient)
 
         for row in range(3, 3 + len(self.stock_list)):   
@@ -100,6 +102,8 @@ class Sheet():
                 cell = number_to_letter(column) + str(row)
                 if(self.sheet[cell].value != None):
                     index = int((self.sheet[cell].value - low) / bin_size)
+                    if(not reg_color_direction):
+                        index -= len(self.color_gradient)
                     if(index < 0):
                         index = 0
                     elif(index >= len(self.color_gradient)):
