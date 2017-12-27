@@ -20,7 +20,7 @@ try:
 
     # get the workbook and stock list
     # depends on the file format of the template
-    template_file = "template.xlsx"
+    template_file = "template.txt"
     wb, stock_list = get_workbook_and_stocklist(template_file)
 
     data = Data(stock_list)
@@ -44,11 +44,13 @@ try:
     percentage_sheet.fill()
     percentage_sheet.color(-10, 10)
 
-    temp_sheet = wb.create_sheet("10YR STD DEV", 1)
+    temp_sheet = wb.create_sheet("10YR % STD DEV", 1)
+    # note: std dev here is std dev of percentage change, not of average value of the month
     std_dev_sheet = Sheet(temp_sheet, long_term_data["std_dev"], stock_list, long_term_data["years"])
     std_dev_sheet.format()
     std_dev_sheet.fill()
-    std_dev_sheet.color_percentage(8, 0, long_term_data["percent_change"])
+    # TODO: do some work to figure out optimal numbers for std dev coloring
+    std_dev_sheet.color(0, 3)
 
     temp_sheet = wb.create_sheet("10YR FREQ", 2)
     freq_sheet = Sheet(temp_sheet, long_term_data["freq"], stock_list, long_term_data["years"])

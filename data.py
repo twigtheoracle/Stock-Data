@@ -60,14 +60,25 @@ class Data():
                 datatable[stock] = stock_data
         except IndexError:
             print("INDEXERROR")
+        except KeyError:
+            print("KEYERROR: Stock is newer than three months")
 
         return datatable
 
     # returns the percentage change of the given month in the given year of the given stock
     # TODO: change the assumption that all stock's data will start on the first trading day of the month 10 years ago. This assumption fails for newer stocks and data is therefore off.
     def get_percentage_change(self, stock_name, year, month):
-        years_since_start = year - self.old_year
-        months_since_start = month - self.current_month
+
+        first_month = str(self.data[stock_name]["data"]["date"][0])[5:7]
+        first_year = str(self.data[stock_name]["data"]["date"][0])[:4]
+
+        # if data does not exist, return None
+        if(int(first_year) > year or (int(first_year) == year and int(first_month) > month)):
+            # print("DATA DOES NOT EXIST:", first_year + "-" + first_month, str(year) + "-" + str(month))
+            return None
+
+        years_since_start = year - int(first_year)
+        months_since_start = month - int(first_month)
 
         # every year has 252 trading days on average and every month has 21 trading days on average 
         # these indicies are approximate values
@@ -94,6 +105,8 @@ class Data():
             # print("KEYERROR: " + stock_name + " did not exist at " + str(year) + "-" + str(month))
             pass
 
+        print(year, month, "(" + str(self.data[stock_name]["data"]["date"][month_start_index])[:10] + ", " + str(self.data[stock_name]["data"]["close"][month_start_index]) + ")", "(" + str(self.data[stock_name]["data"]["date"][month_end_index])[:10] + ", " + str(self.data[stock_name]["data"]["close"][month_end_index]) + ")")
+
         # print(year, month, str(self.data[stock_name]["data"]["date"][month_start_index])[:10], self.data[stock_name]["data"]["close"][month_start_index], str(self.data[stock_name]["data"]["date"][month_end_index])[:10], self.data[stock_name]["data"]["close"][month_end_index])
 
         return percentage_change
@@ -112,7 +125,7 @@ class Data():
         for year in range(self.current_year - 10 - year_offset, self.current_year - year_offset):
             change = self.get_percentage_change(stock_name, year, month)
             if(change != None):
-                datalist.append(self.get_percentage_change(stock_name, year, month))
+                datalist.append(change)
 
         return_data = None
         try:
@@ -123,8 +136,11 @@ class Data():
             percent_positive = (count / len(datalist)) * 100
 
             return_data = [numpy.mean(datalist) * 100, numpy.std(datalist), percent_positive]
+        # this error occurs when there is not enough data to do standard deviation
         except ZeroDivisionError:
             return_data = [None, None, None]
+
+        print(stock_name, month, datalist, "\n")
 
         return return_data
         
@@ -135,7 +151,7 @@ class Data():
     #           data...
     #       stock:
     #           data...
-    #   std_dev:
+    #   std_dev:    
     #       etc...
     def get_long_term_data(self):
         datatable = {}
@@ -144,7 +160,8 @@ class Data():
         datatable["freq"] = {}
         datatable["years"] = {}
         print("\ngetting long term data...")
-        for stock in tqdm(self.stock_list):
+        # for stock in tqdm(self.stock_list):
+        for stock in self.stock_list:
             datatable["percent_change"][stock] = []
             datatable["std_dev"][stock] = []
             datatable["freq"][stock] = []
