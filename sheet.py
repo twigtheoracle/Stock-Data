@@ -24,7 +24,8 @@ class Sheet():
         self.years = years
 
         self.month_index = ["Jan (1)", "Feb (2)", "Mar (3)", "Apr (4)", "May (5)", "Jun (6)", "Jul (7)", "Aug (8)", "Sep (9)", "Oct (10)", "Nov (11)", "Dec (12)"]
-        self.color_gradient = [PatternFill(start_color='E4001A', end_color='E4001A', fill_type='solid'), 
+        # color gradient goes from red to green
+        self.color_gradient = [PatternFill(start_color='E4001A', end_color='E4001A', fill_type='solid'),
             PatternFill(start_color='E30201', end_color='E30201', fill_type='solid'), 
             PatternFill(start_color='E31c02', end_color='E31c02', fill_type='solid'), 
             PatternFill(start_color='E33602', end_color='E33602', fill_type='solid'), 
