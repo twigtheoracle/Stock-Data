@@ -104,7 +104,7 @@ class Sheet():
                 if(self.sheet[cell].value != None):
                     index = int((self.sheet[cell].value - low) / bin_size)
                     if(not reg_color_direction):
-                        index -= len(self.color_gradient)
+                        index = len(self.color_gradient) - index
                     if(index < 0):
                         index = 0
                     elif(index >= len(self.color_gradient)):
