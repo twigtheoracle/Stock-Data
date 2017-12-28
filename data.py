@@ -58,6 +58,7 @@ class Data():
                     temp_price = str(self.data[stock]["data"]["close"][self.data[stock]["data_length"] - day])
                     stock_data.append([temp_date, temp_price])
                 datatable[stock] = stock_data
+        # TODO: why does BFB cause an index error
         except IndexError:
             print("INDEXERROR")
         except KeyError:
@@ -66,7 +67,6 @@ class Data():
         return datatable
 
     # returns the percentage change of the given month in the given year of the given stock
-    # TODO: change the assumption that all stock's data will start on the first trading day of the month 10 years ago. This assumption fails for newer stocks and data is therefore off.
     def get_percentage_change(self, stock_name, year, month):
 
         first_month = str(self.data[stock_name]["data"]["date"][0])[5:7]
