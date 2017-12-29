@@ -8,3 +8,5 @@ test_template.xlsx
 *.pyc
 __pycache__/functions.cpython-36.pyc
 __pycache__/stock.cpython-36.pyc
+__pycache__/functions.cpython-36.pyc
+*.pyc
