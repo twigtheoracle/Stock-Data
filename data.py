@@ -31,7 +31,7 @@ class Data():
 
     # gets a string that will allow me to query quandl for all the data we need
     def get_quandl_query_string(self, stock):
-        returnString = "WIKI/PRICES.json?date.gte=" + self.old_date + "&date.lt=" + self.current_date + "&ticker=" + stock + "&api_key=" + key.get_API_key()
+        returnString = "WIKI/PRICES.json?date.gte=" + self.old_date + "&date.lt=" + self.current_date + "&ticker=" + stock + "&api_key=" + key.get_Quandl_API_key()
         return returnString
 
     # gets data from quandl and stores it in the object
