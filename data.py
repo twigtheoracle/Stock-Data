@@ -60,12 +60,12 @@ class Data():
     def retrieve_data(self, data_provider = "quandl"):
         print("getting stock information...")
         for stock in tqdm(self.stock_list):
-            temp_data = {}
-            temp_quandl_data = quandl.get_table(self.get_quandl_query_string(stock))
-            temp_data["data"] = temp_quandl_data
-            temp_data["data_length"] = len(temp_quandl_data["date"])
+            stock_data = {}
+            temp_data = quandl.get_table(self.get_quandl_query_string(stock))
+            stock_data["data"] = temp_data
+            stock_data["data_length"] = len(temp_data["date"])
 
-            self.data[stock] = temp_data
+            self.data[stock] = stock_data
 
     # slices self.data to return only the data of the last 3 months (every month has 4 weeks and 5 weekdays a week, so there are 20 days a month and 60 days for 3 months)
     def get_short_term_data(self):
