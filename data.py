@@ -57,7 +57,7 @@ class Data():
     #           adj_low:
     #           adj_close:
     #           adj_volume:
-    def retrieve_data(self):
+    def retrieve_data(self, data_provider = "quandl"):
         print("getting stock information...")
         for stock in tqdm(self.stock_list):
             temp_data = {}

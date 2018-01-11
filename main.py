@@ -26,7 +26,7 @@ def main():
         wb, stock_list = get_workbook_and_stocklist(template_file)
 
         data = Data(stock_list)
-        data.retrieve_data()
+        data.retrieve_data(data_provider = "quandl")
         short_term_data = data.get_short_term_data()
 
         print("\ncreating stock sheets...")
