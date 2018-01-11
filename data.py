@@ -31,8 +31,12 @@ class Data():
 
     # gets a string that will allow me to query quandl for all the data we need
     def get_quandl_query_string(self, stock):
-        returnString = "WIKI/PRICES.json?date.gte=" + self.old_date + "&date.lt=" + self.current_date + "&ticker=" + stock + "&api_key=" + key.get_Quandl_API_key()
-        return returnString
+        return_string = "WIKI/PRICES.json?date.gte=" + self.old_date + "&date.lt=" + self.current_date + "&ticker=" + stock + "&api_key=" + key.get_Quandl_API_key()
+        return return_string
+
+    # gets a string that will allow me to query Alpha Vantage for data needed
+    def get_AV_query_string(self, stock):
+        return_string = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&outputsize=full&apikey=" + key.get_AV_API_key()
 
     # gets data from quandl and stores it in the object
     def retrieve_data(self):
