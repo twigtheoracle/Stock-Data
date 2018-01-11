@@ -37,8 +37,26 @@ class Data():
     # gets a string that will allow me to query Alpha Vantage for data needed
     def get_AV_query_string(self, stock):
         return_string = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + stock + "&outputsize=full&apikey=" + key.get_AV_API_key()
+        return return_string
 
     # gets data from quandl and stores it in the object
+    # data is formetted as:
+    #   stock:
+    #       data:
+    #           ticker:
+    #           date:
+    #           open:
+    #           high:
+    #           low:
+    #           close:
+    #           volume:
+    #           ex-divident:
+    #           split-ratio:
+    #           adj_open:
+    #           adj_high:
+    #           adj_low:
+    #           adj_close:
+    #           adj_volume:
     def retrieve_data(self):
         print("getting stock information...")
         for stock in tqdm(self.stock_list):
