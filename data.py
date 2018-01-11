@@ -66,6 +66,7 @@ class Data():
             temp_data = None
             if(data_provider == "quandl"):
                 temp_data = quandl.get_table(self.get_quandl_query_string(stock))
+            # TODO: format data to match existing format
             elif(data_provider == "AV"):
                 with urllib.request.urlopen(self.get_AV_query_string(stock)) as url:
                     temp_data = json.loads(url.read().decode())
