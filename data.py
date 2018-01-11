@@ -36,7 +36,7 @@ class Data():
 
     # gets a string that will allow me to query Alpha Vantage for data needed
     def get_AV_query_string(self, stock):
-        return_string = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&outputsize=full&apikey=" + key.get_AV_API_key()
+        return_string = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + stock + "&outputsize=full&apikey=" + key.get_AV_API_key()
 
     # gets data from quandl and stores it in the object
     def retrieve_data(self):
