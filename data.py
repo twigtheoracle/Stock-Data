@@ -40,15 +40,15 @@ class Data():
         return return_string
 
     # gets data from quandl and stores it in the object
-    # data is formetted as:
+    # data is formatted as such (* means the data in that dictionary is used):
     #   stock:
     #       data:
-    #           ticker:
-    #           date:
-    #           open:
+    #           ticker: 
+    #           date: *
+    #           open: 
     #           high:
     #           low:
-    #           close:
+    #           close: *
     #           volume:
     #           ex-divident:
     #           split-ratio:
@@ -63,7 +63,7 @@ class Data():
             temp_data = {}
             temp_quandl_data = quandl.get_table(self.get_quandl_query_string(stock))
             temp_data["data"] = temp_quandl_data
-            temp_data["data_length"] = len(temp_quandl_data["ticker"])
+            temp_data["data_length"] = len(temp_quandl_data["date"])
 
             self.data[stock] = temp_data
 
