@@ -6,6 +6,8 @@ import datetime
 import quandl
 import numpy
 
+import urllib.request, json # for getting data from AV
+
 import api_key as key
 
 class Data():
@@ -61,7 +63,13 @@ class Data():
         print("getting stock information...")
         for stock in tqdm(self.stock_list):
             stock_data = {}
-            temp_data = quandl.get_table(self.get_quandl_query_string(stock))
+            temp_data = None
+            if(data_provider == "quandl"):
+                temp_data = quandl.get_table(self.get_quandl_query_string(stock))
+            elif(data_provider == "AV"):
+                with urllib.request.urlopen(self.get_AV_query_string(stock)) as url:
+                    temp_data = json.loads(url.read().decode())
+            pprint(temp_data)
             stock_data["data"] = temp_data
             stock_data["data_length"] = len(temp_data["date"])
 
