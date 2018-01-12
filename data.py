@@ -42,7 +42,10 @@ class Data():
         return return_string
 
     # gets data from quandl and stores it in the object
-    # data is formatted as such (* means the data in that dictionary is used):
+    # data is formatted as such:
+    # * means the data is used in processing
+    # note that all structures in data: are lists and not dictonaries
+    # datatable:
     #   stock:
     #       data:
     #           ticker: 
@@ -63,16 +66,35 @@ class Data():
         print("getting stock information...")
         for stock in tqdm(self.stock_list):
             stock_data = {}
-            temp_data = None
+            formatted_data = None
             if(data_provider == "quandl"):
-                temp_data = quandl.get_table(self.get_quandl_query_string(stock))
+                formatted_data = quandl.get_table(self.get_quandl_query_string(stock))
             # TODO: format data to match existing format
+            # Current format is:
+            # datatable:
+            #   Meta Data:
+            #       1. Information:
+            #       2. Symbol:
+            #       3. Last Refreshed:
+            #       4. Output Size:
+            #       5. Time Zone:
+            #   Time Series (Daily):
+            #       Date String (YYYY-MM-DD): 
+            #           1. open:
+            #           2. high:
+            #           3. low:
+            #           4. close:
+            #           5. volume:
+            #       Etc.
             elif(data_provider == "AV"):
                 with urllib.request.urlopen(self.get_AV_query_string(stock)) as url:
-                    temp_data = json.loads(url.read().decode())
-            pprint(temp_data)
-            stock_data["data"] = temp_data
-            stock_data["data_length"] = len(temp_data["date"])
+                    AV_data = json.loads(url.read().decode())
+                formatted_data = {}
+                formatted_data[stock] = {}
+                formatted_data[stock]["data"] = {}
+            pprint(formatted_data)
+            stock_data["data"] = formatted_data
+            stock_data["data_length"] = len(formatted_data["date"])
 
             self.data[stock] = stock_data
 
