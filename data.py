@@ -89,10 +89,11 @@ class Data():
             elif(data_provider == "AV"):
                 with urllib.request.urlopen(self.get_AV_query_string(stock)) as url:
                     AV_data = json.loads(url.read().decode())
+                    pprint(AV_data["Time Series (Daily)"].keys())
                 formatted_data = {}
                 formatted_data[stock] = {}
                 formatted_data[stock]["data"] = {}
-            pprint(formatted_data)
+            # pprint(formatted_data)
             stock_data["data"] = formatted_data
             stock_data["data_length"] = len(formatted_data["date"])
 
