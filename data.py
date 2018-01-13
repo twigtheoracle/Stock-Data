@@ -87,12 +87,26 @@ class Data():
             #           5. volume:
             #       Etc.
             elif(data_provider == "AV"):
+                AV_data = None
                 with urllib.request.urlopen(self.get_AV_query_string(stock)) as url:
                     AV_data = json.loads(url.read().decode())
                     pprint(AV_data["Time Series (Daily)"].keys())
                 formatted_data = {}
                 formatted_data[stock] = {}
                 formatted_data[stock]["data"] = {}
+
+                # start formatting data
+                earlist_date_string = AV_data["Time Series (Daily)"].keys()[-1]
+                earlist_date = datetime.date(int(earlist_date_string[:4]), int(earlist_date_string[5:7]), int(earlist_date_string[8:10]))
+                desired_earlist_date = datetime.date(int(self.old_date[:4]), int(self.old_date[5:7]), int(self.old_date[8:10]))
+
+                # find the proper starting key
+                start_date = None
+                if(earlist_date < desired_earlist_date):
+                    start_date = str(desired_earlist_date)
+                else:
+                    start_date = str(earlist_date)
+
             # pprint(formatted_data)
             stock_data["data"] = formatted_data
             stock_data["data_length"] = len(formatted_data["date"])
