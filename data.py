@@ -107,6 +107,9 @@ class Data():
                 else:
                     start_date = str(earlist_date)
 
+                # TODO: write this function
+                # iterate over keys
+
             # pprint(formatted_data)
             stock_data["data"] = formatted_data
             stock_data["data_length"] = len(formatted_data["date"])
