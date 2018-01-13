@@ -41,10 +41,11 @@ class Data():
         return_string = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + stock + "&outputsize=full&apikey=" + key.get_AV_API_key()
         return return_string
 
-    # gets data from quandl and stores it in the object
-    # data is formatted as such:
+    # gets data from a data provier and stores it in the object
+    # data must be formatted as such:
     # * means the data is used in processing
     # note that all structures in data: are lists and not dictonaries
+    # note that data is organized with furthest back in time at index zero and most recent data at the last index
     # datatable:
     #   stock:
     #       data:
