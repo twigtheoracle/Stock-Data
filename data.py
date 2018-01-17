@@ -91,13 +91,14 @@ class Data():
                 AV_data = None
                 with urllib.request.urlopen(self.get_AV_query_string(stock)) as url:
                     AV_data = json.loads(url.read().decode())
-                    pprint(AV_data["Time Series (Daily)"].keys())
+                    # pprint(AV_data["Time Series (Daily)"].keys())
                 formatted_data = {}
                 formatted_data[stock] = {}
                 formatted_data[stock]["data"] = {}
 
                 # start formatting data
-                date_key_list = AV_data["Time Series (Daily)"].keys().reverse()
+                date_key_list = list(AV_data["Time Series (Daily)"].keys()).reverse()
+                print(date_key_list)
                 earlist_date_string = date_key_list[0]
                 earlist_date = datetime.date(int(earlist_date_string[:4]), int(earlist_date_string[5:7]), int(earlist_date_string[8:10]))
                 desired_earlist_date = datetime.date(int(self.old_date[:4]), int(self.old_date[5:7]), int(self.old_date[8:10]))
@@ -117,6 +118,8 @@ class Data():
                 else:
                     start_date = str(earlist_date)
                 start_index = date_key_list.index(start_date)
+
+                print(date_key_list[start_index])
 
                 # TODO: write this function
                 # iterate over keys
