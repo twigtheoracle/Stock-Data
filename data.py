@@ -97,7 +97,8 @@ class Data():
                 formatted_data[stock]["data"] = {}
 
                 # start formatting data
-                earlist_date_string = AV_data["Time Series (Daily)"].keys()[-1]
+                date_key_list = AV_data["Time Series (Daily)"].keys().reverse()
+                earlist_date_string = date_key_list[0]
                 earlist_date = datetime.date(int(earlist_date_string[:4]), int(earlist_date_string[5:7]), int(earlist_date_string[8:10]))
                 desired_earlist_date = datetime.date(int(self.old_date[:4]), int(self.old_date[5:7]), int(self.old_date[8:10]))
 
@@ -110,6 +111,9 @@ class Data():
 
                 # TODO: write this function
                 # iterate over keys
+                for date in reversed(date_key_list):
+
+
 
             # pprint(formatted_data)
             stock_data["data"] = formatted_data
