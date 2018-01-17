@@ -97,6 +97,7 @@ class Data():
                 formatted_data[stock]["data"] = {}
 
                 # start formatting data
+                # TODO: somehow cast the dict_key object into a list so it can be reversed
                 date_key_list = list(AV_data["Time Series (Daily)"].keys()).reverse()
                 print(date_key_list)
                 earlist_date_string = date_key_list[0]
@@ -106,7 +107,6 @@ class Data():
                 # find the proper starting key
                 start_date = None
                 if(earlist_date < desired_earlist_date):
-                    # TODO: make sure that desired earlist date exists in the date list
                     while(True):
                         try:
                             start_date = str(desired_earlist_date)
