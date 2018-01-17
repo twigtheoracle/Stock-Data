@@ -106,12 +106,13 @@ class Data():
                 start_date = None
                 if(earlist_date < desired_earlist_date):
                     start_date = str(desired_earlist_date)
+                    # TODO: make sure that desired earlist date exists in the date list
                 else:
                     start_date = str(earlist_date)
+                start_index = date_key_list.index(start_date)
 
                 # TODO: write this function
                 # iterate over keys
-                for date in reversed(date_key_list):
 
 
 
