@@ -105,8 +105,15 @@ class Data():
                 # find the proper starting key
                 start_date = None
                 if(earlist_date < desired_earlist_date):
-                    start_date = str(desired_earlist_date)
                     # TODO: make sure that desired earlist date exists in the date list
+                    while(True):
+                        try:
+                            start_date = str(desired_earlist_date)
+                            date_key_list.index(start_date)
+                            break
+                        except ValueError:
+                            date_increment_size = datetime.timedelta(days = 1)
+                            desired_earlist_date += date_increment_size
                 else:
                     start_date = str(earlist_date)
                 start_index = date_key_list.index(start_date)
