@@ -97,9 +97,11 @@ class Data():
                 formatted_data[stock]["data"] = {}
 
                 # start formatting data
-                # TODO: somehow cast the dict_key object into a list so it can be reversed
-                date_key_list = list(AV_data["Time Series (Daily)"].keys()).reverse()
-                print(date_key_list)
+                date_key_list = AV_data["Time Series (Daily)"].keys()
+                # these two lines of code cast the dict_key object to a list (that's been reversed)
+                date_key_list = list(date_key_list)
+                date_key_list.reverse()
+
                 earlist_date_string = date_key_list[0]
                 earlist_date = datetime.date(int(earlist_date_string[:4]), int(earlist_date_string[5:7]), int(earlist_date_string[8:10]))
                 desired_earlist_date = datetime.date(int(self.old_date[:4]), int(self.old_date[5:7]), int(self.old_date[8:10]))
