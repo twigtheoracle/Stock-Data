@@ -92,15 +92,15 @@ class Data():
                 with urllib.request.urlopen(self.get_AV_query_string(stock)) as url:
                     AV_data = json.loads(url.read().decode())
                     # pprint(AV_data["Time Series (Daily)"].keys())
-                formatted_data = {}
-                formatted_data[stock] = {}
-                formatted_data[stock]["data"] = {}
+
+                formatted_data = {"ticker": [], "date": [], "open": [], "high": [], "low": [], "close": [], "volume": []}
 
                 # start formatting data
                 date_key_list = AV_data["Time Series (Daily)"].keys()
                 # these two lines of code cast the dict_key object to a list (that's been reversed)
                 date_key_list = list(date_key_list)
                 date_key_list.reverse()
+                # date_key_list is now sorted with earlist at index zero and latest at largest index
 
                 earlist_date_string = date_key_list[0]
                 earlist_date = datetime.date(int(earlist_date_string[:4]), int(earlist_date_string[5:7]), int(earlist_date_string[8:10]))
@@ -121,11 +121,24 @@ class Data():
                     start_date = str(earlist_date)
                 start_index = date_key_list.index(start_date)
 
-                print(date_key_list[start_index])
-
                 # TODO: write this function
                 # iterate over keys
+                it_index = start_index
+                while(True):
 
+                    try:
+                        formatted_data["ticker"].append(stock)
+                        formatted_data["date"].append(date_key_list[it_index])
+                        formatted_data["open"].append(AV_data["Time Series (Daily)"][date_key_list[it_index]]["1. open"])
+                        formatted_data["high"].append(AV_data["Time Series (Daily)"][date_key_list[it_index]]["2. high"])
+                        formatted_data["low"].append(AV_data["Time Series (Daily)"][date_key_list[it_index]]["3. low"])
+                        formatted_data["close"].append(AV_data["Time Series (Daily)"][date_key_list[it_index]]["4. close"])
+                        formatted_data["volume"].append(AV_data["Time Series (Daily)"][date_key_list[it_index]]["5. volume"])
+
+                        it_index += 1
+
+                    except IndexError:
+                        break
 
 
             # pprint(formatted_data)
