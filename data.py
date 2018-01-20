@@ -129,11 +129,11 @@ class Data():
                     try:
                         formatted_data["ticker"].append(stock)
                         formatted_data["date"].append(date_key_list[it_index])
-                        formatted_data["open"].append(AV_data["Time Series (Daily)"][date_key_list[it_index]]["1. open"])
-                        formatted_data["high"].append(AV_data["Time Series (Daily)"][date_key_list[it_index]]["2. high"])
-                        formatted_data["low"].append(AV_data["Time Series (Daily)"][date_key_list[it_index]]["3. low"])
-                        formatted_data["close"].append(AV_data["Time Series (Daily)"][date_key_list[it_index]]["4. close"])
-                        formatted_data["volume"].append(AV_data["Time Series (Daily)"][date_key_list[it_index]]["5. volume"])
+                        formatted_data["open"].append(float(AV_data["Time Series (Daily)"][date_key_list[it_index]]["1. open"]))
+                        formatted_data["high"].append(float(AV_data["Time Series (Daily)"][date_key_list[it_index]]["2. high"]))
+                        formatted_data["low"].append(float(AV_data["Time Series (Daily)"][date_key_list[it_index]]["3. low"]))
+                        formatted_data["close"].append(float(AV_data["Time Series (Daily)"][date_key_list[it_index]]["4. close"]))
+                        formatted_data["volume"].append(int(AV_data["Time Series (Daily)"][date_key_list[it_index]]["5. volume"]))
 
                         it_index += 1
 
