@@ -4,6 +4,7 @@ api_key.py
 __pycache__/
 __pycache__
 test_template.xlsx
+test_template.txt
 *.cpython-36
 *.pyc
 __pycache__/functions.cpython-36.pyc
@@ -11,3 +12,4 @@ __pycache__/stock.cpython-36.pyc
 __pycache__/functions.cpython-36.pyc
 *.pyc
 test_main.py
+
