@@ -278,5 +278,6 @@ class Data():
                     datatable["percent_change"][stock].append(None)
                     datatable["std_dev"][stock].append(None)
                     datatable["freq"][stock].append(None)
+        print("done")
         return datatable
 
