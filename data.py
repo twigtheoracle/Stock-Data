@@ -63,12 +63,12 @@ class Data():
     #           adj_low:
     #           adj_close:
     #           adj_volume:
-    def retrieve_data(self, data_provider = "quandl"):
+    def retrieve_data(self, data_provider = "Quandl"):
         print("getting stock information...")
         for stock in tqdm(self.stock_list):
             stock_data = {}
             formatted_data = None
-            if(data_provider == "quandl"):
+            if(data_provider == "Quandl"):
                 formatted_data = quandl.get_table(self.get_quandl_query_string(stock))
             # TODO: format data to match existing format
             # Current format is:
