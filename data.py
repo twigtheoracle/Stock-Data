@@ -10,6 +10,7 @@ import urllib.request, json # for getting data from AV
 
 import api_key as key
 
+# TODO: rewrite the Data class to accomdate different data providers in an efficient way
 class Data():
     # initializes data with the list of stocks and proper dates
     def __init__(self, sl):
