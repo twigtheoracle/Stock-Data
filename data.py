@@ -43,35 +43,34 @@ class Data():
         return return_string
 
     # gets data from a data provier and stores it in the object
-    # data must be formatted as such:
-    # * means the data is used in processing
-    # note that all structures in data: are lists and not dictonaries
-    # note that data is organized with furthest back in time at index zero and most recent data at the last index
-    # datatable:
-    #   stock:
-    #       data:
-    #           ticker: 
-    #           date: *
-    #           open: 
-    #           high:
-    #           low:
-    #           close: *
-    #           volume:
-    #           ex-divident:
-    #           split-ratio:
-    #           adj_open:
-    #           adj_high:
-    #           adj_low:
-    #           adj_close:
-    #           adj_volume:
     def retrieve_data(self, data_provider = "Quandl"):
+        # data must be formatted as such:
+        # * means the data is used in processing
+        # note that all structures in data: are lists and not dictonaries
+        # note that data is organized with furthest back in time at index zero and most recent data at the last index
+        # datatable:
+        #   stock:
+        #       data:
+        #           ticker: 
+        #           date: *
+        #           open: 
+        #           high:
+        #           low:
+        #           close: *
+        #           volume:
+        #           ex-divident:
+        #           split-ratio:
+        #           adj_open:
+        #           adj_high:
+        #           adj_low:
+        #           adj_close:
+        #           adj_volume:
         print("getting stock information...")
         for stock in tqdm(self.stock_list):
             stock_data = {}
             formatted_data = None
             if(data_provider == "Quandl"):
                 formatted_data = quandl.get_table(self.get_quandl_query_string(stock))
-            # TODO: format data to match existing format
             # Current format is:
             # datatable:
             #   Meta Data:
@@ -122,7 +121,6 @@ class Data():
                     start_date = str(earlist_date)
                 start_index = date_key_list.index(start_date)
 
-                # TODO: write this function
                 # iterate over keys
                 it_index = start_index
                 while(True):
@@ -248,15 +246,15 @@ class Data():
         return return_data
         
     # returns a datatable with all long term data for every single stock
-    # datatable:
-    #   percent_change:
-    #       stock:
-    #           data...
-    #       stock:
-    #           data...
-    #   std_dev:    
-    #       etc...
     def get_long_term_data(self):
+        # datatable:
+        #   percent_change:
+        #       stock:
+        #           data...
+        #       stock:
+        #           data...
+        #   std_dev:    
+        #       etc...
         datatable = {}
         datatable["percent_change"] = {}
         datatable["std_dev"] = {}
