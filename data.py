@@ -6,8 +6,11 @@ import datetime
 import quandl
 import numpy
 
+import urllib.request, json # for getting data from AV
+
 import api_key as key
 
+# TODO: rewrite the Data class to accomdate different data providers in an efficient way
 class Data():
     # initializes data with the list of stocks and proper dates
     def __init__(self, sl):
@@ -31,19 +34,117 @@ class Data():
 
     # gets a string that will allow me to query quandl for all the data we need
     def get_quandl_query_string(self, stock):
-        returnString = "WIKI/PRICES.json?date.gte=" + self.old_date + "&date.lt=" + self.current_date + "&ticker=" + stock + "&api_key=" + key.get_API_key()
-        return returnString
+        return_string = "WIKI/PRICES.json?date.gte=" + self.old_date + "&date.lt=" + self.current_date + "&ticker=" + stock + "&api_key=" + key.get_Quandl_API_key()
+        return return_string
 
-    # gets data from quandl and stores it in the object
-    def retrieve_data(self):
+    # gets a string that will allow me to query Alpha Vantage for data needed
+    def get_AV_query_string(self, stock):
+        return_string = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + stock + "&outputsize=full&apikey=" + key.get_AV_API_key()
+        return return_string
+
+    # gets data from a data provier and stores it in the object
+    def retrieve_data(self, data_provider = "Quandl"):
+        # data must be formatted as such:
+        # * means the data is used in processing
+        # note that all structures in data: are lists and not dictonaries
+        # note that data is organized with furthest back in time at index zero and most recent data at the last index
+        # datatable:
+        #   stock:
+        #       data:
+        #           ticker: 
+        #           date: *
+        #           open: 
+        #           high:
+        #           low:
+        #           close: *
+        #           volume:
+        #           ex-divident:
+        #           split-ratio:
+        #           adj_open:
+        #           adj_high:
+        #           adj_low:
+        #           adj_close:
+        #           adj_volume:
         print("getting stock information...")
         for stock in tqdm(self.stock_list):
-            temp_data = {}
-            temp_quandl_data = quandl.get_table(self.get_quandl_query_string(stock))
-            temp_data["data"] = temp_quandl_data
-            temp_data["data_length"] = len(temp_quandl_data["ticker"])
+            stock_data = {}
+            formatted_data = None
+            if(data_provider == "Quandl"):
+                formatted_data = quandl.get_table(self.get_quandl_query_string(stock))
+            # Current format is:
+            # datatable:
+            #   Meta Data:
+            #       1. Information:
+            #       2. Symbol:
+            #       3. Last Refreshed:
+            #       4. Output Size:
+            #       5. Time Zone:
+            #   Time Series (Daily):
+            #       Date String (YYYY-MM-DD): 
+            #           1. open:
+            #           2. high:
+            #           3. low:
+            #           4. close:
+            #           5. volume:
+            #       Etc.
+            elif(data_provider == "AV"):
+                AV_data = None
+                with urllib.request.urlopen(self.get_AV_query_string(stock)) as url:
+                    AV_data = json.loads(url.read().decode())
+                    # pprint(AV_data["Time Series (Daily)"].keys())
 
-            self.data[stock] = temp_data
+                formatted_data = {"ticker": [], "date": [], "open": [], "high": [], "low": [], "close": [], "volume": []}
+
+                # start formatting data
+                date_key_list = AV_data["Time Series (Daily)"].keys()
+                # these two lines of code cast the dict_key object to a list (that's been reversed)
+                date_key_list = list(date_key_list)
+                date_key_list.reverse()
+                # date_key_list is now sorted with earlist at index zero and latest at largest index
+
+                earlist_date_string = date_key_list[0]
+                earlist_date = datetime.date(int(earlist_date_string[:4]), int(earlist_date_string[5:7]), int(earlist_date_string[8:10]))
+                desired_earlist_date = datetime.date(int(self.old_date[:4]), int(self.old_date[5:7]), int(self.old_date[8:10]))
+
+                # find the proper starting key
+                start_date = None
+                if(earlist_date < desired_earlist_date):
+                    while(True):
+                        try:
+                            start_date = str(desired_earlist_date)
+                            date_key_list.index(start_date)
+                            break
+                        except ValueError:
+                            date_increment_size = datetime.timedelta(days = 1)
+                            desired_earlist_date += date_increment_size
+                else:
+                    start_date = str(earlist_date)
+                start_index = date_key_list.index(start_date)
+
+                # iterate over keys
+                it_index = start_index
+                while(True):
+
+                    try:
+                        formatted_data["ticker"].append(stock)
+                        formatted_data["date"].append(date_key_list[it_index])
+                        formatted_data["open"].append(float(AV_data["Time Series (Daily)"][date_key_list[it_index]]["1. open"]))
+                        formatted_data["high"].append(float(AV_data["Time Series (Daily)"][date_key_list[it_index]]["2. high"]))
+                        formatted_data["low"].append(float(AV_data["Time Series (Daily)"][date_key_list[it_index]]["3. low"]))
+                        formatted_data["close"].append(float(AV_data["Time Series (Daily)"][date_key_list[it_index]]["4. close"]))
+                        formatted_data["volume"].append(int(AV_data["Time Series (Daily)"][date_key_list[it_index]]["5. volume"]))
+
+                        it_index += 1
+
+                    except IndexError:
+                        break
+
+
+            # pprint(formatted_data)
+            stock_data["data"] = formatted_data
+            stock_data["data_length"] = len(formatted_data["date"])
+
+            self.data[stock] = stock_data
 
     # slices self.data to return only the data of the last 3 months (every month has 4 weeks and 5 weekdays a week, so there are 20 days a month and 60 days for 3 months)
     def get_short_term_data(self):
@@ -145,15 +246,15 @@ class Data():
         return return_data
         
     # returns a datatable with all long term data for every single stock
-    # datatable:
-    #   percent_change:
-    #       stock:
-    #           data...
-    #       stock:
-    #           data...
-    #   std_dev:    
-    #       etc...
     def get_long_term_data(self):
+        # datatable:
+        #   percent_change:
+        #       stock:
+        #           data...
+        #       stock:
+        #           data...
+        #   std_dev:    
+        #       etc...
         datatable = {}
         datatable["percent_change"] = {}
         datatable["std_dev"] = {}
@@ -176,5 +277,6 @@ class Data():
                     datatable["percent_change"][stock].append(None)
                     datatable["std_dev"][stock].append(None)
                     datatable["freq"][stock].append(None)
+        print("done")
         return datatable
 
