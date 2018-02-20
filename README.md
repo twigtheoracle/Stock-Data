@@ -1,10 +1,10 @@
 # Stock-Data
 
-When run, generates an excel doc that gives various stats for short term and long term time periods. The stocks that are analyzed must exist in the free Quandl WIKI/PRICES database and are choosen based on the sheet titles in the file template.xlsx.
+When run, generates an excel doc that gives various stats for short term and long term time periods. The stocks that are analyzed must exist in the free Quandl WIKI/PRICES database (support for Alpha Vantage is in the works and a yahoo finaince data scraper is planned) and are choosen based on the sheet titles in the file template.xlsx or template.txt.
 
-The short term time period is 60 days, about 2 months. Descriptive statistics (n, mean, 60, 40, and 20 day standard deviations), a 20 bin histogram, and a line chart are generated and put in a sheet titled after the stock.
+If the template file is an excel workbook, there must be one sheet for every stock. The title of each sheet must be the name of the stock and the sheet itself must be blank. If the template file is a text document, stocks must be listed with one on each line with no newlines at the front and one newline at the end. If these rules are not followed then there is a chance that the program will not work properly.
 
-The long term time period is 10 years. The program will calculate the average historical percentage change, the standard deviation of the percentage change, and the frequency of which the price goes up or down over the course of a month for the stock. All information for all stocks is compiled into three new sheets that will appear in front of the stocks in template.xlsx.
+The short term time period is 60 days, about 3 months (20 trading days per month). Descriptive statistics (n, mean, 60, 40, and 20 day standard deviations), a 20 bin histogram, and a line chart are generated and put in a sheet titled with the stock name.
 
 In order to run this program, you need to have (at the time of last update), one of two different API keys. Before getting the keys though, first you need to make a file called "api_key.py" in the same folder as main. If you want to use Quandl (suggested for speed), you must get a Quandl key (free) and create a function in api_key.py called get_Quandl_API_key(). This function should only return the key as a string. If you want to use Alpha Vantage (optimization in progress), you must get a AV key from their website (also free) and create a function called get_AV_API_key(): which will only return the key as a string. Finally, in main.py change line 29 (this may change but you can just search for data_provider) to be the correct data provider, either "Quandl" or "AV".
 
