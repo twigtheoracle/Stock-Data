@@ -1,2 +1,0 @@
-import ssl
-import requests
