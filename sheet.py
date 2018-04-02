@@ -64,12 +64,16 @@ class Sheet():
             self.sheet[number_to_letter(index + offset) + "2"].alignment = openpyxl.styles.Alignment(horizontal='center')
             index += 1
             if(month == 11):
-                offset = 1
+                offset += 1
+            if(month - this_month == 2):
+                self.sheet[number_to_letter(index + offset) + "2"] = "4 Month"
+                self.sheet[number_to_letter(index + offset) + "2"].alignment = openpyxl.styles.Alignment(horizontal='center')
+                offset += 1
 
         # merges and puts the year(s) into the top row
         month_offset = 12 - this_month + 1
-        first_range = "B1:" + number_to_letter(1 + month_offset) + "1"
-        second_range = number_to_letter(1 + month_offset + 2) + "1:" + number_to_letter(2 + month_offset + (12 - month_offset)) + "1"
+        first_range = "B1:" + number_to_letter(2 + month_offset) + "1"
+        second_range = number_to_letter(2 + month_offset + 2) + "1:" + number_to_letter(3 + month_offset + (12 - month_offset)) + "1"
         self.sheet.merge_cells(first_range)
         self.sheet.merge_cells(second_range)
         self.sheet["B1"] = int(str(datetime.datetime.now())[:4])
@@ -80,7 +84,7 @@ class Sheet():
     # fills the sheet with data
     def fill(self):
         for row in range(0, len(self.stock_list)):
-            for column in range(2, 15):
+            for column in range(2, 16):
                 self.sheet[number_to_letter(column) + str(row + 3)] = self.data[self.stock_list[row]][column - 2]
 
     # TODO: fix backward coloring... look at the current sheet for why it's broken
@@ -99,7 +103,7 @@ class Sheet():
         bin_size = (high - low) / len(self.color_gradient)
 
         for row in range(3, 3 + len(self.stock_list)):   
-            for column in range(2, 15):
+            for column in range(2, 16):
                 cell = number_to_letter(column) + str(row)
                 if(self.sheet[cell].value != None):
                     index = int((self.sheet[cell].value - low) / bin_size)
@@ -126,7 +130,7 @@ class Sheet():
         foo = 1
         for row in range(3, 3 + len(self.stock_list)):  
             stock_name = self.sheet["A" + str(row)].value
-            for column in range(2, 15):  
+            for column in range(2, 16):  
                 data_cell = number_to_letter(column) + str(row)
                 if(self.sheet[data_cell].value != None):
                     percentage = (self.sheet[data_cell].value / abs(data_list[stock_name][column - 2])) * 100

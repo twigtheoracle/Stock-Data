@@ -13,7 +13,6 @@ from functions import *
 from stock import *
 from data import *
 from sheet import *
-from errors import *
 
 ########################################################################################
 
@@ -26,7 +25,7 @@ def main():
 
         # get the workbook and stock list
         # depends on the file format of the template
-        template_file = "./templates/template.txt"
+        template_file = "./templates/test_template.txt"
         wb, stock_list = get_workbook_and_stocklist(template_file)
 
         data = Data(stock_list)
