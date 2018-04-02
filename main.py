@@ -25,7 +25,7 @@ def main():
 
         # get the workbook and stock list
         # depends on the file format of the template
-        template_file = "./templates/test_template.txt"
+        template_file = "./templates/template.txt"
         wb, stock_list = get_workbook_and_stocklist(template_file)
 
         data = Data(stock_list)

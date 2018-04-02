@@ -279,11 +279,15 @@ class Data():
                         # print(datatable["percent_change"][stock][back_data], (1 + (datatable["percent_change"][stock][back_data] / 100)))
                         four_month_percentage_change *= (1 + (datatable["percent_change"][stock][back_data] / 100))
 
+                    p_consec_4_pos = 1
+                    for back_data in range(-1, -5, -1):
+                        # print(datatable["percent_change"][stock][back_data], (1 + (datatable["percent_change"][stock][back_data] / 100)))
+                        p_consec_4_pos *= ((datatable["freq"][stock][back_data] / 100))
                     # print("")
 
                     datatable["percent_change"][stock].append(four_month_percentage_change * 100 - 100)
                     datatable["std_dev"][stock].append(None)
-                    datatable["freq"][stock].append(None)
+                    datatable["freq"][stock].append(p_consec_4_pos * 100)
                 if(adjusted_month == 12):
                     datatable["percent_change"][stock].append(None)
                     datatable["std_dev"][stock].append(None)
