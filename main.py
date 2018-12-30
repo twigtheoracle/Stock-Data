@@ -32,6 +32,9 @@ def main():
         data.retrieve_data(data_provider = "Quandl")
         short_term_data = data.get_short_term_data()
 
+        print(data.data)
+        print(short_term_data)
+
         print("\ncreating stock sheets...")
         for sheet in wb:
             stock_sheet = Stock(sheet, short_term_data[sheet.title])

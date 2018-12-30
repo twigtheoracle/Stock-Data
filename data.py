@@ -24,6 +24,9 @@ class Data():
         self.old_year = int(self.old_date[:4])
         self.data = {}
 
+        # initialize quandl with the api key
+        quandl.ApiConfig.api_key = key.get_Quandl_API_key()
+
     # gets the old date for data access
     def get_old_date(self, date):
         return_string = ""
@@ -71,7 +74,7 @@ class Data():
             stock_data = {}
             formatted_data = None
             if(data_provider == "Quandl"):
-                formatted_data = quandl.get_table(self.get_quandl_query_string(stock))
+                formatted_data = quandl.get("EOD/" + stock, start_date = self.old_date, end_date = self.current_date)
             # Current format is:
             # datatable:
             #   Meta Data:
@@ -80,14 +83,17 @@ class Data():
             #       3. Last Refreshed:
             #       4. Output Size:
             #       5. Time Zone:
-            #   Time Series (Daily):
-            #       Date String (YYYY-MM-DD): 
-            #           1. open:
-            #           2. high:
-            #           3. low:
-            #           4. close:
-            #           5. volume:
-            #       Etc.
+            #   Data:
+            #       Open:
+            #           Date: Value
+            #           Date: Value
+            #           etc...
+            #       Close:
+            #           Date: Value
+            #           Date: Value
+            #           etc...
+            #       etc...
+
             elif(data_provider == "AV"):
                 AV_data = None
                 with urllib.request.urlopen(self.get_AV_query_string(stock)) as url:
@@ -141,9 +147,8 @@ class Data():
                         break
 
 
-            # pprint(formatted_data)
             stock_data["data"] = formatted_data
-            stock_data["data_length"] = len(formatted_data["date"])
+            stock_data["data_length"] = len(formatted_data["Open"])
 
             self.data[stock] = stock_data
 
@@ -156,15 +161,15 @@ class Data():
             for stock in self.stock_list:
                 stock_data = []
                 for day in range(1, 61):
-                    temp_date = str(self.data[stock]["data"]["date"][self.data[stock]["data_length"] - day])[:10]
-                    temp_price = str(self.data[stock]["data"]["close"][self.data[stock]["data_length"] - day])
+                    temp_date = str(self.data[stock]["data"]["Date"][self.data[stock]["data_length"] - day])[:10]
+                    temp_price = str(self.data[stock]["data"]["Close"][self.data[stock]["data_length"] - day])
                     stock_data.append([temp_date, temp_price])
                 datatable[stock] = stock_data
         # TODO: why does BFB cause an index error
         except IndexError:
             print("INDEXERROR")
-        except KeyError:
-            print("KEYERROR: Stock is newer than three months")
+        # except KeyError:
+        #     print("KEYERROR: Stock is newer than three months")
 
         return datatable
 
