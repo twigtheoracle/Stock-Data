@@ -25,7 +25,7 @@ def main():
 
         # get the workbook and stock list
         # depends on the file format of the template
-        template_file = "./templates/template.txt"
+        template_file = "./templates/test_template.txt"
         wb, stock_list = get_workbook_and_stocklist(template_file)
 
         data = Data(stock_list)
@@ -69,8 +69,8 @@ def main():
         print("\nERROR: NO INTERNET")
     except requests.exceptions.SSLError:
         print("\nERROR: SSL Certificate is not valid")
-    except quandl.errors.quandl_error.QuandlError:
-        print("\nERROR: Quandl Speed Limit Breached")
+    except quandl.errors.quandl_error.QuandlError as err:
+        print(err)
         
     time_elapsed = time.time() - start
     print()

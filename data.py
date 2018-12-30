@@ -11,6 +11,7 @@ import urllib.request, json # for getting data from AV
 import api_key as key
 
 # TODO: rewrite the Data class to accomdate different data providers in an efficient way
+# I'm not sure if I want to do so anymore, hopefully the quandl stuff works out
 class Data():
     # initializes data with the list of stocks and proper dates
     def __init__(self, sl):
@@ -34,7 +35,7 @@ class Data():
 
     # gets a string that will allow me to query quandl for all the data we need
     def get_quandl_query_string(self, stock):
-        return_string = "WIKI/PRICES.json?date.gte=" + self.old_date + "&date.lt=" + self.current_date + "&ticker=" + stock + "&api_key=" + key.get_Quandl_API_key()
+        return_string = "EOD&json?date.gte=" + self.old_date + "&date.lt=" + self.current_date + "&ticker=" + stock + "&api_key=" + key.get_Quandl_API_key()
         return return_string
 
     # gets a string that will allow me to query Alpha Vantage for data needed
