@@ -4,14 +4,12 @@ from tqdm import tqdm
 
 import datetime
 import quandl
-import numpy
+import numpy as np
 
 import urllib.request, json # for getting data from AV
 
 import api_key as key
 
-# TODO: rewrite the Data class to accomdate different data providers in an efficient way
-# I'm not sure if I want to do so anymore, hopefully the quandl stuff works out
 class Data():
     # initializes data with the list of stocks and proper dates
     def __init__(self, sl):
@@ -55,100 +53,50 @@ class Data():
         # datatable:
         #   stock:
         #       data:
-        #           ticker: 
-        #           date: *
-        #           open: 
-        #           high:
-        #           low:
-        #           close: *
-        #           volume:
-        #           ex-divident:
-        #           split-ratio:
-        #           adj_open:
-        #           adj_high:
-        #           adj_low:
-        #           adj_close:
-        #           adj_volume:
+        #           ticker: (single value)
+        #           date: * (numpy string array)
+        #           adj_close: * (numpy float array)
         print("getting stock information...")
         for stock in tqdm(self.stock_list):
             stock_data = {}
             formatted_data = None
             if(data_provider == "Quandl"):
-                formatted_data = quandl.get("EOD/" + stock, start_date = self.old_date, end_date = self.current_date)
-            # Current format is:
-            # datatable:
-            #   Meta Data:
-            #       1. Information:
-            #       2. Symbol:
-            #       3. Last Refreshed:
-            #       4. Output Size:
-            #       5. Time Zone:
-            #   Data:
-            #       Open:
-            #           Date: Value
-            #           Date: Value
-            #           etc...
-            #       Close:
-            #           Date: Value
-            #           Date: Value
-            #           etc...
-            #       etc...
+                quandl_data = quandl.get("EOD/" + stock, start_date = self.old_date, end_date = self.current_date)
+                # print(quandl_data)
+                stock_data["data_length"] = len(quandl_data["Open"])
+                # Current format is:
+                # datatable:
+                #   Meta Data:
+                #       1. Information:
+                #       2. Symbol:
+                #       3. Last Refreshed:
+                #       4. Output Size:
+                #       5. Time Zone:
+                #   Data:
+                #       Open:
+                #           Date: Value
+                #           Date: Value
+                #           etc...
+                #       Close:
+                #           Date: Value
+                #           Date: Value
+                #           etc...
+                #       etc...
 
-            elif(data_provider == "AV"):
-                AV_data = None
-                with urllib.request.urlopen(self.get_AV_query_string(stock)) as url:
-                    AV_data = json.loads(url.read().decode())
-                    # pprint(AV_data["Time Series (Daily)"].keys())
-
-                formatted_data = {"ticker": [], "date": [], "open": [], "high": [], "low": [], "close": [], "volume": []}
-
-                # start formatting data
-                date_key_list = AV_data["Time Series (Daily)"].keys()
-                # these two lines of code cast the dict_key object to a list (that's been reversed)
-                date_key_list = list(date_key_list)
-                date_key_list.reverse()
-                # date_key_list is now sorted with earlist at index zero and latest at largest index
-
-                earlist_date_string = date_key_list[0]
-                earlist_date = datetime.date(int(earlist_date_string[:4]), int(earlist_date_string[5:7]), int(earlist_date_string[8:10]))
-                desired_earlist_date = datetime.date(int(self.old_date[:4]), int(self.old_date[5:7]), int(self.old_date[8:10]))
-
-                # find the proper starting key
-                start_date = None
-                if(earlist_date < desired_earlist_date):
-                    while(True):
-                        try:
-                            start_date = str(desired_earlist_date)
-                            date_key_list.index(start_date)
-                            break
-                        except ValueError:
-                            date_increment_size = datetime.timedelta(days = 1)
-                            desired_earlist_date += date_increment_size
-                else:
-                    start_date = str(earlist_date)
-                start_index = date_key_list.index(start_date)
-
-                # iterate over keys
-                it_index = start_index
-                while(True):
-
-                    try:
-                        formatted_data["ticker"].append(stock)
-                        formatted_data["date"].append(date_key_list[it_index])
-                        formatted_data["open"].append(float(AV_data["Time Series (Daily)"][date_key_list[it_index]]["1. open"]))
-                        formatted_data["high"].append(float(AV_data["Time Series (Daily)"][date_key_list[it_index]]["2. high"]))
-                        formatted_data["low"].append(float(AV_data["Time Series (Daily)"][date_key_list[it_index]]["3. low"]))
-                        formatted_data["close"].append(float(AV_data["Time Series (Daily)"][date_key_list[it_index]]["4. close"]))
-                        formatted_data["volume"].append(int(AV_data["Time Series (Daily)"][date_key_list[it_index]]["5. volume"]))
-
-                        it_index += 1
-
-                    except IndexError:
-                        break
-
+                # format the data properly
+                # we only care about the ticker, date, and adjusted closing price
+                # note: "U10" means string of length 10, thats just how np.empty works
+                formatted_data = {"ticker": stock, 
+                                  "date": np.empty(stock_data["data_length"], dtype="U10"), 
+                                  "adj_close": np.empty(stock_data["data_length"])
+                                  }
+                # get a list of the dates and iterate over them
+                date_keys = quandl_data["Open"].keys()
+                for index in range(0, stock_data["data_length"]):
+                    formatted_data["date"][index] = str(date_keys[index])[:11]
+                    formatted_data["adj_close"][index] = quandl_data["Adj_Close"][date_keys[index]] 
 
             stock_data["data"] = formatted_data
-            stock_data["data_length"] = len(formatted_data["Open"])
 
             self.data[stock] = stock_data
 
@@ -161,15 +109,14 @@ class Data():
             for stock in self.stock_list:
                 stock_data = []
                 for day in range(1, 61):
-                    temp_date = str(self.data[stock]["data"]["Date"][self.data[stock]["data_length"] - day])[:10]
-                    temp_price = str(self.data[stock]["data"]["Close"][self.data[stock]["data_length"] - day])
+                    temp_date = str(self.data[stock]["data"]["date"][self.data[stock]["data_length"] - day])[:10]
+                    temp_price = str(self.data[stock]["data"]["adj_close"][self.data[stock]["data_length"] - day])
                     stock_data.append([temp_date, temp_price])
                 datatable[stock] = stock_data
-        # TODO: why does BFB cause an index error
         except IndexError:
             print("INDEXERROR")
-        # except KeyError:
-        #     print("KEYERROR: Stock is newer than three months")
+        except KeyError:
+            print("KEYERROR: Stock is newer than three months")
 
         return datatable
 
@@ -242,7 +189,7 @@ class Data():
                     count += 1
             percent_positive = (count / len(datalist)) * 100
 
-            return_data = [numpy.mean(datalist) * 100, numpy.std(datalist), percent_positive]
+            return_data = [np.mean(datalist) * 100, np.std(datalist), percent_positive]
         # this error occurs when there is not enough data to do standard deviation
         except ZeroDivisionError:
             return_data = [None, None, None]
