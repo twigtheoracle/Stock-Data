@@ -128,7 +128,7 @@ class Data():
 
         # if data does not exist, return None
         if(int(first_year) > year or (int(first_year) == year and int(first_month) > month)):
-            # print("DATA DOES NOT EXIST:", first_year + "-" + first_month, str(year) + "-" + str(month))
+            print("DATA DOES NOT EXIST:", first_year + "-" + first_month, str(year) + "-" + str(month))
             return None
 
         years_since_start = year - int(first_year)
@@ -153,10 +153,12 @@ class Data():
                     break
                 month_end_index -= 1
 
-            percentage_change = (self.data[stock_name]["data"]["close"][month_end_index] - self.data[stock_name]["data"]["close"][month_start_index]) / self.data[stock_name]["data"]["close"][month_start_index]
+            percentage_change = (self.data[stock_name]["data"]["adj_close"][month_end_index] - self.data[stock_name]["data"]["adj_close"][month_start_index]) / self.data[stock_name]["data"]["adj_close"][month_start_index]
+
+            print(stock_name, year, month, percentage_change)
 
         except KeyError:
-            # print("KEYERROR: " + stock_name + " did not exist at " + str(year) + "-" + str(month))
+            print("KEYERROR: " + stock_name + " did not exist at " + str(year) + "-" + str(month))
             pass
 
         # print(year, month, "(" + str(self.data[stock_name]["data"]["date"][month_start_index])[:10] + ", " + str(self.data[stock_name]["data"]["close"][month_start_index]) + ")", "(" + str(self.data[stock_name]["data"]["date"][month_end_index])[:10] + ", " + str(self.data[stock_name]["data"]["close"][month_end_index]) + ")")
@@ -177,7 +179,9 @@ class Data():
 
         datalist = []
         for year in range(self.current_year - 10 - year_offset, self.current_year - year_offset):
+            # TODO: get_percentage_change returns None for change
             change = self.get_percentage_change(stock_name, year, month)
+            # print(year, month, change)
             if(change != None):
                 datalist.append(change)
 
@@ -192,6 +196,7 @@ class Data():
             return_data = [np.mean(datalist) * 100, np.std(datalist), percent_positive]
         # this error occurs when there is not enough data to do standard deviation
         except ZeroDivisionError:
+            print("WARNING: DIVIDE BY ZERO ERROR")
             return_data = [None, None, None]
 
         # print(stock_name, month, datalist, "\n")
