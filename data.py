@@ -155,7 +155,7 @@ class Data():
 
             percentage_change = (self.data[stock_name]["data"]["adj_close"][month_end_index] - self.data[stock_name]["data"]["adj_close"][month_start_index]) / self.data[stock_name]["data"]["adj_close"][month_start_index]
 
-            print(stock_name, year, month, percentage_change)
+            # print(stock_name, year, month, percentage_change)
 
         except KeyError:
             print("KEYERROR: " + stock_name + " did not exist at " + str(year) + "-" + str(month))
@@ -178,7 +178,8 @@ class Data():
             year_offset = 0
 
         datalist = []
-        for year in range(self.current_year - 10 - year_offset, self.current_year - year_offset):
+        # TODO: verify that the loop executes in the correct range as i increased both the lower bound and the upper bound by one on Jan 2019
+        for year in range(self.current_year - 10 - year_offset + 1, self.current_year - year_offset + 1):
             # TODO: get_percentage_change returns None for change
             change = self.get_percentage_change(stock_name, year, month)
             # print(year, month, change)
@@ -199,7 +200,7 @@ class Data():
             print("WARNING: DIVIDE BY ZERO ERROR")
             return_data = [None, None, None]
 
-        # print(stock_name, month, datalist, "\n")
+        # print(stock_name, month, return_data, "\n")
 
         return return_data
         
