@@ -46,7 +46,7 @@ def main():
         
         long_term_data = data.get_long_term_data()
 
-        print(long_term_data)
+        # print(long_term_data)
 
         temp_sheet = wb.create_sheet("10YR %", 0)
         percentage_sheet = Sheet(temp_sheet, long_term_data["percent_change"], stock_list, long_term_data["years"])

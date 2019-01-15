@@ -61,6 +61,7 @@ class Data():
             stock_data = {}
             formatted_data = None
             if(data_provider == "Quandl"):
+                # print(stocks)
                 quandl_data = quandl.get("EOD/" + stock, start_date = self.old_date, end_date = self.current_date)
                 # print(quandl_data)
                 stock_data["data_length"] = len(quandl_data["Open"])
@@ -128,7 +129,7 @@ class Data():
 
         # if data does not exist, return None
         if(int(first_year) > year or (int(first_year) == year and int(first_month) > month)):
-            print("DATA DOES NOT EXIST:", first_year + "-" + first_month, str(year) + "-" + str(month))
+            print("DATA DOES NOT EXIST:", stock_name, first_year + "-" + first_month, str(year) + "-" + str(month))
             return None
 
         years_since_start = year - int(first_year)
@@ -159,6 +160,10 @@ class Data():
 
         except KeyError:
             print("KEYERROR: " + stock_name + " did not exist at " + str(year) + "-" + str(month))
+            pass
+        except IndexError as err:
+            print(err)
+            print(stock_name)
             pass
 
         # print(year, month, "(" + str(self.data[stock_name]["data"]["date"][month_start_index])[:10] + ", " + str(self.data[stock_name]["data"]["close"][month_start_index]) + ")", "(" + str(self.data[stock_name]["data"]["date"][month_end_index])[:10] + ", " + str(self.data[stock_name]["data"]["close"][month_end_index]) + ")")
