@@ -71,15 +71,25 @@ class Sheet():
                 offset += 1
 
         # merges and puts the year(s) into the top row
-        month_offset = 12 - this_month + 1
-        first_range = "B1:" + number_to_letter(2 + month_offset) + "1"
-        second_range = number_to_letter(2 + month_offset + 2) + "1:" + number_to_letter(3 + month_offset + (12 - month_offset)) + "1"
-        self.sheet.merge_cells(first_range)
-        self.sheet.merge_cells(second_range)
-        self.sheet["B1"] = int(str(datetime.datetime.now())[:4])
-        self.sheet["B1"].alignment = openpyxl.styles.Alignment(horizontal='center')
-        self.sheet[second_range[:2]] = int(str(datetime.datetime.now())[:4]) + 1
-        self.sheet[second_range[:2]].alignment = openpyxl.styles.Alignment(horizontal='center')
+
+        # note, janurary is a special case as all month data will belong to the current year, example below
+        #                            2019
+        # | Jan (1) | Feb (2) | Mar (3) | ... | Nov (11) | Dec (12) |
+        if(this_month == 1):
+            only_range = "B1:" + number_to_letter(2 + 11) + "1"
+            self.sheet.merge_cells(only_range)
+            self.sheet["B1"] = int(str(datetime.datetime.now())[:4]) + 1
+            self.sheet["B1"].alignment = openpyxl.styles.Alignment(horizontal='center')
+        else:
+            month_offset = 12 - this_month + 1
+            first_range = "B1:" + number_to_letter(2 + month_offset) + "1"
+            second_range = number_to_letter(2 + month_offset + 2) + "1:" + number_to_letter(3 + month_offset + (12 - month_offset)) + "1"
+            self.sheet.merge_cells(first_range)
+            self.sheet.merge_cells(second_range)
+            self.sheet["B1"] = int(str(datetime.datetime.now())[:4])
+            self.sheet["B1"].alignment = openpyxl.styles.Alignment(horizontal='center')
+            self.sheet[second_range[:2]] = int(str(datetime.datetime.now())[:4]) + 1
+            self.sheet[second_range[:2]].alignment = openpyxl.styles.Alignment(horizontal='center')
 
     # fills the sheet with data
     def fill(self):

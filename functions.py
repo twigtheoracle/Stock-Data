@@ -8,7 +8,7 @@ def get_save_path():
     if(platform.system() == "Darwin"):
         return "/users/twig/Desktop/"
     elif(platform.system() == "Windows"):
-       return "C:/Users/ericl/Desktop/"
+       return "./"
 
 ################################################################################
 

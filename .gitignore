@@ -17,3 +17,5 @@ test_template.txt
 test_main.py
 
 .DS_Store
+
+*.xlsx
