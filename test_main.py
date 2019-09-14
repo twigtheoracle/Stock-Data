@@ -1,17 +1,9 @@
-from data import Data
-from pprint import pprint
+from data_processing import Data
 
-d = Data(["AAPL"])
-d.retrieve_data(data_provider = "AV")
+data = Data(["AAPL", "PYPL", "SPGI", "PSX", "ZTS"])
+# Data(["AAPL"])
+# 
 
-pprint(d.data)
+data.get_data()
 
-# test_dict = {"test1": "content1", "test2": "content2", "test3": "content3"}
-
-# keys = test_dict.keys()
-
-# print(type(keys), keys)
-
-# list_keys = list(keys)
-
-# print(type(list_keys), list_keys)
+data.cut_long_term_data()
