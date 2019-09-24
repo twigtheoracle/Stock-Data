@@ -29,6 +29,12 @@ class Data():
         # create the dataframe to hold the recent data
         self.stocks_short_term_data = pd.DataFrame()
 
+        # create the dataframe to hold the average monthly change data
+        self.monthly_change_data = pd.DataFrame(index=sl)
+
+        # create the dataframe to hold the frequency data
+        self.frequency_data = pd.DataFrame()
+
         # store the stock list
         self.stock_list = sl
 
@@ -121,15 +127,6 @@ class Data():
                 [self.stocks_long_term_data, stock_data[1]], 
                 axis=1, join="outer", sort=False)
 
-        # remove rows from all data such that the last row is the last trading
-        # day of the previous month
-
-        print("Long Term Data")
-        print(self.stocks_long_term_data)
-        print()
-        print("Short Term Data")
-        print(self.stocks_short_term_data)
-
     def cut_long_term_data(self):
         """
         Cuts out rows of the long term data such that for any given month, the
@@ -162,10 +159,75 @@ class Data():
         # False and all others as True
         month_change = ~(month_change == 0)
 
-        print(month_change)
-        print(len(month_change))
-        print(type(month_change))
+        # select only the rows of self.stocks_long_term_data where the month is
+        # changing
+        self.stocks_long_term_data = self.stocks_long_term_data[month_change]
 
-        print(self.stocks_long_term_data[month_change])
+        print("Complete long term data")
+        print(self.stocks_long_term_data)
+        print()
+        print()
 
+    def get_monthly_percent_change(self):
+        """
+        Computes the percent change for each month for each stock given the 
+        cut daily data. Modifies self.stocks_long_term_data to hold the
+        average monthly change for the stocks
+        :param:     None
+        :return:    None
+        """
+        # first, change the datetime index to a multiindex with the levels
+        # year and month
+        self.stocks_long_term_data.index = pd.MultiIndex.from_arrays([
+            self.stocks_long_term_data.index.year,
+            self.stocks_long_term_data.index.month])
+        self.stocks_long_term_data.index.names = ["Year", "Month"]
 
+        # get the monthly change for the stocks
+        change = self.stocks_long_term_data.diff()
+
+        # get the percent change for the stocks
+        # select only the rows that we care about: 
+        # from the change df, we only want the end of the month diff rows, since
+        # that value is the end of the month minus the beginning of the month
+        # from the long term data df, we only want the beginning of the month
+        # rows since that is what the change should be compared to
+        change = change.iloc[1::2]
+        self.stocks_long_term_data = self.stocks_long_term_data.iloc[::2]
+
+        # divide the change by the baseline to get the percent change
+        percent_change = change / self.stocks_long_term_data
+        percent_change *= 100
+
+        # save the percent_change in the long term data df
+        self.stocks_long_term_data = percent_change
+
+    def compute_monthly_change(self):
+        """
+        Computes the chance of a particular stock going up during a month, 
+        based on historical data as calculated by get_monthly_percent_change().
+        Does this for all months and all stocks
+        :param:     None
+        :return:    None
+        """
+        # iterate over all the months starting from the month where our monthly
+        # data ends (self.dates[2].month)
+        for month in range(self.dates[2].month, self.dates[2].month + 12):
+            # adjust the month to be the the range 1-12
+            adj_month = (month % 12) + 1
+
+            # select the rows of the where the month equals the current 
+            # iteration
+            month_data = \
+                self.stocks_long_term_data[\
+                self.stocks_long_term_data.index.get_level_values("Month") == \
+                adj_month]
+
+            # get the average for each month
+            month_data = month_data.mean(axis=0)
+
+            # add the data as a row in the monthly change df
+            self.monthly_change_data[adj_month] = month_data
+        
+        print(self.monthly_change_data)
+        print()

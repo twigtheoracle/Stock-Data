@@ -7,3 +7,7 @@ data = Data(["AAPL", "PYPL", "SPGI", "PSX", "ZTS"])
 data.get_data()
 
 data.cut_long_term_data()
+
+data.get_monthly_percent_change()
+
+data.compute_monthly_change()
