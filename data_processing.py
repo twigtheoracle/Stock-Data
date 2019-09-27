@@ -32,6 +32,9 @@ class Data():
         # create the dataframe to hold the average monthly change data
         self.monthly_change_data = pd.DataFrame(index=sl)
 
+        # create the dataframe to hold the positive frequency of monthy change
+        self.monthly_frequency_data = pd.DataFrame(index=sl)
+
         # create the dataframe to hold the frequency data
         self.frequency_data = pd.DataFrame()
 
@@ -163,11 +166,6 @@ class Data():
         # changing
         self.stocks_long_term_data = self.stocks_long_term_data[month_change]
 
-        print("Complete long term data")
-        print(self.stocks_long_term_data)
-        print()
-        print()
-
     def get_monthly_percent_change(self):
         """
         Computes the percent change for each month for each stock given the 
@@ -202,11 +200,12 @@ class Data():
         # save the percent_change in the long term data df
         self.stocks_long_term_data = percent_change
 
+        print(self.stocks_long_term_data)
+
     def compute_monthly_change(self):
         """
-        Computes the chance of a particular stock going up during a month, 
-        based on historical data as calculated by get_monthly_percent_change().
-        Does this for all months and all stocks
+        Computes the average monthly change for a particular stock for as much 
+        data as exists. Does this for all months and all stocks
         :param:     None
         :return:    None
         """
@@ -231,3 +230,31 @@ class Data():
         
         print(self.monthly_change_data)
         print()
+
+    def compute_monthly_frequency(self):
+        """
+        Computes the chance of a particular stock going up during a month, 
+        based on historical data as calculated by get_monthly_percent_change().
+        Does this for all months and all stocks
+        :param:     None
+        :return:    None
+        """
+        # iterate over all the months starting from the month where our monthly
+        # data ends (self.dates[2].month)
+        for month in range(self.dates[2].month, self.dates[2].month + 12):
+            # adjust the month to be in the range 1-12
+            adj_month = (month % 12) + 1
+
+            # select the rows of the table where the month equals the current 
+            # adjusted month
+            month_data = \
+                self.stocks_long_term_data[\
+                self.stocks_long_term_data.index.get_level_values("Month") == \
+                adj_month]
+
+            print(month_data)
+
+            # count the number of rows where the percent change is positive
+            # then divide by the total number of rows
+
+            # 
