@@ -29,6 +29,9 @@ class Data():
         # create the dataframe to hold the recent data
         self.stocks_short_term_data = pd.DataFrame()
 
+        # create the dataframe to hold the recent summary statistics
+        self.summary_statistics = pd.DataFrame(index=sl)
+
         # create the dataframe to hold the average monthly change data
         self.monthly_change_data = pd.DataFrame(index=sl)
 
@@ -57,7 +60,8 @@ class Data():
         # get the date today and 63 days ago
         # note, 63 trading days is ~ 3 months
         today = datetime.date.today()
-        short_term_data_start = today - datetime.timedelta(days=63)
+        short_term_data_start = datetime.date(today.year, today.month - 3, 
+            today.day)
 
         # get the long term data end
         # this is the last trading day of the previous month
@@ -130,6 +134,28 @@ class Data():
                 [self.stocks_long_term_data, stock_data[1]], 
                 axis=1, join="outer", sort=False)
 
+    def compute_summary_statistics(self):
+        """
+        Computes the short term summary statistics of all the stocks. These 
+        include number of data points (63), mean, three month std (63 days), 
+        two month std (42 days), and one month std (21 days). This function also
+        bins the data to make the histogram creation easier
+        Note, 21 trading days approximates one month, according to Wikipedia
+        :param:     None
+        :return:    None
+        """
+        # add the count column
+        self.summary_statistics["n"] = \
+            [63 for i in range(0, len(self.stock_list))]
+
+        # add the mean column
+        self.summary_statistics["mean"] = self.stocks_short_term_data.mean()
+
+        # add teh std columns
+        self.summary_statistics["3 month std"] = self.stocks_short_term_data.std()
+        self.summary_statistics["2 month std"] = self.stocks_short_term_data[21:].std()
+        self.summary_statistics["1 month std"] = self.stocks_short_term_data[42:].std()
+
     def cut_long_term_data(self):
         """
         Cuts out rows of the long term data such that for any given month, the
@@ -200,8 +226,6 @@ class Data():
         # save the percent_change in the long term data df
         self.stocks_long_term_data = percent_change
 
-        print(self.stocks_long_term_data)
-
     def compute_monthly_change(self):
         """
         Computes the average monthly change for a particular stock for as much 
@@ -227,9 +251,6 @@ class Data():
 
             # add the data as a row in the monthly change df
             self.monthly_change_data[adj_month] = month_data
-        
-        print(self.monthly_change_data)
-        print()
 
     def compute_monthly_frequency(self):
         """
@@ -252,9 +273,19 @@ class Data():
                 self.stocks_long_term_data.index.get_level_values("Month") == \
                 adj_month]
 
-            print(month_data)
+            # count the number of non-NaN in each column
+            num_data_points = month_data.count()
 
-            # count the number of rows where the percent change is positive
-            # then divide by the total number of rows
+            # fill missing data with 0
+            month_data = month_data.fillna(0)
 
-            # 
+            # change all data points greater than 0 to 1
+            month_data = ((month_data > 0) * 1)
+
+            # count the number of years where this particular month had a 
+            # postiive gain
+            month_data = month_data.sum()
+
+            # get the frequency of positive change and store it in the df
+            month_data = month_data / num_data_points
+            self.monthly_frequency_data[adj_month] = month_data
