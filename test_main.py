@@ -33,3 +33,7 @@ print()
 print("summary statistics")
 print(data.summary_statistics)
 print() 
+
+print("bins")
+print(data.bins)
+print()
