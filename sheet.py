@@ -94,8 +94,18 @@ class Sheet():
     # fills the sheet with data
     def fill(self):
         for row in range(0, len(self.stock_list)):
-            for column in range(2, 16):
-                self.sheet[number_to_letter(column) + str(row + 3)] = self.data[self.stock_list[row]][column - 2]
+            counter = 0
+            offset = 0
+            for column in range(2, 15):
+                try:
+                    self.sheet[number_to_letter(column + offset) + str(row + 3)] = self.data[self.stock_list[row]][column - 2]
+                    if(offset == 0 and self.data[self.stock_list[row]][column + offset - 2] != None):
+                        counter += 1
+                        if(counter == 4):
+                            offset += 1
+                except IndexError as e:
+                    print(row, column)
+
 
     # TODO: fix backward coloring... look at the current sheet for why it's broken
     # colors the sheet based on a low and high value
