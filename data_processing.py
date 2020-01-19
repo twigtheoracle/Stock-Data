@@ -32,6 +32,9 @@ class Data():
         # create the dataframe to hold the recent summary statistics
         self.summary_statistics = pd.DataFrame(index=sl)
 
+        # create a dictionary to hold the binning data
+        self.bins = {}
+
         # create the dataframe to hold the average monthly change data
         self.monthly_change_data = pd.DataFrame(index=sl)
 
@@ -158,6 +161,14 @@ class Data():
             self.stocks_short_term_data[21:].std()
         self.summary_statistics["1 month std"] = \
             self.stocks_short_term_data[42:].std()
+        # compute the bins for each column
+        for stock in self.stock_list:
+            # compute which of 20 intervals each recent data point falls into
+            stock_intervals = pd.cut(self.stocks_short_term_data[stock], 
+                bins=20)
+
+            # count and store each interval
+            self.bins[stock] = stock_intervals.value_counts(sort=False)
 
     def cut_long_term_data(self):
         """
