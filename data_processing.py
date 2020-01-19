@@ -152,9 +152,12 @@ class Data():
         self.summary_statistics["mean"] = self.stocks_short_term_data.mean()
 
         # add teh std columns
-        self.summary_statistics["3 month std"] = self.stocks_short_term_data.std()
-        self.summary_statistics["2 month std"] = self.stocks_short_term_data[21:].std()
-        self.summary_statistics["1 month std"] = self.stocks_short_term_data[42:].std()
+        self.summary_statistics["3 month std"] = \
+            self.stocks_short_term_data.std()
+        self.summary_statistics["2 month std"] = \
+            self.stocks_short_term_data[21:].std()
+        self.summary_statistics["1 month std"] = \
+            self.stocks_short_term_data[42:].std()
 
     def cut_long_term_data(self):
         """
