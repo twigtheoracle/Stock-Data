@@ -18,7 +18,7 @@ def get_path(relative_path):
     abs_path = os.path.abspath(relative_path)
 
     # for some reason, if the input path is a directory, then the trailing "\" is removed
-    if(os.path.isdir(abs_path)):
+    if(relative_path[-1] == "\\" or relative_path[-1] == "/"):
         abs_path += "\\"
 
     # return the path

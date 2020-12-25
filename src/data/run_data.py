@@ -4,6 +4,7 @@
 # in the other files in the data folder
 
 import shutil
+import os
 
 from src.functions import get_path
 
@@ -16,16 +17,15 @@ def run_data(tickers):
     "data/processed/" by default. These save locations can be changed in the config file
     """
     # the folders in which to save data
-    raw_path = "data/raw/"
-    processed_path = "data/processed/"
+    raw_path = get_path("data/raw/")
+    processed_path = get_path("data/processed/")
 
     # delete then recreate the data folders
     # this is to completly overwrite all data if it exists
-
-
-    # convert the paths to absoltue paths
-    raw_path = get_path(raw_path)
-    processed_path = get_path(processed_path)
+    shutil.rmtree(get_path("data/"), ignore_errors=True)
+    os.mkdir(get_path("data/"))
+    os.mkdir(raw_path)
+    os.mkdir(processed_path)
 
     # download raw data
     download_data(raw_path, tickers)
