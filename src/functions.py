@@ -88,7 +88,6 @@ def save(wb, save_location):
     try:
         # attempt to save at the requested location
         wb.save(save_location + "option_analysis_" + str(datetime.date.today()) + ".xlsx")
-        print(save_location + "option_analysis_" + str(datetime.date.today()) + ".xlsx")
     except PermissionError:
         # raise an error if the file is currently open
         raise PermissionError("File cannot be saved since it is open. Close the file and run again")

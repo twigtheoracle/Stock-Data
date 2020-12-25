@@ -16,6 +16,7 @@ import quandl
 import json
 
 from src.functions import *
+from src.data.run_data import run_data
 
 ########################################################################################
 
@@ -33,6 +34,9 @@ def main():
         help="Define tickers using a file instead of the config file. This will overwrite the " \
         "tickers included in the config file. The file must contain one ticker per line. See " \
         "TODO for an example file")
+    parser.add_argument("-o", "--overwrite", action="store_true",
+        help="Download/overwrite existing data. This flag must be passed in everytime the " \
+        "tickers change or the data save location changes")
     args = parser.parse_args()
 
     # open and process the config file
@@ -46,11 +50,17 @@ def main():
         config["save_location"] = get_path(config["save_location"])
 
         # change tickers if the "--test" flag is present
+        # also overwrite data
         if(args.test):
             config["tickers"] = ["AAPL", "ZTE"]
+            args.overwrite = True
 
     # get the workbook formatted with the input tickers
     wb = get_workbook(config["tickers"])
+
+    # download/overwrite data if requested
+    if(args.overwrite):
+        run_data(config["tickers"])
 
     # save the wb
     save(wb, config["save_location"])
