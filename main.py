@@ -29,7 +29,7 @@ def main():
         "this takes the value of \"config/default.json\"")
     parser.add_argument("--test", action="store_true",
         help="When present, the program will override the \"tickers\" parameter of the config " \
-        "file to only process on AAPL. This will also override the \"--tickers\" argument")
+        "file to only process on AAPL and ZTS. This will also override the \"--tickers\" argument")
     parser.add_argument("--tickers", type=str, metavar="str", default=None,
         help="Define tickers using a file instead of the config file. This will overwrite the " \
         "tickers included in the config file. The file must contain one ticker per line. See " \
@@ -50,10 +50,8 @@ def main():
         config["save_location"] = get_path(config["save_location"])
 
         # change tickers if the "--test" flag is present
-        # also overwrite data
         if(args.test):
-            config["tickers"] = ["AAPL"]
-            args.overwrite = True
+            config["tickers"] = ["AAPL", "ZTS"]
 
     # get the workbook formatted with the input tickers
     wb = get_workbook(config["tickers"])

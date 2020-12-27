@@ -42,7 +42,7 @@ def get_ticker(ticker):
     # get the current date and historical date as strings
     # TODO: adjust for leap year?
     current_date = datetime.date.today()
-    historical_date = datetime.date(year=current_date.year-10, month=current_date.month, 
+    historical_date = datetime.date(year=current_date.year-11, month=current_date.month, 
         day=current_date.day)
     current_date = str(current_date)
     historical_date = str(historical_date)  
