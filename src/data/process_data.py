@@ -35,3 +35,55 @@ def process_data(raw_path, processed_path):
 
         # save the short term data in the proper place
         data.to_csv(get_path(processed_path + ticker_file), index=False)
+
+    # then compute and save the long term data
+    # create the structure to hold the data
+    months = ["Jan (1)", "Feb (2)", "Mar (3)", "Apr (4)", "May (5)", "Jun (6)", "Jul (7)", 
+        "Aug (8)", "Sep (9)", "Oct (10)", "Nov (11)", "Dec (12)"]
+    percent_change = pd.DataFrame(columns=["Ticker"]+months)
+    std = pd.DataFrame(columns=["Ticker"]+months)
+    freq = pd.DataFrame(columns=["Ticker"]+months)
+
+    # get the percent change for each ticker
+    for ticker_file in os.listdir(get_path(raw_path)):
+        # get the data
+        ticker_path = get_path(raw_path + ticker_file)
+        data = pd.read_csv(ticker_path, parse_dates=["Date"])
+
+        # get the percentage change for every month in the last ~11 years for the ticker
+        monthly_changes = get_monthly_percent_change(data)
+
+        # process the monthly percentage change into the various averages/freqs
+        raise ValueError
+
+    # save the long term data
+    percent_change.to_csv(get_path(processed_path + "percent_change.csv"), index=False)
+    std.to_csv(get_path(processed_path + "std.csv"), index=False)
+    freq.to_csv(get_path(processed_path + "freq.csv"), index=False)
+
+def get_monthly_percent_change(data):
+    """
+    Takes the input price data (with dates) and computes the percent change for all available
+    months, then returns it as a df. This function will ignore the current month since data is very
+    likely not complete. This function will also ignore the first month in the data, since that data
+    is also likely not complete. Since 11 months of data are downloaded initially, ignoring those 
+    two months does not matter.
+
+    :param:     data        The input data to process
+
+    :return:    pd.df       The data changed to get the percent change for every month
+    """
+    # extract the year and month
+    data["Year"] = data["Date"].dt.year
+    data["Month"] = data["Date"].dt.month 
+    data = data.drop(["Date"], axis=1)
+
+    # get the year and month of the first row of data
+
+
+    # get the year and month of the last row of data
+
+
+    # remove the first and last months of the data
+
+    print(data)
