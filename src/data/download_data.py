@@ -12,8 +12,6 @@ import quandl
 import numpy as np
 import pandas as pd
 
-from src.api_key import get_API_key as key
-
 def download_data(raw_path, tickers):
     """
     Download the raw data needed for every ticker

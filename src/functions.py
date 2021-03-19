@@ -5,8 +5,9 @@
 import openpyxl
 import datetime
 import os
+import json
 
-def get_path(relative_path):
+def make_absolute(relative_path):
     """
     Returns an absolute path from the root of the project directory based on the input relative
     path
@@ -34,7 +35,7 @@ def check_directory(path):
     :param:     path    The path to check 
     """
     # convert to absolute path
-    path = get_path(path)
+    path = make_absolute(path)
 
     # check that the path exists and is not a directory
     if(os.path.exists(path) and not os.path.isdir(path)):
@@ -49,6 +50,21 @@ def check_directory(path):
     elif(os.path.exists(path) and os.path.isdir(path)):
         # do nothing
         pass
+
+def get_params(path):
+    """
+    This function tries to open the json file at the input path, and throws an error if it does
+    not exist
+
+    :param:     path        The path to the configuation json file
+
+    :return:    dict        A dictonary containing the contents of the configuation file
+    """
+    try:
+        with open(make_absolute(path), "r") as file:
+            return json.load(file)
+    except:
+        raise FileNotFoundError("The configuation file \"" + path + "\" does not exist.")
 
 def get_workbook(tickers):
     """

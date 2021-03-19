@@ -16,7 +16,7 @@ import os
 
 import pandas as pd
 
-from src.functions import get_path
+from src.functions import make_absolute
 
 def process_data(raw_path, processed_path):
     """
@@ -28,13 +28,13 @@ def process_data(raw_path, processed_path):
     """
     # first save all the short term data
     # iterate over all the raw data
-    for ticker_file in os.listdir(get_path(raw_path)):
+    for ticker_file in os.listdir(make_absolute(raw_path)):
         # open the csv file and select the most recent 60 rows
-        ticker_path = get_path(raw_path + ticker_file)
+        ticker_path = make_absolute(raw_path + ticker_file)
         data = pd.read_csv(ticker_path)[-60:]
 
         # save the short term data in the proper place
-        data.to_csv(get_path(processed_path + ticker_file), index=False)
+        data.to_csv(make_absolute(processed_path + ticker_file), index=False)
 
     # then compute and save the long term data
     # create the structure to hold the data
@@ -45,9 +45,9 @@ def process_data(raw_path, processed_path):
     freq = pd.DataFrame(columns=["Ticker"]+months)
 
     # get the percent change for each ticker
-    for ticker_file in os.listdir(get_path(raw_path)):
+    for ticker_file in os.listdir(make_absolute(raw_path)):
         # get the data
-        ticker_path = get_path(raw_path + ticker_file)
+        ticker_path = make_absolute(raw_path + ticker_file)
         data = pd.read_csv(ticker_path, parse_dates=["Date"])
 
         # get the percentage change for every month in the last ~11 years for the ticker
@@ -57,9 +57,9 @@ def process_data(raw_path, processed_path):
         raise ValueError
 
     # save the long term data
-    percent_change.to_csv(get_path(processed_path + "percent_change.csv"), index=False)
-    std.to_csv(get_path(processed_path + "std.csv"), index=False)
-    freq.to_csv(get_path(processed_path + "freq.csv"), index=False)
+    percent_change.to_csv(make_absolute(processed_path + "percent_change.csv"), index=False)
+    std.to_csv(make_absolute(processed_path + "std.csv"), index=False)
+    freq.to_csv(make_absolute(processed_path + "freq.csv"), index=False)
 
 def get_monthly_percent_change(data):
     """

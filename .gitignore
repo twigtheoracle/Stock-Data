@@ -1,6 +1,5 @@
 # Project specific folders/files
 xl_sheets/
-src/api_key.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

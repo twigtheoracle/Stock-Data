@@ -7,8 +7,6 @@ from scipy.ndimage.interpolation import shift
 
 import datetime
 
-import api_key as key
-
 ################################################################################
 
 class Data():

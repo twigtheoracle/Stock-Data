@@ -1,13 +1,10 @@
 from openpyxl.styles import Color, PatternFill
 from numpy import interp
-from pprint import pprint
 
 import openpyxl
 import datetime
 import string
 import time
-
-import api_key as key
 
 # returns an uppcase representation of the number
 # 1 --> A, 2 --> B, etc.

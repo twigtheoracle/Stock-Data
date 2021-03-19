@@ -2,15 +2,9 @@
 
 # TODO
 
-from pprint import pprint
 from tqdm import tqdm
 
-# for errors
-import ssl
-import requests
-
 import argparse
-import openpyxl
 import time
 import quandl
 import json
@@ -37,21 +31,24 @@ def main():
     parser.add_argument("-o", "--overwrite", action="store_true",
         help="Download/overwrite existing data. This flag must be passed in everytime the " \
         "tickers change or the data save location changes")
-    args = parser.parse_args()
+    parser.add_argument("--quandl", type=str, nargs=1, help="Your Quandl API key. " \
+        "This key should have access to the EOD and QOR premium databases (~$1250 per year). " \
+        "This flag sets the value to the env key \"QUANDL_API_KEY\". If your enviorment already " \
+        "has the key set, you do not need to use this flag.")
+    args = vars(parser.parse_args())
 
-    # open and process the config file
-    with open(get_path(args.config), "r") as f:
-        config = json.load(f)
-    
-        # ensure that the save location exists and is a directory
-        check_directory(config["save_location"])
+    # if using the --test flag, use the default config file
+    if(args["test"]):
+        args["config"] = "config/default.json"
 
-        # change the paths to absolute
-        config["save_location"] = get_path(config["save_location"])
+    # get the requested config file
+    config = get_params(args["config"])
 
-        # change tickers if the "--test" flag is present
-        if(args.test):
-            config["tickers"] = ["AAPL", "ZTS"]
+    # if using the --test flag, change the tickers
+    if(args["test"]):
+        config["tickers"] = ["AAPL", "ZTS"]
+
+    raise ValueError
 
     # get the workbook formatted with the input tickers
     wb = get_workbook(config["tickers"])
@@ -62,71 +59,6 @@ def main():
 
     # save the wb
     save(wb, config["save_location"])
-
-    # start = time.time()
-
-    # try:
-    #     save_path = get_save_path()
-
-    #     # get the workbook and stock list
-    #     # depends on the file format of the template
-    #     template_file = "./templates/template 20-06-2020.txt"
-    #     wb, stock_list = get_workbook_and_stocklist(template_file)
-
-    #     data = Data(stock_list)
-    #     data.retrieve_data(data_provider = "Quandl")
-    #     short_term_data = data.get_short_term_data()
-
-    #     # print(data.data)
-    #     # print(short_term_data)
-
-    #     print("\ncreating stock sheets...")
-    #     for sheet in wb:
-    #         stock_sheet = Stock(sheet, short_term_data[sheet.title])
-    #         stock_sheet.format()
-    #         stock_sheet.fill_data()
-    #         stock_sheet.fill_stats()
-    #         stock_sheet.fill_graphs()
-    #     print("done")
-        
-    #     long_term_data = data.get_long_term_data()
-
-    #     # print(long_term_data)
-
-    #     temp_sheet = wb.create_sheet("10YR %", 0)
-    #     percentage_sheet = Sheet(temp_sheet, long_term_data["percent_change"], stock_list, long_term_data["years"])
-    #     percentage_sheet.format()
-    #     percentage_sheet.fill()
-    #     percentage_sheet.color(-10, 10)
-
-    #     temp_sheet = wb.create_sheet("10YR % STD DEV", 1)
-    #     # note: std dev here is std dev of percentage change, not of average value of the month
-    #     std_dev_sheet = Sheet(temp_sheet, long_term_data["std_dev"], stock_list, long_term_data["years"])
-    #     std_dev_sheet.format()
-    #     std_dev_sheet.fill()
-    #     # TODO: do some work to figure out optimal numbers for std dev coloring
-    #     std_dev_sheet.color(.1, .02)
-
-    #     temp_sheet = wb.create_sheet("10YR FREQ", 2)
-    #     freq_sheet = Sheet(temp_sheet, long_term_data["freq"], stock_list, long_term_data["years"])
-    #     freq_sheet.format()
-    #     freq_sheet.fill()
-    #     freq_sheet.color(20, 80)
-
-    # # this doesn't work to stop no wifi errors for some reason
-    # # TODO: catch no wifi error
-    # except ConnectionError:
-    #     print("\nERROR: NO INTERNET")
-    # except requests.exceptions.SSLError:
-    #     print("\nERROR: SSL Certificate is not valid")
-    # except quandl.errors.quandl_error.QuandlError as err:
-    #     print(err)
-        
-    # time_elapsed = time.time() - start
-    # print()
-    # print("time elapsed: " + str(int(int(time_elapsed) / 60)) + "m " + str(int(time_elapsed) % 60) + "s")
-
-    # save(wb, save_path)
 
 if __name__ == '__main__':
     main()
