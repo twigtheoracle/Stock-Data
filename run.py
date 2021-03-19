@@ -8,6 +8,7 @@ import argparse
 import time
 import quandl
 import json
+import os
 
 from src.functions import *
 from src.data.run_data import run_data
@@ -37,9 +38,14 @@ def main():
         "has the key set, you do not need to use this flag.")
     args = vars(parser.parse_args())
 
-    # if using the --test flag, use the default config file
+    # if the user inputed a quandl api key, add it to the env variables
+    if(args["quandl"] is not None):
+        os.environ["QUANDL_API_KEY"] = args["quandl"][0]
+
+    # if using the --test flag, use the default config file and overwrite data
     if(args["test"]):
         args["config"] = "config/default.json"
+        args["overwrite"] = True
 
     # get the requested config file
     config = get_params(args["config"])
@@ -48,13 +54,11 @@ def main():
     if(args["test"]):
         config["tickers"] = ["AAPL", "ZTS"]
 
-    raise ValueError
-
     # get the workbook formatted with the input tickers
     wb = get_workbook(config["tickers"])
 
     # download/overwrite data if requested
-    if(args.overwrite):
+    if(args["overwrite"]):
         run_data(config["tickers"])
 
     # save the wb

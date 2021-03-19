@@ -8,6 +8,7 @@ from tqdm import tqdm
 
 import datetime
 import quandl
+import os
 
 import numpy as np
 import pandas as pd
@@ -20,7 +21,7 @@ def download_data(raw_path, tickers):
     :param:     tickers         A list containing every ticker to download data for
     """
     # initialize quandl with the api key
-    quandl.ApiConfig.api_key = key()
+    quandl.ApiConfig.api_key = os.environ["QUANDL_API_KEY"]
 
     print("Downloading data")
 
