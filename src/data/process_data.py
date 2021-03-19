@@ -67,9 +67,9 @@ def process_data(raw_path, processed_path):
     freq = pd.DataFrame(freq, columns=columns)
 
     # save the long term data
-    percent_change.to_csv(make_absolute(processed_path + "percent_changes.csv"), index=False)
-    std.to_csv(make_absolute(processed_path + "standard_deviations.csv"), index=False)
-    freq.to_csv(make_absolute(processed_path + "frequencies.csv"), index=False)
+    percent_change.to_csv(make_absolute(processed_path + "perc.csv"), index=False)
+    std.to_csv(make_absolute(processed_path + "std.csv"), index=False)
+    freq.to_csv(make_absolute(processed_path + "freq.csv"), index=False)
 
 def get_monthly_for_stock(data):
     """

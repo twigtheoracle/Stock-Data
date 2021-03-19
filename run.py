@@ -59,7 +59,9 @@ def main():
 
     # download/overwrite data if requested
     if(args["overwrite"]):
-        run_data(config["tickers"])
+        run_data(config)
+
+    # put the processed data into an xl sheet
 
     # save the wb
     save(wb, config["save_location"])
