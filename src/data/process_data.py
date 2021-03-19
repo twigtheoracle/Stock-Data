@@ -126,7 +126,7 @@ def get_monthly_for_stock(data):
         end_price = month_data.iloc[1::2][-10:].reset_index(drop=True)["Adj_Close"]
 
         # get the percentage change for the month for every year
-        percent_change_per_year = (end_price - start_price) / start_price
+        percent_change_per_year = ((end_price - start_price) / start_price) * 100
 
         # get the average percent changes
         percent_changes.append(percent_change_per_year.sum() / percent_change_per_year.size)
@@ -136,7 +136,7 @@ def get_monthly_for_stock(data):
 
         # get the frequencies
         positive_change = percent_change_per_year > 0
-        freq.append(positive_change.sum() / positive_change.size)
+        freq.append((positive_change.sum() / positive_change.size) * 100)
 
     # return all values
     return [percent_changes, std, freq]

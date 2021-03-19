@@ -1,4 +1,12 @@
 {
     "save_location": "xl_sheets/",
-    "tickers": ["TSM", "UNH", "PLD", "SPGI", "AMD", "FB", "MCO", "ICE", "CLX", "ZTS", "NVDA", "WMT", "DG", "BLK", "AMZN", "PYPL", "TGT", "HD", "BBY", "COST", "NKE", "JPM", "PNC", "USB", "GS", "BX", "HON"]
+    "tickers": ["TSM", "UNH", "PLD", "SPGI", "AMD", "FB", "MCO", "ICE", "CLX", "ZTS", "NVDA", 
+        "WMT", "DG", "BLK", "AMZN", "PYPL", "TGT", "HD", "BBY", "COST", "NKE", "JPM", "PNC", 
+        "USB", "GS", "BX", "HON"],
+    "color_gradient": ["E4001A", "E30201", "E31c02", "E33602", "E25003", "E26904", "E28304", 
+        "E19C05", "E1B506", "E1CD06", "DBE007", "C2E008", "A9E008", "91DF09", "79DF09", "60DF0A", 
+        "49DE0B", "31DE0B", "1ADE0C", "0CDE17"],
+    "perc_low_high": [-10, 10],
+    "freq_low_high": [0, 100],
+    "std_low_high": [10, 0]
 }
