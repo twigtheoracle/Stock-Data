@@ -13,49 +13,42 @@
 # are over 10 years
 
 import os
+import shutil
 
 import pandas as pd
 
 from src.functions import make_absolute
 
-def process_data(raw_path, processed_path):
+def process_data(config):
     """
     This function contains the logic to change raw data into processed data, as described in the 
     file header
 
-    :param:     raw_path            The path to load raw data
-    :param:     processed_path      The path to save processed data
+    :param:     config      The config file
     """
-    # first save all the short term data
-    # store data here
-    short_term_data = pd.DataFrame()
-
-    # only add the date column once
-    has_date = False
+    # the folders in which to download/save data
+    data_path = make_absolute(config["data_path"])
+    raw_path = data_path + config["raw_folder"]
+    adj_close_path = raw_path + config["adj_close_folder"]
+    iv_path = raw_path + config["iv_folder"]
+    processed_path = data_path + config["processed_folder"]
 
     # iterate over all the raw data
-    for ticker_file in os.listdir(make_absolute(raw_path)):
-        # open the csv file and select the most recent 60 rows
-        ticker_path = make_absolute(raw_path + ticker_file)
-        data = pd.read_csv(ticker_path)[-60:]
+    for ticker in config["tickers"]:
+        # open the adj_close csv file and select the most recent 60 rows
+        data = pd.read_csv(adj_close_path + ticker + ".csv")[-60:].reset_index(drop=True)
 
-        # get the actual ticker name
-        ticker_str = ticker_file.split(".")[0]
+        # open the iv csv file and add the columns to data
+        iv_data = pd.read_csv(iv_path + ticker + ".csv")
+        data[["IV30 %", "IV30 Rank", "IV30 Rating"]] = iv_data[["Iv30Percentile", "Iv30Rank", 
+            "Iv30Rating"]]
 
-        print(data)
+        # save the combined columns to a csv file
+        data.to_csv(processed_path + ticker + ".csv", index=False)
 
-        raise ValueError
-
-        # add the date if there is no date column yet
-        if(not has_date):
-            short_term_data["Date"] = data["Date"]
-            has_date = True
-
-        # add the price data
-        short_term_data[ticker_str] = list(data["Adj_Close"])
-
-    # save the short term data
-    short_term_data.to_csv(make_absolute(processed_path + "short_term.csv"), index=False)
+    # move the metadata from raw data to processed data
+    # no additional processing needs to be done
+    shutil.copyfile(iv_path + "metadata.csv", processed_path + "metadata.csv")
 
     # then compute and save the long term data
     # create the structure to hold the data
@@ -64,21 +57,16 @@ def process_data(raw_path, processed_path):
     freq = []
 
     # get the percent change for each ticker
-    for ticker_file in os.listdir(make_absolute(raw_path)):
-        # get the data
-        ticker_path = make_absolute(raw_path + ticker_file)
-        data = pd.read_csv(ticker_path, parse_dates=["Date"])
+    for ticker in config["tickers"]:
+        data = pd.read_csv(adj_close_path + ticker + ".csv", parse_dates=["Date"])
 
         # get the percentage change for every month in the last 10 years for the ticker
         monthly = get_monthly_for_stock(data)
 
-        # get the actual ticker string
-        ticker = [ticker_file.split(".")[0]]
-
         # add the various values to the proper lists
-        percent_change.append(ticker + monthly[0])
-        std.append(ticker + monthly[1])
-        freq.append(ticker + monthly[2])
+        percent_change.append([ticker] + monthly[0])
+        std.append([ticker] + monthly[1])
+        freq.append([ticker] + monthly[2])
 
     # change the lists of lists to dfs
     columns = ["Ticker", "Jan (1)", "Feb (2)", "Mar (3)", "Apr (4)", "May (5)", "Jun (6)", 

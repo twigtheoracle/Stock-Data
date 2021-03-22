@@ -38,4 +38,4 @@ def run_data(config):
     download_data(config)
 
     # process the data
-    process_data(raw_path, processed_path)
+    process_data(config)

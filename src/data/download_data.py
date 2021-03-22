@@ -52,8 +52,6 @@ def download_data(config):
         "calendar_days", "crush_rate"])
     iv_metadata.to_csv(iv_path + "metadata.csv", index=False)
 
-    raise ValueError
-
 def get_ticker_adj_close(ticker):
     """
     Get and return the raw adj_close data for a single ticker
