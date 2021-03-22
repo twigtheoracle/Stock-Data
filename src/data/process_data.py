@@ -27,14 +27,35 @@ def process_data(raw_path, processed_path):
     :param:     processed_path      The path to save processed data
     """
     # first save all the short term data
+    # store data here
+    short_term_data = pd.DataFrame()
+
+    # only add the date column once
+    has_date = False
+
     # iterate over all the raw data
     for ticker_file in os.listdir(make_absolute(raw_path)):
         # open the csv file and select the most recent 60 rows
         ticker_path = make_absolute(raw_path + ticker_file)
         data = pd.read_csv(ticker_path)[-60:]
 
-        # save the short term data in the proper place
-        data.to_csv(make_absolute(processed_path + ticker_file), index=False)
+        # get the actual ticker name
+        ticker_str = ticker_file.split(".")[0]
+
+        print(data)
+
+        raise ValueError
+
+        # add the date if there is no date column yet
+        if(not has_date):
+            short_term_data["Date"] = data["Date"]
+            has_date = True
+
+        # add the price data
+        short_term_data[ticker_str] = list(data["Adj_Close"])
+
+    # save the short term data
+    short_term_data.to_csv(make_absolute(processed_path + "short_term.csv"), index=False)
 
     # then compute and save the long term data
     # create the structure to hold the data

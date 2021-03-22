@@ -1,6 +1,8 @@
 {
     "data_path": "data/",
     "raw_folder": "raw/",
+    "adj_close_folder": "adj_close/",
+    "iv_folder": "iv/",
     "processed_folder": "processed/",
     "save_location": "xl_sheets/",
     "tickers": ["TSM", "UNH", "PLD", "SPGI", "AMD", "FB", "MCO", "ICE", "CLX", "ZTS", "NVDA", 

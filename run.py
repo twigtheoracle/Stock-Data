@@ -12,6 +12,7 @@ import os
 
 from src.functions import *
 from src.data.run_data import run_data
+from src.sheet.run_sheet import run_sheet
 
 ########################################################################################
 
@@ -62,6 +63,7 @@ def main():
         run_data(config)
 
     # put the processed data into an xl sheet
+    wb = run_sheet(config, wb)
 
     # save the wb
     save(wb, config["save_location"])
