@@ -1,6 +1,7 @@
 # Eric Liu
 
-# TODO
+# This file contains all logic needed to take processed (short term) data and fill it into 
+# individual sheets for each stock.
 
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.styles import Alignment
@@ -12,9 +13,15 @@ import openpyxl
 
 def add_short_term_sheet(ticker, sheet, data, metadata, config):
     """
-    TODO
+    This function exists as an easy function to call to create all individual short term sheets
 
-    TODO
+    :param:     ticker      The name of the stock
+    :param:     sheet       The sheet to add short term data into
+    :param:     data        The short term data corresponding to the stock. This is the contents
+                            of the file (default location) "data/processed/{ticker}.csv"
+    :param:     metadata    The metadata for the stock. This is one row of the file (default
+                            location) "data/processed/metadata.csv"
+    :param:     config      The configuration file. Default location is "config/default.json"
     """
     # add all the short term data to the sheet
     for row in dataframe_to_rows(data, index=False, header=True):
@@ -48,9 +55,9 @@ def add_short_term_sheet(ticker, sheet, data, metadata, config):
     
 def format_short_term(sheet):
     """
-    TODO
+    Format the columns "A" through "E" which contain the short term raw data
 
-    TODO
+    :param:     sheet       The sheet to format
     """
     # "Date" column
     # just set the width
@@ -76,9 +83,9 @@ def format_short_term(sheet):
 
 def format_statistics(sheet):
     """
-    TODO
+    Format the cells that contain Adj_Close statistics, IV statistics, and histogram data
 
-    TODO
+    :param:     sheet       The sheet to format
     """
     # set the width of the columns
     name_col = sheet.column_dimensions["G"]
@@ -129,9 +136,11 @@ def format_statistics(sheet):
 
 def add_bins(sheet, data, bins):
     """
-    TODO
+    Compute bins and counts and put them into the sheet 
 
-    TODO
+    :param:     sheet       The sheet to add bins/counts into
+    :param:     data        The data to gererate bins/counts from
+    :param:     bins        The number of bins as defined in the config file
     """
     # get the bins and counts
     bins_counts = data.value_counts(bins=bins).to_frame().reset_index()
@@ -147,9 +156,10 @@ def add_bins(sheet, data, bins):
 
 def add_charts(sheet, bins):
     """
-    TODO
+    Add the three charts of Adj_Close histogram, Adj_Close line chart, and IV line chart
 
-    TODO
+    :param:     sheet       The sheet to add charts into
+    :param:     bins        The number of bins as defined in the config file
     """
     # histogram of adj_close prices
     histogram = openpyxl.chart.BarChart()
@@ -206,9 +216,21 @@ def add_charts(sheet, bins):
 
 def letter_range(c1, c2):
     """
-    TODO
+    Get the letter range between the two input characters inclusive. I'm not sure what will happen 
+    if you don't input two capital letters in reverse order, like ("E", "A") so don't do that.
+    Code originally from https://stackoverflow.com/questions/7001144/range-over-character-in-python
 
-    TODO
+    :param:     c1      The first character
+    :param:     c2      The second character
+    """
+    """
+    >>> for letter in letter_range("A", "E"):
+    >>>     print(letter)
+    >>> A
+    >>> B
+    >>> C
+    >>> D
+    >>> E
     """
     for c in range(ord(c1), ord(c2) + 1):
         yield chr(c)
