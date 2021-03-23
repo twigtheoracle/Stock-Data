@@ -55,18 +55,12 @@ def main():
     if(args["test"]):
         config["tickers"] = ["AAPL", "ZTS"]
 
-    # get the workbook formatted with the input tickers
-    wb = get_workbook(config["tickers"])
-
     # download/overwrite data if requested
     if(args["overwrite"]):
         run_data(config)
 
     # put the processed data into an xl sheet
-    wb = run_sheet(config, wb)
-
-    # save the wb
-    save(wb, config["save_location"])
+    run_sheet(config)
 
 if __name__ == '__main__':
     main()

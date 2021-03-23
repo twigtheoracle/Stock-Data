@@ -30,7 +30,7 @@ def download_data(config):
     # initialize quandl with the api key
     quandl.ApiConfig.api_key = os.environ["QUANDL_API_KEY"]
 
-    print("Downloading data")
+    print("Downloading data...")
 
     # store iv metadata here
     iv_metadata = []
@@ -51,6 +51,8 @@ def download_data(config):
     iv_metadata = pd.DataFrame(iv_metadata, columns=["ticker", "next_earnings_day", "trading_days",
         "calendar_days", "crush_rate"])
     iv_metadata.to_csv(iv_path + "metadata.csv", index=False)
+
+    print("Done\n")
 
 def get_ticker_adj_close(ticker):
     """

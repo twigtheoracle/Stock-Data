@@ -13,7 +13,6 @@
 # are over 10 years
 
 import os
-import shutil
 
 import pandas as pd
 
@@ -33,10 +32,25 @@ def process_data(config):
     iv_path = raw_path + config["iv_folder"]
     processed_path = data_path + config["processed_folder"]
 
+    # store short term data statistics here
+    short_term_stats = pd.DataFrame(columns=["ticker", "n", "mean", "20 Day STD", "40 Day STD",
+        "60 Day STD"])
+
     # iterate over all the raw data
     for ticker in config["tickers"]:
         # open the adj_close csv file and select the most recent 60 rows
         data = pd.read_csv(adj_close_path + ticker + ".csv")[-60:].reset_index(drop=True)
+
+        # compute the various short term data stats
+        n = 60 
+        mean = data["Adj_Close"].mean()
+        std_20 = data["Adj_Close"][-20:].std()
+        std_40 = data["Adj_Close"][-40:].std()
+        std_60 = data["Adj_Close"].std()
+
+        # add the short term stats to the df
+        short_term_stats.loc[len(short_term_stats.index)] = [ticker, n, mean, std_20, std_40, 
+            std_60]
 
         # open the iv csv file and add the columns to data
         iv_data = pd.read_csv(iv_path + ticker + ".csv")
@@ -46,9 +60,10 @@ def process_data(config):
         # save the combined columns to a csv file
         data.to_csv(processed_path + ticker + ".csv", index=False)
 
-    # move the metadata from raw data to processed data
-    # no additional processing needs to be done
-    shutil.copyfile(iv_path + "metadata.csv", processed_path + "metadata.csv")
+    # add short term data statistics to the metadata then save
+    metadata = pd.read_csv(iv_path + "metadata.csv")
+    metadata = metadata.merge(short_term_stats, on="ticker", how="inner")
+    metadata.to_csv(processed_path + "metadata.csv", index=False)
 
     # then compute and save the long term data
     # create the structure to hold the data
