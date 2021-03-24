@@ -45,6 +45,7 @@ These are by default found in the file "config/default.json"
 |perc_low_high|[int, int]|[-5, 10]|The values that correspond go the lowest (red) percent change to the highest (green) percent change|
 |std_low_high|[int, int]|[10, 3]|The values that correspond go the lowest (red) standard deviation to the highest (green) standard deviation|
 |freq_low_high|[int, int]|[0, 100]|The values that correspond go the lowest (red) frequency to the highest (green) frequency|
+
 \* These default values are too long to include here, look in the actual file "config/default.json"
 
 Last Updated: March 23rd, 2021
