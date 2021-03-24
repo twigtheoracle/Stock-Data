@@ -9,6 +9,7 @@ from tqdm import tqdm
 from src.functions import make_absolute, get_workbook, save
 
 from src.sheet.short_term_sheet import add_short_term_sheet
+from src.sheet.long_term_sheet import add_long_term_sheets
 
 def run_sheet(config):
     """
@@ -38,6 +39,13 @@ def run_sheet(config):
         # add the short term data and metadata to the wb
         add_short_term_sheet(ticker, wb[ticker], data, metadata[metadata["ticker"] == ticker], 
             config)
+    print("Done\n")
+
+    print("Adding long term data...")
+    # add all long term sheets
+    add_long_term_sheets(wb, config)
+    print("Done\n")
 
     # at the end save the sheet
     save(wb, xl_path)
+    

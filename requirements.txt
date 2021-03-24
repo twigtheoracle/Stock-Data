@@ -1,5 +1,4 @@
 pandas
-numpy
-scipy
 openpyxl
 quandl
+tqdm

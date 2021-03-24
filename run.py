@@ -1,6 +1,7 @@
 # Eric Liu
 
-# TODO
+# The main function. This parses command line arguments or optionally takes the single input of
+# a dictionary that simulates running from the command line
 
 from tqdm import tqdm
 
@@ -16,8 +17,14 @@ from src.sheet.run_sheet import run_sheet
 
 ########################################################################################
 
-def main():
+def main(params=None):
+    """
+    The main function which calls all other functions
 
+    :param:     params      Optional params which simulate running from the command line, used to 
+                            run the project from the website. It is expected for params to be a 
+                            dictionary with key/value for every command line arg below
+    """
     # read and process command line arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--config", type=str, nargs=1, metavar="str", 
@@ -38,6 +45,10 @@ def main():
         "This flag sets the value to the env key \"QUANDL_API_KEY\". If your enviorment already " \
         "has the key set, you do not need to use this flag.")
     args = vars(parser.parse_args())
+
+    # if this project is being called from the website
+    if(params is not None):
+        args = params
 
     # if the user inputed a quandl api key, add it to the env variables
     if(args["quandl"] is not None):
@@ -63,5 +74,7 @@ def main():
     run_sheet(config)
 
 if __name__ == '__main__':
+    start_time = time.time()
     main()
+    print(f"Runtime ---{time.time() - start_time:.2f} seconds---")
 

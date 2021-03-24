@@ -1,6 +1,6 @@
 # Eric Liu
 
-# TODO
+# Various functions usefully across all src files
 
 import openpyxl
 import datetime
@@ -40,8 +40,7 @@ def check_directory(path):
     # check that the path exists and is not a directory
     if(os.path.exists(path) and not os.path.isdir(path)):
         # raise an error indicitating that the path exists as a file and not a directory
-        raise FileExistsError("Save path \"" + path + 
-            "\" exists as a file and not a directory already")
+        raise FileExistsError(f"Save path \"{path}\" exists as a file and not a directory already")
     # check that the path does not exist
     elif(not os.path.exists(path)):
         # create the directory
@@ -64,7 +63,7 @@ def get_params(path):
         with open(make_absolute(path), "r") as file:
             return json.load(file)
     except:
-        raise FileNotFoundError("The configuation file \"" + path + "\" does not exist.")
+        raise FileNotFoundError(f"The configuation file \"{path}\" does not exist.")
 
 def get_workbook(tickers):
     """
@@ -103,7 +102,7 @@ def save(wb, save_location):
     """
     try:
         # attempt to save at the requested location
-        wb.save(save_location + "option_analysis_" + str(datetime.date.today()) + ".xlsx")
+        wb.save(f"{save_location}option_analysis_{str(datetime.date.today())}.xlsx")
     except PermissionError:
         # raise an error if the file is currently open
         raise PermissionError("File cannot be saved since it is open. Close the file and run again")

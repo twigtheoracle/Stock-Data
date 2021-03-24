@@ -25,6 +25,8 @@ def process_data(config):
 
     :param:     config      The config file
     """
+    print("Processing Data...")
+
     # the folders in which to download/save data
     data_path = make_absolute(config["data_path"])
     raw_path = data_path + config["raw_folder"]
@@ -95,6 +97,8 @@ def process_data(config):
     std.to_csv(make_absolute(processed_path + "std.csv"), index=False)
     freq.to_csv(make_absolute(processed_path + "freq.csv"), index=False)
 
+    print("Done\n")
+
 def get_monthly_for_stock(data):
     """
     Take the input data and compute the historical average percent change/standard deviation/
@@ -164,3 +168,4 @@ def get_monthly_for_stock(data):
 
     # return all values
     return [percent_changes, std, freq]
+    
