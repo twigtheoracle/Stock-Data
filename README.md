@@ -1,15 +1,50 @@
+
 # Stock-Data
 
-When run, generates an excel doc that gives various stats for short term and long term time periods. The stocks that are analyzed must exist in the free Quandl WIKI/PRICES database (support for Alpha Vantage is in the works and a yahoo finaince data scraper is planned) and are choosen based on the sheet titles in the file template.xlsx or template.txt.
+This project automates the generation of Excel spreadsheets containing various stock price/IV data. The data for this project comes from Quandl, from the paid datasets of [QOD](https://www.quandl.com/data/QOR-US-Equity-Option-Ratings) (US Equity Option Ratings) and [EOD](https://www.quandl.com/data/EOD-End-of-Day-US-Stock-Prices) (End of Day US Stock Prices).
 
-If the template file is an excel workbook, there must be one sheet for every stock. The title of each sheet must be the name of the stock and the sheet itself must be blank. If the template file is a text document, stocks must be listed with one on each line with no newlines at the front and one newline at the end. If these rules are not followed then there is a chance that the program will not work properly.
+Three long term (10 years) sheets are generated showing monthly percent change, monthly percent change standard deviation, and monthly positive gain frequency. One short term sheet is generated for every stock in the ticker list, with each short term sheet showing three month (60 trading days) price history, IV30 percentile, IV30 rank, and IV30 Rating. For a description of what IV30___ means, see the [documentation page](https://www.quandl.com/data/QOR-US-Equity-Option-Ratings/documentation) for the QOR dataset.
 
-The short term time period is 60 days, about 3 months (20 trading days per month). Descriptive statistics (n, mean, 60, 40, and 20 day standard deviations), a 20 bin histogram, and a line chart are generated and put in a sheet titled with the stock name.
+See the file sample.xlsx for a better idea of what the project generates.
 
-In order to run this program, you need to have (at the time of last update), one of two different API keys. Before getting the keys though, first you need to make a file called "api_key.py" in the same folder as main. If you want to use Quandl (suggested for speed), you must get a Quandl key (free) and create a function in api_key.py called get_Quandl_API_key(). This function should only return the key as a string. If you want to use Alpha Vantage (optimization in progress), you must get a AV key from their website (also free) and create a function called get_AV_API_key(): which will only return the key as a string. Finally, in main.py change line 29 (this may change but you can just search for data_provider) to be the correct data provider, either "Quandl" or "AV".
+## How to Run
+You can run the project through my website (WIP) and through the command line interface.
 
-In addition, before you run this program, you need a template file of some sort. This can either be a .txt file or a .xlsx file. If your template file is a text file, you must format it with no leading newlines, and one trailing newline, with every desired stock on a different line. If your template file is an excel sheet, your workbook must have one sheet for every stock, where the sheet title is the stock. Finally every sheet should be completly blank and unformatted.
+### Website
+WIP
 
-Once you have taken care of all those annoying things (I'm working on a GUI to make this easier), all you have to do is run main.py from the console and watch the magic happen (at least I hope).
+### Command Line Interface
 
-Last Updated: 1/19/2018
+ 1. Clone the project anywhere
+ 2. Navigate to the project directory and run the command "pip install -r requirements.txt". Note the project requires Python 3.X
+ 3. Test that the project successfully installed by running the command "python run.py --test --quandl {QUANDL_API_KEY}". Make sure to input your Quandl API key in the {}
+ 4. For a description of all possible command line arguments, see below
+
+## Description of Parameters
+### Command Line Arguments
+|Flag|Type|Default Value|Description|
+|-|-|-|-|
+|-c, -\-config|str|"config/default.json"|Where to find the settings file|
+|-\-test|bool|False|Test the program on the tickers of "AAPL" and "ZTS". Using this flag will always overwrite data and use the default config file.|
+|-\-overwrite|bool|False|Whether or not to overwrite data. This flag should be included everytime the stock list changes, running the program on different days, or with a fresh clone of the project.|
+|-\-quandl|str|None|Your Quandl API key. The key can be found on you [Quandl Profile Page](https://www.quandl.com/account/profile). The account associated with the key must have subscriptions to the QOD and EOD premium datasets. This key is not necessary if you are not downloading data (-\-overwrite is not present), or if your Quandl API key is stored in your local environment under the key "QUANDL_API_KEY". This means that the python code "os.environ["QUANDL_API_KEY"]" will return your key.|
+
+### Configuration Arguments
+These are by default found in the file "config/default.json"
+|Key|Type|Default Value|Description|
+|-|-|-|-|
+|data_path|str|"data/"|The folder where data is saved to.|
+|raw_folder|str|"raw/"|The folder where raw data is saved to.|
+|adj_close_folder|str|"adj_close/"|The folder where EOD data is saved to. The full path by default is "data/raw/adj_close/"|
+|iv_folder|str|"iv/"|The folder where QOD data is saved to. The full path by default is "data/raw/iv/"|
+|processed_folder|str|"processed/"|The folder where cleaned data is saved. The full path by default is "data/processed/"|
+|save_location|str|"xl_sheets/"|The folder where generated Excel sheets are saved|
+|tickers|[strs]|*|The list of tickers to generate the Excel sheets for|
+|num_bins|int|15|The number of bins to use when creating short term data histograms|
+|color_gradient|[strs]|*|The list of colors (hex color codes) that define the color gradient to use. By default, the gradient is formed with 20 colors from red (#E4001A) to green (#0CDE17)|
+|perc_low_high|[int, int]|[-5, 10]|The values that correspond go the lowest (red) percent change to the highest (green) percent change|
+|std_low_high|[int, int]|[10, 3]|The values that correspond go the lowest (red) standard deviation to the highest (green) standard deviation|
+|freq_low_high|[int, int]|[0, 100]|The values that correspond go the lowest (red) frequency to the highest (green) frequency|
+\* These default values are too long to include here, look in the actual file "config/default.json"
+
+Last Updated: March 23rd, 2021

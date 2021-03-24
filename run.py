@@ -32,11 +32,7 @@ def main(params=None):
         "this takes the value of \"config/default.json\"")
     parser.add_argument("--test", action="store_true",
         help="When present, the program will override the \"tickers\" parameter of the config " \
-        "file to only process on AAPL and ZTS. This will also override the \"--tickers\" argument")
-    parser.add_argument("--tickers", type=str, metavar="str", default=None,
-        help="Define tickers using a file instead of the config file. This will overwrite the " \
-        "tickers included in the config file. The file must contain one ticker per line. See " \
-        "TODO for an example file")
+        "file to only process on AAPL and ZTS.")
     parser.add_argument("-o", "--overwrite", action="store_true",
         help="Download/overwrite existing data. This flag must be passed in everytime the " \
         "tickers change or the data save location changes")
