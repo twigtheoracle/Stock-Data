@@ -5,11 +5,12 @@
     "iv_folder": "iv/",
     "processed_folder": "processed/",
     "save_location": "xl_sheets/",
-    "tickers": ["UNH", "BLK", "GS", "TSM", "JPM", "C", "WFC", "BAC", "USB", "PNC", "TXN", "ABT", 
-        "PLD", "INTC", "AXP", "JNJ", "AMD", "AAPL", "SBUX", "MSFT", "FB", "MA", "PYPL", "V", "BX", 
-        "DGX", "AMZN", "GOOG", "SPGI", "ICE", "MSCI", "ECL", "CMCSA", "CME", "PEP", "MCO", "CBOE", 
-        "HON", "CLX", "DIS", "MCD", "CVS", "ZTS", "IDXX", "NVDA", "WMT", "TGT", "HD", "BBY", "DG", 
-        "COST", "NKE", "STZ", "SPGI", "PDD", "BABA", "BKNG", "EXPE"],
+    "tickers": ["STZ", "BLK", "GS", "TSM", "JPM", "C", "WFC", "BAC", "UNH", "USB", "PNC", "TXN", 
+        "PLD", "INTC", "AXP", "JNJ", "AMD", "SBUX", "MSFT", "ABT", "AAPL", "FB", "CME", "MA", 
+        "CMCSA", "MCD", "V", "BX", "MSCI", "HON", "LLY", "GOOGL", "AMZN", "CLX", "DIS", "PYPL", 
+        "DGX", "SPGI", "ICE", "CBOE", "MCO", "PEP", "ZTS", "IDXX", "CVS", "ECL", "WMT", "HD", 
+        "NVDA", "BBY", "TGT", "DG", "COST", "NKE", "SPG", "BKNG", "EXPE", "DE", "PDD", "BABA", 
+        "TCEHY"],
     "num_bins": 15,
     "color_gradient": ["E4001A", "E30201", "E31c02", "E33602", "E25003", "E26904", "E28304", 
         "E19C05", "E1B506", "E1CD06", "DBE007", "C2E008", "A9E008", "91DF09", "79DF09", "60DF0A", 
@@ -18,4 +19,3 @@
     "freq_low_high": [0, 100],
     "std_low_high": [10, 3]
 }
-

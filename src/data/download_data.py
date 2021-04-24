@@ -37,16 +37,26 @@ def download_data(config):
 
     # iterate over each ticker
     for ticker in tqdm(config["tickers"]):
-        # for each ticker download and save adj_close data
-        data = get_ticker_adj_close(ticker)
-        data.to_csv(adj_close_path + ticker + ".csv", index=False)
+        # this try except should catch tickers that do not exist in Quandl's EOD database
+        try:
+            # for each ticker download and save adj_close data
+            data = get_ticker_adj_close(ticker)
+            data.to_csv(adj_close_path + ticker + ".csv", index=False)
 
-        # for each ticker get iv data/metadata
-        # save data and store metadata
-        data, metadata = get_ticker_iv(ticker)
-        data.to_csv(iv_path + ticker + ".csv", index=False)
-        iv_metadata.append(metadata)
+            # for each ticker get iv data/metadata
+            # save data and store metadata
+            data, metadata = get_ticker_iv(ticker)
+            data.to_csv(iv_path + ticker + ".csv", index=False)
+            iv_metadata.append(metadata)
+        except quandl.errors.quandl_error.NotFoundError as e:
+            # print out an error statement
+            print()
+            print(f"Ticker {ticker} does not exist in Quandl's EOD database. It will be removed " +
+                "for the rest of the current run.")
 
+            # remove the ticker from the config file
+            config["tickers"].remove(ticker)
+    
     # save metadata
     iv_metadata = pd.DataFrame(iv_metadata, columns=["ticker", "next_earnings_day", "trading_days",
         "calendar_days", "crush_rate"])
@@ -106,12 +116,16 @@ def get_ticker_iv(ticker):
     data = quandl.get("QOR/" + ticker, start_date=historical_date, end_date=current_date) 
 
     # collect the various metadata
-    last_row = data.tail(1)
-    trading_days = last_row["TradingDaysUntilEarnings"].values[0]
-    calendar_days = last_row["CalendarDaysUntilEarnings"].values[0]
-    next_earnings_day = datetime.date.today() + datetime.timedelta(days=calendar_days)
-    crush_rate = last_row["EarningsCrushRate"].values[0]
-    metadata = [ticker, next_earnings_day, trading_days, calendar_days, crush_rate]
+    # sometimes, a ValueError is raised if the next earnings report date is not currenlty known
+    try:
+        last_row = data.tail(1)
+        trading_days = last_row["TradingDaysUntilEarnings"].values[0]
+        calendar_days = last_row["CalendarDaysUntilEarnings"].values[0]
+        next_earnings_day = datetime.date.today() + datetime.timedelta(days=calendar_days)
+        crush_rate = last_row["EarningsCrushRate"].values[0]
+        metadata = [ticker, next_earnings_day, trading_days, calendar_days, crush_rate]
+    except ValueError:
+        metadata = [ticker, "Unknown", "Unknown", "Unknown", "Unknown"]
 
     # get the most recent 60 data points and the columns we want
     data = data.tail(60)
