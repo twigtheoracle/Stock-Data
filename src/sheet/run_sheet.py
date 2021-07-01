@@ -15,7 +15,9 @@ def run_sheet(config):
     """
     This file collates the logic needed to put processed data into the sheet
 
-    :param:     wb          The empty workbook in which to add
+    :param:     config      The config file
+
+    :return:    str         The name of the wb saved
     """
     # the folders in which to get data
     data_path = make_absolute(config["data_path"])
@@ -47,5 +49,5 @@ def run_sheet(config):
     print("Done\n")
 
     # at the end save the sheet
-    save(wb, xl_path)
+    return save(wb, xl_path)
     

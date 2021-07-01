@@ -126,6 +126,8 @@ def get_ticker_iv(ticker):
         metadata = [ticker, next_earnings_day, trading_days, calendar_days, crush_rate]
     except ValueError:
         metadata = [ticker, "Unknown", "Unknown", "Unknown", "Unknown"]
+    except TypeError:
+        metadata = [ticker, "Unknown", "Unknown", "Unknown", "Unknown"]
 
     # get the most recent 60 data points and the columns we want
     data = data.tail(60)

@@ -99,10 +99,12 @@ def save(wb, save_location):
     :param:     wb              The workbook to save
     :param:     save_location   The location at which to save. This should be a directory, and not
                                 a file
+    :return:    str             The name of the workbook
     """
     try:
         # attempt to save at the requested location
         wb.save(f"{save_location}option_analysis_{str(datetime.date.today())}.xlsx")
+        return(f"{save_location}option_analysis_{str(datetime.date.today())}.xlsx")
     except PermissionError:
         # raise an error if the file is currently open
         raise PermissionError("File cannot be saved since it is open. Close the file and run again")

@@ -24,27 +24,29 @@ def main(params=None):
     :param:     params      Optional params which simulate running from the command line, used to 
                             run the project from the website. It is expected for params to be a 
                             dictionary with key/value for every command line arg below
-    """
-    # read and process command line arguments
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--config", type=str, nargs=1, metavar="str", 
-        default="config/default.json", help="The path to the desired config file. By default " \
-        "this takes the value of \"config/default.json\"")
-    parser.add_argument("--test", action="store_true",
-        help="When present, the program will override the \"tickers\" parameter of the config " \
-        "file to only process on AAPL and ZTS.")
-    parser.add_argument("-o", "--overwrite", action="store_true",
-        help="Download/overwrite existing data. This flag must be passed in everytime the " \
-        "tickers change or the data save location changes")
-    parser.add_argument("--quandl", type=str, nargs=1, help="Your Quandl API key. " \
-        "This key should have access to the EOD and QOR premium databases (~$1250 per year). " \
-        "This flag sets the value to the env key \"QUANDL_API_KEY\". If your enviorment already " \
-        "has the key set, you do not need to use this flag.")
-    args = vars(parser.parse_args())
 
+    :return:    str         The name of the saved wb
+    """
     # if this project is being called from the website
     if(params is not None):
         args = params
+    else:
+        # read and process command line arguments
+        parser = argparse.ArgumentParser()
+        parser.add_argument("-c", "--config", type=str, nargs=1, metavar="str", 
+            default="config/default.json", help="The path to the desired config file. By default " \
+            "this takes the value of \"config/default.json\"")
+        parser.add_argument("--test", action="store_true",
+            help="When present, the program will override the \"tickers\" parameter of the config " \
+            "file to only process on AAPL and ZTS.")
+        parser.add_argument("-o", "--overwrite", action="store_true",
+            help="Download/overwrite existing data. This flag must be passed in everytime the " \
+            "tickers change or the data save location changes")
+        parser.add_argument("--quandl", type=str, nargs=1, help="Your Quandl API key. " \
+            "This key should have access to the EOD and QOR premium databases (~$1250 per year). " \
+            "This flag sets the value to the env key \"QUANDL_API_KEY\". If your enviorment already " \
+            "has the key set, you do not need to use this flag.")
+        args = vars(parser.parse_args())
 
     # if the user inputed a quandl api key, add it to the env variables
     if(args["quandl"] is not None):
@@ -58,6 +60,15 @@ def main(params=None):
     # get the requested config file
     config = get_params(args["config"])
 
+    # if parameters were provided from the web app, overwrite the tickers modify the paths
+    if(params is not None):
+        # overwrite tickers
+        config["tickers"] = params["tickers"]
+        
+        # modify paths
+        config["data_path"] = params["sd_root"] + "/" + config["data_path"]
+        config["save_location"] = params["sd_root"] + "/" + config["save_location"]
+
     # if using the --test flag, change the tickers
     if(args["test"]):
         config["tickers"] = ["AAPL", "ZTS"]
@@ -67,7 +78,7 @@ def main(params=None):
         run_data(config)
 
     # put the processed data into an xl sheet
-    run_sheet(config)
+    return run_sheet(config)
 
 if __name__ == '__main__':
     start_time = time.time()
