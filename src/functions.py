@@ -20,7 +20,7 @@ def make_absolute(relative_path):
 
     # for some reason, if the input path is a directory, then the trailing "\" is removed
     if(relative_path[-1] == "\\" or relative_path[-1] == "/"):
-        abs_path += "\\"
+        abs_path += "/"
 
     # return the path
     return abs_path
