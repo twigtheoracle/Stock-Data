@@ -18,10 +18,6 @@ def make_absolute(relative_path):
     # get the absolute path
     abs_path = os.path.abspath(relative_path)
 
-    # for some reason, if the input path is a directory, then the trailing "\" is removed
-    if(relative_path[-1] == "\\" or relative_path[-1] == "/"):
-        abs_path += "/"
-
     # return the path
     return abs_path
 
@@ -106,8 +102,9 @@ def save(wb, save_location):
     """
     try:
         # attempt to save at the requested location
-        wb.save(f"{save_location}option_analysis_{str(datetime.date.today())}.xlsx")
-        return(f"{save_location}option_analysis_{str(datetime.date.today())}.xlsx")
+        path = os.path.join(save_location, f"option_analysis_{str(datetime.date.today())}.xlsx")
+        wb.save(path)
+        return(path)
     except PermissionError:
         # log the error
         log(str(PermissionError))
@@ -122,5 +119,5 @@ def log(error):
     :param:     error       The error str to log
     """
     # log the error
-    with open(os.environ["ERROR_LOG_FILE"], "a") as f:
+    with open(os.environ["ERROR_LOG_FILE"], "a+") as f:
         f.write(error + "\n")
