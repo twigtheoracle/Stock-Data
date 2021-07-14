@@ -43,6 +43,8 @@ def main(params=None):
         parser.add_argument("-o", "--overwrite", action="store_true",
             help="Download/overwrite existing data. This flag must be passed in everytime the " \
             "tickers change or the data save location changes")
+        parser.add_argument("-l", "--log", action="store_true",
+            help="Include this flag to log errors")
         parser.add_argument("--quandl", type=str, nargs=1, help="Your Quandl API key. " \
             "This key should have access to the EOD and QOR premium databases (~$1250 per year). " \
             "This flag sets the value to the env key \"QUANDL_API_KEY\". If your enviorment already " \

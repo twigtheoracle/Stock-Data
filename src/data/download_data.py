@@ -53,7 +53,8 @@ def download_data(config):
                 "will be removed for the rest of the current run."
 
             # log the error
-            log(error_str)
+            if(config["log"]):
+                log(error_str)
 
             # print out an error statement
             print()
@@ -130,10 +131,8 @@ def get_ticker_iv(ticker):
         crush_rate = last_row["EarningsCrushRate"].values[0]
         metadata = [ticker, next_earnings_day, trading_days, calendar_days, crush_rate]
     except ValueError:
-        log(f"Metadata for {ticker} does not exist.")
         metadata = [ticker, "Unknown", "Unknown", "Unknown", "Unknown"]
     except TypeError:
-        log(f"Metadata for {ticker} does not exist.")
         metadata = [ticker, "Unknown", "Unknown", "Unknown", "Unknown"]
 
     # get the most recent 60 data points and the columns we want
