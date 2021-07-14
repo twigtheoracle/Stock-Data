@@ -69,8 +69,9 @@ def main(params=None):
         config["tickers"] = params["tickers"]
         
         # modify paths
-        config["data_path"] = params["sd_root"] + "/" + config["data_path"]
-        config["save_location"] = params["sd_root"] + "/" + config["save_location"]
+
+        config["data_path"] = os.path.join(params["sd_root"], config["data_path"])
+        config["save_location"] = os.path.join(params["sd_root"], config["save_location"])
 
     # if using the --test flag, change the tickers
     if(args["test"]):
