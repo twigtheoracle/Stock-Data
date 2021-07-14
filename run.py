@@ -62,6 +62,7 @@ def main(params=None):
 
     # get the requested config file
     config = get_params(args["config"])
+    config["log"] = args["log"]
 
     # if parameters were provided from the web app, overwrite the tickers modify the paths
     if(params is not None):
