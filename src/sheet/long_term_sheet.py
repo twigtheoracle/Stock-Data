@@ -4,6 +4,7 @@
 # individual sheets for each form of long term data.
 
 import datetime
+import os
 
 import pandas as pd
 
@@ -133,7 +134,9 @@ def add_long_term_sheet(wb, config, file_name, sheet_name, sheet_location, avg_f
     sheet = wb.create_sheet(sheet_name, sheet_location)
 
     # get the data to fill into the sheet
-    data_path = make_absolute(config["data_path"] + config["processed_folder"] + file_name + ".csv")
+    
+    data_path = os.path.join(make_absolute(config["data_path"]), config["processed_folder"], 
+        file_name + ".csv")
     data = pd.read_csv(data_path)
 
     # get the correct order of months

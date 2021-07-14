@@ -20,10 +20,10 @@ def run_data(config):
     """
     # the folders in which to save data
     data_path = make_absolute(config["data_path"])
-    raw_path = data_path + config["raw_folder"]
-    adj_close_path = raw_path + config["adj_close_folder"]
-    iv_path = raw_path + config["iv_folder"]
-    processed_path = data_path + config["processed_folder"]
+    raw_path = os.path.join(data_path, config["raw_folder"])
+    adj_close_path = os.path.join(raw_path, config["adj_close_folder"])
+    iv_path = os.path.join(raw_path, config["iv_folder"])
+    processed_path = os.path.join(data_path, config["processed_folder"])
 
     # delete then recreate the data folders
     # this is to completly overwrite all data if it exists

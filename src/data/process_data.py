@@ -29,10 +29,10 @@ def process_data(config):
 
     # the folders in which to download/save data
     data_path = make_absolute(config["data_path"])
-    raw_path = data_path + config["raw_folder"]
-    adj_close_path = raw_path + config["adj_close_folder"]
-    iv_path = raw_path + config["iv_folder"]
-    processed_path = data_path + config["processed_folder"]
+    raw_path = os.path.join(data_path, config["raw_folder"])
+    adj_close_path = os.path.join(raw_path, config["adj_close_folder"])
+    iv_path = os.path.join(raw_path, config["iv_folder"])
+    processed_path = os.path.join(data_path, config["processed_folder"])
 
     # store short term data statistics here
     short_term_stats = pd.DataFrame(columns=["ticker", "n", "mean", "20 Day STD", "40 Day STD",
@@ -41,7 +41,9 @@ def process_data(config):
     # iterate over all the raw data
     for ticker in config["tickers"]:
         # open the adj_close csv file and select the most recent 60 rows
-        data = pd.read_csv(adj_close_path + ticker + ".csv")[-60:].reset_index(drop=True)
+        os.path.join(adj_close_path, ticker + ".csv")
+        data = pd.read_csv(os.path.join(adj_close_path, 
+            ticker + ".csv"))[-60:].reset_index(drop=True)
 
         # compute the various short term data stats
         n = 60 
@@ -55,17 +57,17 @@ def process_data(config):
             std_60]
 
         # open the iv csv file and add the columns to data
-        iv_data = pd.read_csv(iv_path + ticker + ".csv")
+        iv_data = pd.read_csv(os.path.join(iv_path, ticker + ".csv"))
         data[["IV30 %", "IV30 Rank", "IV30 Rating"]] = iv_data[["Iv30Percentile", "Iv30Rank", 
             "Iv30Rating"]]
 
         # save the combined columns to a csv file
-        data.to_csv(processed_path + ticker + ".csv", index=False)
+        data.to_csv(os.path.join(processed_path, ticker + ".csv"), index=False)
 
     # add short term data statistics to the metadata then save
-    metadata = pd.read_csv(iv_path + "metadata.csv")
+    metadata = pd.read_csv(os.path.join(iv_path, "metadata.csv"))
     metadata = metadata.merge(short_term_stats, on="ticker", how="inner")
-    metadata.to_csv(processed_path + "metadata.csv", index=False)
+    metadata.to_csv(os.path.join(processed_path, "metadata.csv"), index=False)
 
     # then compute and save the long term data
     # create the structure to hold the data
@@ -75,7 +77,7 @@ def process_data(config):
 
     # get the percent change for each ticker
     for ticker in config["tickers"]:
-        data = pd.read_csv(adj_close_path + ticker + ".csv", parse_dates=["Date"])
+        data = pd.read_csv(os.path.join(adj_close_path, ticker + ".csv"), parse_dates=["Date"])
 
         # get the percentage change for every month in the last 10 years for the ticker
         monthly = get_monthly_for_stock(data)
@@ -93,9 +95,9 @@ def process_data(config):
     freq = pd.DataFrame(freq, columns=columns)
 
     # save the long term data
-    percent_change.to_csv(make_absolute(processed_path + "perc.csv"), index=False)
-    std.to_csv(make_absolute(processed_path + "std.csv"), index=False)
-    freq.to_csv(make_absolute(processed_path + "freq.csv"), index=False)
+    percent_change.to_csv(os.path.join(make_absolute(processed_path), "perc.csv"), index=False)
+    std.to_csv(os.path.join(make_absolute(processed_path), "std.csv"), index=False)
+    freq.to_csv(os.path.join(make_absolute(processed_path), "freq.csv"), index=False)
 
     print("Done\n")
 

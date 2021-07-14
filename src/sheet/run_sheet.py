@@ -6,6 +6,8 @@
 import pandas as pd
 from tqdm import tqdm
 
+import os
+
 from src.functions import make_absolute, get_workbook, save
 
 from src.sheet.short_term_sheet import add_short_term_sheet
@@ -21,7 +23,7 @@ def run_sheet(config):
     """
     # the folders in which to get data
     data_path = make_absolute(config["data_path"])
-    processed_path = data_path + config["processed_folder"]
+    processed_path = os.path.join(data_path, config["processed_folder"])
     xl_path = make_absolute(config["save_location"])
 
     # create the wb with the proper pages for each sheet
@@ -30,13 +32,13 @@ def run_sheet(config):
     # add short term data to the wb
 
     # get the short term metadata
-    metadata = pd.read_csv(processed_path + "metadata.csv")
+    metadata = pd.read_csv(os.path.join(processed_path, "metadata.csv"))
 
     # iterate over every ticker with short term data
     print("Adding short term data...")
     for ticker in tqdm(config["tickers"]):
         # get the short term data for this ticker
-        data = pd.read_csv(processed_path + ticker + ".csv")
+        data = pd.read_csv(os.path.join(processed_path, ticker + ".csv"))
 
         # add the short term data and metadata to the wb
         add_short_term_sheet(ticker, wb[ticker], data, metadata[metadata["ticker"] == ticker], 

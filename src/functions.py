@@ -18,10 +18,6 @@ def make_absolute(relative_path):
     # get the absolute path
     abs_path = os.path.abspath(relative_path)
 
-    # for some reason, if the input path is a directory, then the trailing "\" is removed
-    if(relative_path[-1] == "\\" or relative_path[-1] == "/"):
-        abs_path += "/"
-
     # return the path
     return abs_path
 
@@ -63,6 +59,9 @@ def get_params(path):
         with open(make_absolute(path), "r") as file:
             return json.load(file)
     except:
+        # log the error
+        log(f"The configuation file \"{path}\" does not exist.")
+
         raise FileNotFoundError(f"The configuation file \"{path}\" does not exist.")
 
 def get_workbook(tickers):
@@ -103,8 +102,22 @@ def save(wb, save_location):
     """
     try:
         # attempt to save at the requested location
-        wb.save(f"{save_location}option_analysis_{str(datetime.date.today())}.xlsx")
-        return(f"{save_location}option_analysis_{str(datetime.date.today())}.xlsx")
+        path = os.path.join(save_location, f"option_analysis_{str(datetime.date.today())}.xlsx")
+        wb.save(path)
+        return(path)
     except PermissionError:
+        # log the error
+        log(str(PermissionError))
+ 
         # raise an error if the file is currently open
         raise PermissionError("File cannot be saved since it is open. Close the file and run again")
+
+def log(error):
+    """
+    Log the given error in the error file
+
+    :param:     error       The error str to log
+    """
+    # log the error
+    with open(os.environ["ERROR_LOG_FILE"], "a+") as f:
+        f.write(error + "\n")

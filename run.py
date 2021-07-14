@@ -10,6 +10,7 @@ import time
 import quandl
 import json
 import os
+import datetime
 
 from src.functions import *
 from src.data.run_data import run_data
@@ -71,8 +72,13 @@ def main(params=None):
 
     # if using the --test flag, change the tickers
     if(args["test"]):
-        config["tickers"] = ["AAPL", "ZTS"]
+        config["tickers"] = ["AAPL", "ZTS", "ABCD"]
 
+    # set the error logging file to an environment variable
+    # the file will look something like: "2021-07-14_10:44:14:642246.log"
+    os.environ["ERROR_LOG_FILE"] = os.path.join(make_absolute(config["error_logs"]), 
+        str(datetime.datetime.now()).replace(" ", "_").replace(".", ":").replace(":", "-") + ".log")
+        
     # download/overwrite data if requested
     if(args["overwrite"]):
         run_data(config)

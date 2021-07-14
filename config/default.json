@@ -5,6 +5,7 @@
     "iv_folder": "iv/",
     "processed_folder": "processed/",
     "save_location": "xl_sheets/",
+    "error_logs": "logs/",
     "tickers": ["STZ", "PEP", "BLK", "GS", "TSM", "JPM", "C", "WFC", "BAC", "UNH", "USB", "PNC", 
         "BX", "PLD", "JNJ", "ABT", "AXP", "INTC", "TXN", "AMD", "SBUX", "GOOGL", "MSFT", "LLY", 
         "AAPL", "FB", "CME", "CMCSA", "MCD", "V", "MA", "MSCI", "HON", "AMZN", "ICE", "CBOE", 

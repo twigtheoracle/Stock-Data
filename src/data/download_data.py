@@ -13,7 +13,7 @@ import os
 import numpy as np
 import pandas as pd
 
-from src.functions import make_absolute
+from src.functions import make_absolute, log
 
 def download_data(config):
     """
@@ -23,9 +23,9 @@ def download_data(config):
     """
     # the folders in which to save data
     data_path = make_absolute(config["data_path"])
-    raw_path = data_path + config["raw_folder"]
-    adj_close_path = raw_path + config["adj_close_folder"]
-    iv_path = raw_path + config["iv_folder"]
+    raw_path = os.path.join(data_path, config["raw_folder"])
+    adj_close_path = os.path.join(raw_path, config["adj_close_folder"])
+    iv_path = os.path.join(raw_path, config["iv_folder"])
 
     # initialize quandl with the api key
     quandl.ApiConfig.api_key = os.environ["QUANDL_API_KEY"]
@@ -41,18 +41,23 @@ def download_data(config):
         try:
             # for each ticker download and save adj_close data
             data = get_ticker_adj_close(ticker)
-            data.to_csv(adj_close_path + ticker + ".csv", index=False)
+            data.to_csv(os.path.join(adj_close_path, ticker + ".csv"), index=False)
 
             # for each ticker get iv data/metadata
             # save data and store metadata
             data, metadata = get_ticker_iv(ticker)
-            data.to_csv(iv_path + ticker + ".csv", index=False)
+            data.to_csv(os.path.join(iv_path, ticker + ".csv"), index=False)
             iv_metadata.append(metadata)
         except quandl.errors.quandl_error.NotFoundError as e:
+            error_str = f"Ticker {ticker} does not exist in Quandl's EOD database. It " + \
+                "will be removed for the rest of the current run."
+
+            # log the error
+            log(error_str)
+
             # print out an error statement
             print()
-            print(f"Ticker {ticker} does not exist in Quandl's EOD database. It will be removed " +
-                "for the rest of the current run.")
+            print(error_str)
 
             # remove the ticker from the config file
             config["tickers"].remove(ticker)
@@ -125,8 +130,10 @@ def get_ticker_iv(ticker):
         crush_rate = last_row["EarningsCrushRate"].values[0]
         metadata = [ticker, next_earnings_day, trading_days, calendar_days, crush_rate]
     except ValueError:
+        log(f"Metadata for {ticker} does not exist.")
         metadata = [ticker, "Unknown", "Unknown", "Unknown", "Unknown"]
     except TypeError:
+        log(f"Metadata for {ticker} does not exist.")
         metadata = [ticker, "Unknown", "Unknown", "Unknown", "Unknown"]
 
     # get the most recent 60 data points and the columns we want
