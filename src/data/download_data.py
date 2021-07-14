@@ -13,7 +13,7 @@ import os
 import numpy as np
 import pandas as pd
 
-from src.functions import make_absolute
+from src.functions import make_absolute, log
 
 def download_data(config):
     """
@@ -49,10 +49,15 @@ def download_data(config):
             data.to_csv(iv_path + ticker + ".csv", index=False)
             iv_metadata.append(metadata)
         except quandl.errors.quandl_error.NotFoundError as e:
+            error_str = f"Ticker {ticker} does not exist in Quandl's EOD database. It " + 
+                "will be removed for the rest of the current run."
+
+            # log the error
+            log(error_str)
+
             # print out an error statement
             print()
-            print(f"Ticker {ticker} does not exist in Quandl's EOD database. It will be removed " +
-                "for the rest of the current run.")
+            print(error_str)
 
             # remove the ticker from the config file
             config["tickers"].remove(ticker)
@@ -125,8 +130,10 @@ def get_ticker_iv(ticker):
         crush_rate = last_row["EarningsCrushRate"].values[0]
         metadata = [ticker, next_earnings_day, trading_days, calendar_days, crush_rate]
     except ValueError:
+        log(f"Metadata for {ticker} does not exist.")
         metadata = [ticker, "Unknown", "Unknown", "Unknown", "Unknown"]
     except TypeError:
+        log(f"Metadata for {ticker} does not exist.")
         metadata = [ticker, "Unknown", "Unknown", "Unknown", "Unknown"]
 
     # get the most recent 60 data points and the columns we want

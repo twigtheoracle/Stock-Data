@@ -63,6 +63,9 @@ def get_params(path):
         with open(make_absolute(path), "r") as file:
             return json.load(file)
     except:
+        # log the error
+        log(f"The configuation file \"{path}\" does not exist.")
+
         raise FileNotFoundError(f"The configuation file \"{path}\" does not exist.")
 
 def get_workbook(tickers):
@@ -106,5 +109,18 @@ def save(wb, save_location):
         wb.save(f"{save_location}option_analysis_{str(datetime.date.today())}.xlsx")
         return(f"{save_location}option_analysis_{str(datetime.date.today())}.xlsx")
     except PermissionError:
+        # log the error
+        log(str(PermissionError))
+ 
         # raise an error if the file is currently open
         raise PermissionError("File cannot be saved since it is open. Close the file and run again")
+
+def log(error):
+    """
+    Log the given error in the error file
+
+    :param:     error       The error str to log
+    """
+    # log the error
+    with open(os.environ["ERROR_LOG_FILE"], "a") as f:
+        f.write(error + "\n")
