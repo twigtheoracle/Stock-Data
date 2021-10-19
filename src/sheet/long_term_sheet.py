@@ -141,7 +141,14 @@ def add_long_term_sheet(wb, config, file_name, sheet_name, sheet_location, avg_f
 
     # get the correct order of months
     month_order = get_month_order(current_month)
-    four_month = month_order[1:5]
+    four_month = None
+    if(current_month >= 10):
+        # if the month is Oct, Nov, or Dec, then there will be an empty column placed after Dec,
+        # which will cause issues with the averaging functions. so remove the empty column
+        four_month = month_order.copy()[1:6]
+        four_month.remove("Empty")
+    else:
+        four_month = month_order[1:5]
 
     # compute the four month average based on the specific average function
     data["4 Month"] = data[four_month].apply(avg_function, axis=1)
