@@ -42,7 +42,7 @@ def download_data(config):
             # for each ticker download and save adj_close data
             data = get_ticker_adj_close(ticker)
             data.to_csv(os.path.join(adj_close_path, ticker + ".csv"), index=False)
-
+            
             # for each ticker get iv data/metadata
             # save data and store metadata
             data, metadata = get_ticker_iv(ticker)
@@ -87,7 +87,20 @@ def get_ticker_adj_close(ticker):
     historical_date = str(historical_date)  
 
     # get the data
-    data = quandl.get("EOD/" + ticker, start_date=historical_date, end_date=current_date)
+    data = quandl.get_table("QUOTEMEDIA/PRICES", ticker=ticker, date={
+        "gte": historical_date,
+        "lte": current_date
+        })
+    # data = quandl.get_table("EOD/" + ticker, start_date=historical_date, end_date=current_date)
+
+    # the old time-series format used the columns "Date" and "Adj_Close" instead of "date" and 
+    # "adj_close"
+    # to keep consistency, rename the lowercase columnns to the old columns
+    data["Date"] = data["date"]
+    data["Adj_Close"] = data["adj_close"]
+
+    # additionally, the old time-series had data in flipped order
+    data.reindex(index=data.index[::-1])
 
     # reset the index so that the date appears as a column
     data = data.reset_index()

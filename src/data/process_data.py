@@ -43,8 +43,8 @@ def process_data(config):
         # open the adj_close csv file and select the most recent 60 rows
         os.path.join(adj_close_path, ticker + ".csv")
         data = pd.read_csv(os.path.join(adj_close_path, 
-            ticker + ".csv"))[-60:].reset_index(drop=True)
-
+            ticker + ".csv"))[:60].reset_index(drop=True)
+        
         # compute the various short term data stats
         n = 60 
         mean = data["Adj_Close"].mean()
