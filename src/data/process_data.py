@@ -48,8 +48,8 @@ def process_data(config):
         # compute the various short term data stats
         n = 60 
         mean = data["Adj_Close"].mean()
-        std_20 = data["Adj_Close"][-20:].std()
-        std_40 = data["Adj_Close"][-40:].std()
+        std_20 = data["Adj_Close"][:20].std()
+        std_40 = data["Adj_Close"][:40].std()
         std_60 = data["Adj_Close"].std()
 
         # add the short term stats to the df
