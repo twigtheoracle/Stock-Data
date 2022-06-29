@@ -126,8 +126,14 @@ def get_ticker_iv(ticker):
         historical_date = datetime.date(year=current_date.year, month=current_date.month-4, 
             day=current_date.day)
     except ValueError:
-        historical_date = datetime.date(year=current_date.year-1, 
-            month=(12 - (4 - current_date.month)), day=current_date.day)
+        # do things differently if the month four months ago is february and we are looking at a day
+        # in february that does not exist
+        if(current_date.month == 6 and current_date.day > 28):
+            historical_date = datetime.date(year=current_date.year, month=current_date.month-4, 
+                day=28)
+        else:
+            historical_date = datetime.date(year=current_date.year-1, 
+                month=(12 - (4 - current_date.month)), day=current_date.day)
     current_date = str(current_date)
     historical_date = str(historical_date) 
 
