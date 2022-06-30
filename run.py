@@ -76,7 +76,11 @@ def main(params=None):
 
     # if using the --test flag, change the tickers
     if(args["test"]):
-        config["tickers"] = ["AAPL", "ZTS", "ABCD"]
+        config["tickers"] = ["AAPL", "ZTS", "ABCD", "AAPL"]
+
+    # ensure that duplicate tickers are removed
+    from collections import OrderedDict
+    config["tickers"] = list(OrderedDict.fromkeys(config["tickers"]))
 
     # set the error logging file to an environment variable
     # the file will look something like: "2021-07-14_10:44:14:642246.log"
