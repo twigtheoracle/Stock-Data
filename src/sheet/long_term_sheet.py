@@ -21,14 +21,17 @@ def add_long_term_sheets(wb, config):
     :param:     wb          The workbook to add long term sheets to
     :param:     config      The config file. By default "config/default.json"
     """
+    # create and add the percent change sheet
+    add_long_term_sheet(wb, config, "monthly_price_std", "Normalized Price STD", 0, std_average)
+
     # create and add the frequency sheet
-    add_long_term_sheet(wb, config, "freq", "Frequency", 0, freq_average)
+    add_long_term_sheet(wb, config, "freq_pct_positive", "Freq(+ % Change)", 0, freq_average)
 
     # create and add the std sheet
-    add_long_term_sheet(wb, config, "std", "STD", 0, std_average)
+    add_long_term_sheet(wb, config, "std_pct", "STD(% Change)", 0, std_average)
 
     # create and add the percent change sheet
-    add_long_term_sheet(wb, config, "perc", "% Change", 0, perc_average)
+    add_long_term_sheet(wb, config, "percent_changes", "% Change", 0, perc_average)
 
 def get_month_order(current_month):
     """
@@ -246,7 +249,7 @@ def get_color(low, high, value, gradient):
     if(normalized < 0):
         normalized = 0
     elif(normalized >= r):
-        normalized = r - .01
+        normalized = r - .00001
 
     # get the color index
     color_index = int(normalized / step_size)
