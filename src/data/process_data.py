@@ -18,6 +18,7 @@ import pandas as pd
 
 from src.functions import make_absolute
 
+
 def process_data(config):
     """
     This function contains the logic to change raw data into processed data, as described in the 
@@ -36,30 +37,30 @@ def process_data(config):
 
     # store short term data statistics here
     short_term_stats = pd.DataFrame(columns=["ticker", "n", "mean", "20 Day STD", "40 Day STD",
-        "60 Day STD"])
+                                             "60 Day STD"])
 
     # iterate over all the raw data
     for ticker in config["tickers"]:
         # open the adj_close csv file and select the most recent 60 rows
         os.path.join(adj_close_path, ticker + ".csv")
-        data = pd.read_csv(os.path.join(adj_close_path, 
-            ticker + ".csv"))[:60].reset_index(drop=True)
-        
+        data = pd.read_csv(os.path.join(adj_close_path,
+                                        ticker + ".csv"))[:60].reset_index(drop=True)
+
         # compute the various short term data stats
-        n = 60 
+        n = 60
         mean = data["Adj_Close"].mean()
         std_20 = data["Adj_Close"][:20].std()
         std_40 = data["Adj_Close"][:40].std()
         std_60 = data["Adj_Close"].std()
 
         # add the short term stats to the df
-        short_term_stats.loc[len(short_term_stats.index)] = [ticker, n, mean, std_20, std_40, 
-            std_60]
+        short_term_stats.loc[len(short_term_stats.index)] = [ticker, n, mean, std_20, std_40,
+                                                             std_60]
 
         # open the iv csv file and add the columns to data
         iv_data = pd.read_csv(os.path.join(iv_path, ticker + ".csv"))
-        data[["IV30 %", "IV30 Rank", "IV30 Rating"]] = iv_data[["Iv30Percentile", "Iv30Rank", 
-            "Iv30Rating"]]
+        data[["IV30 %", "IV30 Rank", "IV30 Rating"]] = iv_data[["Iv30Percentile", "Iv30Rank",
+                                                                "Iv30Rating"]]
 
         # save the combined columns to a csv file
         data.to_csv(os.path.join(processed_path, ticker + ".csv"), index=False)
@@ -71,9 +72,10 @@ def process_data(config):
 
     # then compute and save the long term data
     # create the structure to hold the data
-    percent_change = []
-    std = []
-    freq = []
+    percent_changes = []
+    std_pct = []
+    freq_pct_positive = []
+    monthly_price_std = []
 
     # get the percent change for each ticker
     for ticker in config["tickers"]:
@@ -83,23 +85,31 @@ def process_data(config):
         monthly = get_monthly_for_stock(data)
 
         # add the various values to the proper lists
-        percent_change.append([ticker] + monthly[0])
-        std.append([ticker] + monthly[1])
-        freq.append([ticker] + monthly[2])
+        percent_changes.append([ticker] + monthly[0])
+        std_pct.append([ticker] + monthly[1])
+        freq_pct_positive.append([ticker] + monthly[2])
+        monthly_price_std.append([ticker] + monthly[3])
 
     # change the lists of lists to dfs
-    columns = ["Ticker", "Jan (1)", "Feb (2)", "Mar (3)", "Apr (4)", "May (5)", "Jun (6)", 
-        "Jul (7)", "Aug (8)", "Sep (9)", "Oct (10)", "Nov (11)", "Dec (12)"]
-    percent_change = pd.DataFrame(percent_change, columns=columns)
-    std = pd.DataFrame(std, columns=columns)
-    freq = pd.DataFrame(freq, columns=columns)
+    columns = ["Ticker", "Jan (1)", "Feb (2)", "Mar (3)", "Apr (4)", "May (5)", "Jun (6)",
+               "Jul (7)", "Aug (8)", "Sep (9)", "Oct (10)", "Nov (11)", "Dec (12)"]
+    percent_changes = pd.DataFrame(percent_changes, columns=columns)
+    std_pct = pd.DataFrame(std_pct, columns=columns)
+    freq_pct_positive = pd.DataFrame(freq_pct_positive, columns=columns)
+    monthly_price_std = pd.DataFrame(monthly_price_std, columns=columns)
 
     # save the long term data
-    percent_change.to_csv(os.path.join(make_absolute(processed_path), "perc.csv"), index=False)
-    std.to_csv(os.path.join(make_absolute(processed_path), "std.csv"), index=False)
-    freq.to_csv(os.path.join(make_absolute(processed_path), "freq.csv"), index=False)
+    percent_changes.to_csv(
+        os.path.join(make_absolute(processed_path), "percent_changes.csv"), index=False)
+    std_pct.to_csv(
+        os.path.join(make_absolute(processed_path), "std_pct.csv"), index=False)
+    freq_pct_positive.to_csv(
+        os.path.join(make_absolute(processed_path), "freq_pct_positive.csv"), index=False)
+    monthly_price_std.to_csv(
+        os.path.join(make_absolute(processed_path), "monthly_price_std.csv"), index=False)
 
     print("Done\n")
+
 
 def get_monthly_for_stock(data):
     """
@@ -109,21 +119,25 @@ def get_monthly_for_stock(data):
     downloading code should get 11 years of data, so a 10 year average change can be easily 
     computed.
 
-    :param:     data        The input data to process
+    Args:
+        data: The input data to process
 
-    :return:    [[float],   A list of three float lists. Each float list should contain 12 elements,
-                 [float],   one for each month. The first float list contains average monthly 
-                 [float]]   change, the second float list contains standard deviation, and the 
-                            third float list contains the frequency positive.
+    Returns:
+        list[list[float]]: A list of four float lists. Each float list should contain 12 elements,
+            one for each month. The first float list contains average monthly change, the second
+            float list contains standard deviation of the average monthly change, the third float
+            list contains the frequency of positive average monthly change, and the final float
+            list contains the normalized monthly standard deviation of price.
     """
     # store values here
     percent_changes = []
-    std = []
-    freq = []
+    std_pct = []
+    freq_pct_positive = []
+    monthly_price_std = []
 
     # extract the year and month
     data["Year"] = data["Date"].dt.year
-    data["Month"] = data["Date"].dt.month 
+    data["Month"] = data["Date"].dt.month
     data = data.drop(["Date"], axis=1)
 
     # ignore the first month of data
@@ -133,6 +147,18 @@ def get_monthly_for_stock(data):
     # ignore the last month of data
     last_row = data.iloc[len(data.index) - 1]
     data = data[~((data["Year"] == last_row["Year"]) & (data["Month"] == last_row["Month"]))]
+
+    # Now, compute the normalized price standard deviation for each month
+    average_price = \
+        data[["Year", "Month", "Adj_Close"]].copy(deep=True).groupby(["Year", "Month"]).mean()
+    std_price = \
+        data[["Year", "Month", "Adj_Close"]].copy(deep=True).groupby(["Year", "Month"]).std()
+    normalized_std_price = (std_price / average_price).reset_index(drop=False)
+    normalized_std_price = normalized_std_price.groupby("Month").mean().reset_index(drop=False)
+
+    # Just to make sure, sort by month and take the "Adj_Close" column
+    normalized_std_price = normalized_std_price.sort_values(by="Month").reset_index(drop=True)
+    monthly_price_std = normalized_std_price["Adj_Close"].to_list()
 
     # find the rows where months change
     # first get the rows where a new month starts
@@ -144,9 +170,9 @@ def get_monthly_for_stock(data):
     ends = data["diff_-1"] != 0
 
     # get the rows where a month begins or ends
-    data = data[(starts) | (ends)].drop(["diff_1", "diff_-1"], axis=1)
+    data = data[starts | ends].drop(["diff_1", "diff_-1"], axis=1)
 
-    # iterate over each month
+    # Iterate over each month for the percent change stuff
     for month_index in range(1, 13):
         # get the rows we want
         month_data = data[data["Month"] == month_index]
@@ -162,12 +188,11 @@ def get_monthly_for_stock(data):
         percent_changes.append(percent_change_per_year.sum() / percent_change_per_year.size)
 
         # get the standard deviations
-        std.append(percent_change_per_year.std())
+        std_pct.append(percent_change_per_year.std())
 
         # get the frequencies
         positive_change = percent_change_per_year > 0
-        freq.append((positive_change.sum() / positive_change.size) * 100)
+        freq_pct_positive.append((positive_change.sum() / positive_change.size) * 100)
 
     # return all values
-    return [percent_changes, std, freq]
-    
+    return [percent_changes, std_pct, freq_pct_positive, monthly_price_std]
