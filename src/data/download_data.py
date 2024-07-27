@@ -45,9 +45,9 @@ def download_data(config):
             
             # for each ticker get iv data/metadata
             # save data and store metadata
-            data, metadata = get_ticker_iv(ticker)
-            data.to_csv(os.path.join(iv_path, ticker + ".csv"), index=False)
-            iv_metadata.append(metadata)
+            # data, metadata = get_ticker_iv(ticker)
+            # data.to_csv(os.path.join(iv_path, ticker + ".csv"), index=False)
+            # iv_metadata.append(metadata)
         except:
             error_str = f"Ticker {ticker} does not exist in Quandl's EOD database. It " + \
                 "will be removed for the rest of the current run."
@@ -64,9 +64,9 @@ def download_data(config):
             config["tickers"].remove(ticker)
     
     # save metadata
-    iv_metadata = pd.DataFrame(iv_metadata, columns=["ticker", "next_earnings_day", "trading_days",
-        "calendar_days", "crush_rate"])
-    iv_metadata.to_csv(iv_path + "metadata.csv", index=False)
+    # iv_metadata = pd.DataFrame(iv_metadata, columns=["ticker", "next_earnings_day", "trading_days",
+    #     "calendar_days", "crush_rate"])
+    # iv_metadata.to_csv(iv_path + "metadata.csv", index=False)
 
     print("Done\n")
 

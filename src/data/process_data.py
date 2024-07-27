@@ -58,16 +58,19 @@ def process_data(config):
                                                              std_60]
 
         # open the iv csv file and add the columns to data
-        iv_data = pd.read_csv(os.path.join(iv_path, ticker + ".csv"))
-        data[["IV30 %", "IV30 Rank", "IV30 Rating"]] = iv_data[["Iv30Percentile", "Iv30Rank",
-                                                                "Iv30Rating"]]
+        # iv_data = pd.read_csv(os.path.join(iv_path, ticker + ".csv"))
+        # data[["IV30 %", "IV30 Rank", "IV30 Rating"]] = iv_data[["Iv30Percentile", "Iv30Rank",
+        #                                                         "Iv30Rating"]]
+        for col in ["IV30 %", "IV30 Rank", "IV30 Rating"]:
+            data[col] = "N/A"
 
         # save the combined columns to a csv file
         data.to_csv(os.path.join(processed_path, ticker + ".csv"), index=False)
 
     # add short term data statistics to the metadata then save
-    metadata = pd.read_csv(os.path.join(iv_path, "metadata.csv"))
-    metadata = metadata.merge(short_term_stats, on="ticker", how="inner")
+    # metadata = pd.read_csv(os.path.join(iv_path, "metadata.csv"))
+    # metadata = metadata.merge(short_term_stats, on="ticker", how="inner")
+    metadata = short_term_stats
     metadata.to_csv(os.path.join(processed_path, "metadata.csv"), index=False)
 
     # then compute and save the long term data

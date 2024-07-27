@@ -42,10 +42,14 @@ def add_short_term_sheet(ticker, sheet, data, metadata, config):
     sheet["H6"] = metadata["60 Day STD"].values[0]
 
     # IV Statistics
-    sheet["H10"] = metadata["next_earnings_day"].values[0]
-    sheet["H11"] = metadata["trading_days"].values[0]
-    sheet["H12"] = metadata["calendar_days"].values[0]
-    sheet["H13"] = metadata["crush_rate"].values[0]
+    # sheet["H10"] = metadata["next_earnings_day"].values[0]
+    # sheet["H11"] = metadata["trading_days"].values[0]
+    # sheet["H12"] = metadata["calendar_days"].values[0]
+    # sheet["H13"] = metadata["crush_rate"].values[0]
+    sheet["H10"] = "N/A"
+    sheet["H11"] = "N/A"
+    sheet["H12"] = "N/A"
+    sheet["H13"] = "N/A"
 
     # add the bin averages/counts to the sheet
     add_bins(sheet, data["Adj_Close"], config["num_bins"])
@@ -152,7 +156,8 @@ def add_bins(sheet, data, bins):
     # add the bin averages and counts to the sheet
     for i in range(0, bins):
         sheet["G" + str(i+17)] = bins_counts["bin_average"].values[i]
-        sheet["H" + str(i+17)] = bins_counts["Adj_Close"].values[i]
+        # sheet["H" + str(i+17)] = bins_counts["Adj_Close"].values[i]
+        sheet["H" + str(i+17)] = bins_counts["count"].values[i]
 
 def add_charts(sheet, bins):
     """
