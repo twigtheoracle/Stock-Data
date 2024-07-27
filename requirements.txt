@@ -1,4 +1,4 @@
 pandas
 openpyxl
-quandl
+nasdaq-data-link
 tqdm

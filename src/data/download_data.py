@@ -7,7 +7,7 @@ from calendar import monthrange
 from tqdm import tqdm
 
 import datetime
-import quandl
+import nasdaqdatalink
 import os
 
 import numpy as np
@@ -28,7 +28,7 @@ def download_data(config):
     iv_path = os.path.join(raw_path, config["iv_folder"])
 
     # initialize quandl with the api key
-    quandl.ApiConfig.api_key = os.environ["QUANDL_API_KEY"]
+    nasdaqdatalink.ApiConfig.api_key = os.environ["QUANDL_API_KEY"]
 
     print("Downloading data...")
 
@@ -48,7 +48,7 @@ def download_data(config):
             data, metadata = get_ticker_iv(ticker)
             data.to_csv(os.path.join(iv_path, ticker + ".csv"), index=False)
             iv_metadata.append(metadata)
-        except quandl.errors.quandl_error.NotFoundError as e:
+        except:
             error_str = f"Ticker {ticker} does not exist in Quandl's EOD database. It " + \
                 "will be removed for the rest of the current run."
 
@@ -87,7 +87,7 @@ def get_ticker_adj_close(ticker):
     historical_date = str(historical_date)  
 
     # get the data
-    data = quandl.get_table("QUOTEMEDIA/PRICES", ticker=ticker, date={
+    data = nasdaqdatalink.get_table("QUOTEMEDIA/PRICES", ticker=ticker, date={
         "gte": historical_date,
         "lte": current_date
         })
@@ -138,7 +138,7 @@ def get_ticker_iv(ticker):
     historical_date = str(historical_date) 
 
     # get the data
-    data = quandl.get("QOR/" + ticker, start_date=historical_date, end_date=current_date) 
+    data = nasdaqdatalink.get("QOR/" + ticker, start_date=historical_date, end_date=current_date)
 
     # collect the various metadata
     # sometimes, a ValueError is raised if the next earnings report date is not currenlty known
