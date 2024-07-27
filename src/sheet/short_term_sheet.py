@@ -156,8 +156,14 @@ def add_bins(sheet, data, bins):
     # add the bin averages and counts to the sheet
     for i in range(0, bins):
         sheet["G" + str(i+17)] = bins_counts["bin_average"].values[i]
-        # sheet["H" + str(i+17)] = bins_counts["Adj_Close"].values[i]
-        sheet["H" + str(i+17)] = bins_counts["count"].values[i]
+        try:
+            sheet["H" + str(i+17)] = bins_counts["Adj_Close"].values[i]
+        except:
+            pass
+        try:
+            sheet["H" + str(i+17)] = bins_counts["count"].values[i]
+        except:
+            pass
 
 def add_charts(sheet, bins):
     """
